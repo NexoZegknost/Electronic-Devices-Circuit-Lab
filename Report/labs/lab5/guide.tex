@@ -1,28 +1,92 @@
 \section{LTspice Guide}
 
-This guide is written for students using LTspice for the first time. All screenshots are taken from
-LTspice \ltspiceVersion.
+This guide shows the LTspice operations needed in Lab~5, using the circuit of Exercise~5.3 (JFET self-bias) as the running
+example. All screenshots are taken from LTspice \ltspiceVersion. Operations already introduced in Labs~1--4
+(placing resistors and sources, wiring, ground, running \texttt{.op}) are only recalled briefly.
 
-\subsection{Step 1: JFET and MOSFET symbols and models}
-\todo{\texttt{njf}, \texttt{nmos}; Pick New JFET/MOSFET.}
+\subsection{Step 1: Placing JFET and MOSFET symbols}
+\begin{enumerate}[itemsep=2pt]
+  \item Press \textit{F2} (or \textit{Edit $\rightarrow$ Component}) to open the component library.
+  \item Type the symbol name in the search box and place it:
+        \begin{itemize}[itemsep=1pt]
+          \item \texttt{njf} -- n-channel JFET (Exercises 5.1--5.4);
+          \item \texttt{nmos4} -- n-channel MOSFET with a separate bulk pin (Exercises 5.5--5.10);
+          \item \texttt{pmos4} -- p-channel MOSFET with a separate bulk pin (Exercise 5.10).
+        \end{itemize}
+  \item Press \textit{Ctrl+R} to rotate and \textit{Ctrl+E} to mirror before clicking to place.
+  \item For \texttt{nmos4}/\texttt{pmos4}, wire the bulk pin to the source unless the exercise says otherwise.
+\end{enumerate}
+\guidefig{step01_fet_symbols}{Selecting the \texttt{njf} and \texttt{nmos4} symbols in the component library}
 
-\guidefig{step01_fet_model}{JFET and MOSFET symbols and models}
+\subsection{Step 2: Defining a device with \texttt{.model}}
+The devices of this lab are not taken from the LTspice library: each one is defined by a \texttt{.model} line, so that its
+parameters are known exactly.
+\begin{enumerate}[itemsep=2pt]
+  \item Press \textit{S} (or \textit{Edit $\rightarrow$ SPICE Directive}), type the model line and place it on the schematic, e.g.
+\begin{spice}[title=Models used in Lab 5]
+.model JN  NJF(Vto=-2 Beta=1m Lambda=0)
+.model DM  NMOS(Level=1 Vto=-3 Kp=2m Lambda=0)
+.model EM  NMOS(Level=1 Vto=2  Kp=1m Lambda=0)
+.model SW  NMOS(Level=1 Vto=2  Kp=0.5 Lambda=0)
+.model SWP PMOS(Level=1 Vto=-2 Kp=0.5 Lambda=0)
+\end{spice}
+  \item Right-click the transistor and type the model name (e.g.\ \texttt{JN}) as its \textit{Value}.
+  \item For a MOSFET, also give the channel size \texttt{l=1u w=1u} (second value field), so that $W/L = 1$.
+\end{enumerate}
+\begin{notebox}{How the model parameters map to the theory}
+\begin{tabular}{l l}
+JFET (\texttt{NJF}): & $V_P = \texttt{Vto}$, \quad $I_{DSS} = \texttt{Beta}\cdot V_P^2$\\
+MOSFET level 1: & $V_{GS(\mathrm{Th})}$ or $V_P$ $= \texttt{Vto}$, \quad $k = \tfrac{\texttt{Kp}}{2}\tfrac{W}{L}$, \quad $I_{DSS} = k\,V_P^2$ (D-MOSFET)\\
+Both: & \texttt{Lambda=0} removes channel-length modulation (flat curves in saturation)
+\end{tabular}
+\end{notebox}
+\guidefig{step02_model}{A \texttt{.model} directive on the schematic and the model name assigned to the transistor}
 
-\subsection{Step 2: Writing a custom \texttt{.model}}
-\todo{\texttt{.model MD NMOS(VTO=-2 KP=1m)}.}
+\subsection{Step 3: Operating point of a bias circuit}
+\begin{enumerate}[itemsep=2pt]
+  \item Add the directive \texttt{.op} and run (\textit{Simulate $\rightarrow$ Run} or the running-man button).
+  \item Move the mouse over a node: the node voltage appears in the status bar. Move it over a component to read its current.
+  \item To show values on the schematic, right-click a node and choose \textit{Place .op Data Label}.
+  \item The complete list of node voltages and device currents is in \textit{View $\rightarrow$ SPICE Error Log}.
+\end{enumerate}
+\guidefig{step03_op}{Operating point of the JFET self-bias circuit (Exercise 5.3)}
 
-\guidefig{step02_model}{Writing a custom \texttt{.model}}
+\subsection{Step 4: Characteristic curves with \texttt{.dc} and nested \texttt{.dc}}
+\begin{enumerate}[itemsep=2pt]
+  \item \textbf{Transfer curve} (one source): \texttt{.dc V3 -3 0 0.01} sweeps the gate source $V_3$ from $-3$\,V to $0$\,V in 10\,mV steps.
+  \item \textbf{Output curves} (two sources): \texttt{.dc V2 0 10 0.05 V3 -2 0 0.5}. The first source ($V_2$, drain) is the inner
+        sweep and forms the x-axis; the second source ($V_3$, gate) is the outer sweep and gives one curve per value.
+  \item After the run, click the drain pin of the transistor (the cursor becomes a current probe) to plot \texttt{Id(J1)} or \texttt{Id(M1)}.
+  \item Right-click the plot and use \textit{View $\rightarrow$ Show Cursors} (or click the trace name) to read exact values.
+\end{enumerate}
+\guidefig{step04_nested_dc}{Output characteristics of the JFET with a nested DC sweep (Exercise 5.2)}
 
-\subsection{Step 3: Transfer and output characteristics}
-\todo{\texttt{.dc V2 0 15 0.1 V1 -4 0 0.5}.}
+\subsection{Step 5: Pulse source and transient analysis}
+\begin{enumerate}[itemsep=2pt]
+  \item Place a \texttt{voltage} source, right-click it, press \textit{Advanced} and choose \textit{PULSE}.
+  \item Fill in the fields: $V_{\mathrm{initial}}$, $V_{\mathrm{on}}$, $T_{\mathrm{delay}}$, $T_{\mathrm{rise}}$, $T_{\mathrm{fall}}$,
+        $T_{\mathrm{on}}$, $T_{\mathrm{period}}$. Example of Exercise 5.8: \texttt{PULSE(0 5 0 10n 10n 0.5m 1m)}.
+  \item Add the transient command \texttt{.tran 0 3m 0 1u} (stop time 3\,ms, maximum time step 1\,$\mu$s) and run.
+  \item Plot node voltages by clicking on wires and currents by clicking on component pins.
+        To plot $V_{DS}$ of a transistor whose source is not grounded, drag from the drain to the source (differential probe).
+\end{enumerate}
+\guidefig{step05_tran}{Gate drive and drain voltage of the MOSFET switch (Exercise 5.8)}
 
-\guidefig{step03_nested_dc}{Transfer and output characteristics}
-
-\subsection{Step 4: Switching an inductive load}
-\todo{PULSE gate drive, flyback diode, \texttt{.tran}.}
-
-\guidefig{step04_tran}{Switching an inductive load}
+\subsection{Step 6: Parameter sweep and measurements (advanced exercises)}
+\begin{enumerate}[itemsep=2pt]
+  \item Replace a component value or source value by a parameter in braces, e.g.\ the gate source value \texttt{\{VG\}}.
+  \item Sweep it with \texttt{.step param VG list 3 4 5 6 8 10}.
+  \item Compute a result automatically with \texttt{.meas}, e.g.\ \texttt{.meas OP Rds FIND V(d)/Id(M1)}.
+  \item Open \textit{View $\rightarrow$ SPICE Error Log}; right-click and choose \textit{Plot .step'ed .meas data} to plot the result versus the parameter.
+\end{enumerate}
+\guidefig{step06_step_meas}{Stepped \texttt{.meas} results plotted against the swept parameter}
 
 \begin{tipbox}
-\todo{Add one practical tip for this lab (common error, shortcut, or setting).}
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+  \item \textbf{Current sign:} LTspice counts a device current as positive when it flows \emph{into} the pin. \texttt{Id(M1)} of an
+        n-channel MOSFET is positive, but the current of a supply that delivers power, e.g.\ \texttt{I(VDD)}, is negative.
+  \item \textbf{Inductive loads:} if a switched inductor has no current path (no diode, no capacitance), LTspice stops with
+        \textit{Time step too small}. This is the simulation telling you that a real circuit would produce a destructive voltage spike.
+  \item \textbf{Units:} \texttt{1Meg} is one megaohm; \texttt{1M} means one \emph{milli}ohm in SPICE.
+\end{itemize}
 \end{tipbox}

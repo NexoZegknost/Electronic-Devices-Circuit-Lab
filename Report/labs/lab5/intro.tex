@@ -1,6 +1,20 @@
 \section{Introduction}
 
-\todo{Write 1--2 paragraphs introducing Lab 5 (adapted from Ch.6 -- Field Effect Transistor of the original manual).}
+In a bipolar transistor the collector current is controlled by the base \emph{current}. A field-effect transistor (FET)
+is controlled by a \emph{voltage}: the gate--source voltage $V_{GS}$ sets the width of a conducting channel between drain
+and source, and the gate draws practically no current. This very high input resistance makes FETs the basic element
+of digital ICs, analog switches and power switches.
+
+This lab, adapted from Chapter~6 of the original PSpice manual, covers the three main FET families:
+the junction FET (JFET), the depletion-type MOSFET (D-MOSFET) and the enhancement-type MOSFET (E-MOSFET).
+You first measure their characteristic curves and parameters ($I_{DSS}$, $V_P$, $V_{GS(\mathrm{Th})}$, $k$), then
+bias them in the configurations studied in class, and finally use a MOSFET as a switch for resistive and inductive loads.
+Every device is described by a short \texttt{.model} statement, so the simulation can be compared exactly with the
+square-law equations used in the theory:
+\[
+  I_D = I_{DSS}\left(1-\frac{V_{GS}}{V_P}\right)^2 \quad\text{(JFET, D-MOSFET)},\qquad
+  I_D = k\left(V_{GS}-V_{GS(\mathrm{Th})}\right)^2 \quad\text{(E-MOSFET)}.
+\]
 
 \subsection{Objectives}
 After this lab, students will be able to:
@@ -12,4 +26,10 @@ After this lab, students will be able to:
 \end{itemize}
 
 \subsection{Analysis types introduced}
-DC sweep and nested DC sweep (\texttt{.dc}), \texttt{.op}, \texttt{.tran}, user-defined \texttt{.model}.
+\begin{itemize}[itemsep=2pt]
+  \item \textbf{Operating point} (\texttt{.op}) -- bias circuits (Exercises 5.3--5.5, 5.7).
+  \item \textbf{DC sweep} and \textbf{nested DC sweep} (\texttt{.dc} with one or two sources) -- characteristic curves (5.1, 5.2, 5.5, 5.6).
+  \item \textbf{Transient analysis} (\texttt{.tran}) with a \texttt{PULSE} source -- switching circuits (5.8--5.10).
+  \item \textbf{User-defined device models} (\texttt{.model} for \texttt{NJF}, \texttt{NMOS}, \texttt{PMOS}).
+  \item Advanced exercises: \textbf{parameter sweep} (\texttt{.step}) and \textbf{measurements} (\texttt{.meas}).
+\end{itemize}

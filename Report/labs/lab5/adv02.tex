@@ -1,26 +1,67 @@
 % Lab 5 -- Advanced Exercise 2  |  Nguyễn Huỳnh Hữu Đức – 2510290
-\advexercise{Switching Loss with an Inductive Load}{\texttt{.tran}, \texttt{.meas}}
+% Netlist:
+%   VDD vdd 0 12 ; RL vdd x 12 ; L1 x d 100m ; DF d vdd DF          (diode: anode ở drain, cathode ở VDD)
+%   M1 d g 0 0 SW l=1u w=1u   (symbol nmos4) ; CGS g 0 1n ; CGD g d 100p
+%   VDRV drv 0 PULSE(0 10 0 10n 10n 50u 100u) ; RG drv g {RG}
+\advexercise{Switching Loss with an Inductive Load}{\texttt{.tran}, \texttt{.ic}, \texttt{.step}, \texttt{.meas}}
 
 \subsubsection*{Objective}
-\todo{State the objective and why it is more challenging than the main exercises.}
+Measure the energy lost in a MOSFET each time it switches a clamped inductive load, and compare the switching loss with
+the conduction loss. The exercise goes beyond Exercises~5.8--5.9 because it requires the gate capacitances (Miller effect),
+an initial condition on an inductor, energy integration with \texttt{.meas} and a parameter sweep of the gate resistor.
 
 \subsubsection*{Task}
-\task{\todo{Problem statement.}}
+\task{The MOSFET switches a load $R_L = 12\,\Omega$ in series with $L = 100$\,mH at $f = 10$\,kHz, 50\,\% duty cycle. The inductance is
+so large that the load current is practically constant ($I_L \approx 0.5$\,A) and the freewheeling diode DF carries it
+when the MOSFET is OFF. The gate capacitances are added as external capacitors $C_{GS} = 1$\,nF and $C_{GD} = 100$\,pF, and the
+gate is driven from a 0/10\,V source through $R_G$. Measure the turn-on energy $E_{\mathrm{on}}$, the turn-off energy
+$E_{\mathrm{off}}$ and the average MOSFET power for $R_G$ = 10, 100 and 1000\,$\Omega$.}
 \circuitfig{adv02}{Circuit of Advanced Exercise 5.A2}
+\components{
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+  \item $V_{DD} = 12$\,V, $R_L = 12\,\Omega$, $L = 100$\,mH (initial current 0.5\,A), DF: \texttt{.model DF D(Is=1n Rs=0.01)}.
+  \item M1: \texttt{.model SW NMOS(Level=1 Vto=2 Kp=0.5 Lambda=0)}, $L = W = 1\,\mu$m; $C_{GS} = 1$\,nF, $C_{GD} = 100$\,pF.
+  \item Gate drive: \texttt{PULSE(0 10 0 10n 10n 50u 100u)} through $R_G$ = \texttt{\{RG\}}.
+\end{itemize}}
 
 \subsubsection*{Simulation}
 \begin{spice}
-.tran 0 2m 0 10n
-.meas TRAN Eon INTEG V(d)*Id(M1) FROM=1m TO=1.0005m
+.model SW NMOS(Level=1 Vto=2 Kp=0.5 Lambda=0)
+.model DF D(Is=1n Rs=0.01)
+.param RG=100
+.step param RG list 10 100 1000
+.ic I(L1)=0.5
+.tran 0 200u 0 2n
+.meas TRAN Eoff INTEG V(d)*Id(M1) FROM 50u TO 52u
+.meas TRAN Eon  INTEG V(d)*Id(M1) FROM 100u TO 102u
+.meas TRAN Pavg AVG   V(d)*Id(M1) FROM 100u TO 200u
 \end{spice}
-\simfig{adv02_sim}{Simulation result of Advanced Exercise 5.A2}
+\simfig{adv02_sim}{Drain voltage, drain current and instantaneous MOSFET power during turn-off (Advanced Exercise 5.A2)}
 
 \subsubsection*{Questions}
 \begin{enumerate}[itemsep=2pt]
-  \item \todo{Question 1}
-  \item \todo{Question 2}
+  \item Plot $V_{GS}$ during a transition and identify the Miller plateau. Compare its level with
+        $V_{\mathrm{pl}} = V_{GS(\mathrm{Th})} + \sqrt{I_L/k}$.
+  \item Using $E \approx \tfrac12 V_{DD} I_L t_{\mathrm{sw}}$ with the measured transition times, check the values of $E_{\mathrm{on}}$ and $E_{\mathrm{off}}$.
+  \item Compare the switching loss $P_{\mathrm{sw}} = (E_{\mathrm{on}}+E_{\mathrm{off}})f$ with the conduction loss
+        $P_{\mathrm{cond}} = I_L^2 R_{DS(\mathrm{on})} D$ for each $R_G$. Above which frequency does switching loss dominate for $R_G = 100\,\Omega$?
+  \item Why is the turn-off slower than the turn-on in this circuit?
 \end{enumerate}
-\answerspace{6}
+\answerspace{10}
 \begin{solution}
-\todo{Expected results and discussion.}
+With $k = 0.25\,\mathrm{A/V^2}$: $V_{\mathrm{pl}} = 2 + \sqrt{0.5/0.25} \approx 3.41$\,V.
+Order-of-magnitude estimates for $R_G = 100\,\Omega$ (constant capacitances, $\tau_G = R_G(C_{GS}+C_{GD}) = 110$\,ns):
+\begin{itemize}[itemsep=1pt]
+  \item turn-on: current rise $\approx \tau_G\ln\frac{10-2}{10-3.41} \approx 21$\,ns, voltage fall $\approx \frac{C_{GD}V_{DD}}{(10-3.41)/R_G} \approx 18$\,ns
+        $\Rightarrow E_{\mathrm{on}} \approx \tfrac12\cdot12\cdot0.5\cdot39\,\mathrm{ns} \approx 0.12\,\mu$J;
+  \item turn-off: voltage rise $\approx \frac{C_{GD}V_{DD}}{3.41/R_G} \approx 35$\,ns, current fall $\approx \tau_G\ln\frac{3.41}{2} \approx 59$\,ns
+        $\Rightarrow E_{\mathrm{off}} \approx 0.28\,\mu$J.
+\end{itemize}
+$P_{\mathrm{sw}} \approx 0.40\,\mu\mathrm{J}\times 10\,\mathrm{kHz} \approx 4$\,mW, while
+$P_{\mathrm{cond}} = 0.5^2\cdot0.25\cdot0.5 \approx 31$\,mW. Switching loss equals conduction loss at about
+$31\,\mathrm{mW}/0.40\,\mu\mathrm{J} \approx 78$\,kHz. Switching times and energies scale roughly with $R_G$: for $R_G = 1\,\mathrm{k}\Omega$
+the switching loss ($\approx 40$\,mW) already exceeds the conduction loss at 10\,kHz.
+Turn-off is slower because the gate discharges from only $V_{\mathrm{pl}}$ towards 0\,V (small current $V_{\mathrm{pl}}/R_G$), while at
+turn-on it is charged by the larger difference $10\,\mathrm{V}-V_{\mathrm{pl}}$.
+\todo{Compare these estimates with the \texttt{.meas} results after the run.}
 \end{solution}
