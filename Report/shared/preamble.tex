@@ -180,16 +180,3 @@
 % Ghi chú TODO cho nhóm (đổi \showtodotrue -> \showtodofalse khi nộp)
 \newif\ifshowtodo \showtodotrue
 \newcommand{\todo}[1]{\ifshowtodo{\color{red!70!black}\small\itshape [TODO: #1]}\fi}
-
-% ---------------------------------------------------------------------
-%  YÊU CẦU ĐẦU RA (Output Requirements) -- shared/output_common.tex
-%   \begin{outputlist} \outrow{Ex~1}{Tiêu đề}{Đầu ra bắt buộc} ... \end{outputlist}
-% ---------------------------------------------------------------------
-\newenvironment{outputlist}{%
-  \small\renewcommand{\arraystretch}{1.3}%
-  \begin{longtable}{>{\centering\arraybackslash}p{1.5cm} >{\raggedright\arraybackslash}p{4.3cm} >{\raggedright\arraybackslash}p{8.4cm} >{\centering\arraybackslash}p{0.8cm}}
-  \toprule
-  \textbf{No.} & \textbf{Exercise} & \textbf{Required outputs in the report} & \textbf{Done}\\ \midrule\endhead
-  \bottomrule\endfoot}
-  {\end{longtable}}
-\newcommand{\outrow}[3]{#1 & #2 & #3 & $\square$\\}
