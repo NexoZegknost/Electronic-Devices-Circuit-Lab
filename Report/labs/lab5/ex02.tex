@@ -1,6 +1,6 @@
 % Lab 5 -- Exercise 2  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 2.2 (Nested DC sweep)  |  Status: Keep
 % Netlist (dùng lại mạch Ex01):
-%   V2  d 0 10 ; V3 g 0 0 ; J1 d g 0 JN
+%   V2  n 0 10 ; R1 n d 100 ; V3 g 0 0 ; J1 d g 0 JN
 \exercise{JFET Output Characteristics (Nested Sweep)}{Keep}{Ch.6 2.2 -- Nested DC sweep}
 \statusreason{Same circuit and objective as the original nested DC sweep. Only the tool changes: the two-source
 \texttt{.dc} command of LTspice replaces the primary/secondary sweep of PSpice. The model of Exercise 5.1 is reused.}
@@ -13,7 +13,7 @@ pinch-off boundary, and compare the saturation currents with Shockley's equation
 \circuitfig{ex02}{Circuit of Exercise 5.2 (same as Exercise 5.1)}
 \components{
 \begin{itemize}[leftmargin=*,itemsep=1pt]
-  \item $V_2$ (drain, primary sweep 0--10\,V), $V_3$ (gate, secondary sweep $-2$--0\,V).
+  \item $V_2$ (drain supply, primary sweep 0--10\,V) in series with $R_1 = 100\,\Omega$; $V_3$ (gate, secondary sweep $-2$--0\,V).
   \item J1 with model \texttt{.model JN NJF(Vto=-2 Beta=1m Lambda=0)}.
 \end{itemize}}
 
@@ -39,7 +39,8 @@ For $V_{DS} < V_{DS(\mathrm{sat})}$ the device is in the ohmic region; above it 
 \subsubsection*{Simulation}
 \begin{enumerate}[itemsep=2pt]
   \item Replace the sweep of Exercise 5.1 by the nested sweep below: $V_2$ is the inner (primary) sweep, $V_3$ the outer one.
-  \item Plot \texttt{Id(J1)}; LTspice draws one curve per value of $V_3$.
+  \item Plot \texttt{Id(J1)}; LTspice draws one curve per value of $V_3$. Because of $R_1$, the drain voltage is
+        $V_{DS} = V_2 - R_1 I_D$, not $V_2$: change the x-axis to \texttt{V(d)} so that the axis shows $V_{DS}$.
   \item Read $I_D$ at $V_{DS} = 8$\,V on each curve and the knee of the $V_{GS}=0$ curve.
 \end{enumerate}
 \begin{spice}

@@ -1,13 +1,13 @@
 % Lab 5 -- Exercise 3  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 2.3.1 (Self-bias)  |  Status: Keep
 % Netlist:
 %   VDD vdd 0 12
-%   RD  vdd d 3.3k
+%   RD  vdd d 2k
 %   J1  d g s JN
 %   RS  s 0 1k
-%   RG  g 0 1Meg
+%   RG  g 0 680k
 \exercise{JFET Self-Bias}{Keep}{Ch.6 2.3.1 -- Self-bias configuration}
-\statusreason{Same configuration and objective as the original exercise (gate returned to ground, bias set by $R_S$).
-Component values are chosen so that the operating point can be found by hand with the model of Exercise 5.1.}
+\statusreason{Same configuration, component values and objective as the original exercise (gate returned to ground, bias set by $R_S$).
+The JFET is defined with an explicit \texttt{.model} ($V_P=-2$\,V, $I_{DSS}=4$\,mA) so that the operating point can be found by hand.}
 
 \task{For the self-bias circuit below, determine the quiescent values $I_{DQ}$, $V_{GSQ}$, $V_D$, $V_S$ and $V_{DS}$.
 Check that the JFET operates in the saturation region, then verify the results with an operating-point analysis.}
@@ -16,7 +16,7 @@ Check that the JFET operates in the saturation region, then verify the results w
 \circuitfig{ex03}{Circuit of Exercise 5.3: JFET self-bias}
 \components{
 \begin{itemize}[leftmargin=*,itemsep=1pt]
-  \item $V_{DD} = 12$\,V, $R_D = 3.3\,\mathrm{k}\Omega$, $R_S = 1\,\mathrm{k}\Omega$, $R_G = 1\,\mathrm{M}\Omega$ (gate to ground).
+  \item $V_{DD} = 12$\,V, $R_D = 2\,\mathrm{k}\Omega$, $R_S = 1\,\mathrm{k}\Omega$, $R_G = 680\,\mathrm{k}\Omega$ (gate to ground).
   \item J1: \texttt{.model JN NJF(Vto=-2 Beta=1m Lambda=0)} \quad ($I_{DSS} = 4$\,mA, $V_P = -2$\,V).
 \end{itemize}}
 
@@ -35,9 +35,9 @@ With $I_D$ in mA and $R_S = 1\,\mathrm{k}\Omega$: $V_{GS} = -I_D$ (V).
 $I_D = 4$\,mA gives $V_{GS} = -4\,\mathrm{V} < V_P$ (not valid), so
 $I_{DQ} = 1$\,mA, $V_{GSQ} = -1$\,V.
 \[
-  V_S = I_D R_S = 1\,\mathrm{V},\qquad V_D = V_{DD} - I_D R_D = 8.7\,\mathrm{V},\qquad V_{DS} = V_D - V_S = 7.7\,\mathrm{V}
+  V_S = I_D R_S = 1\,\mathrm{V},\qquad V_D = V_{DD} - I_D R_D = 10\,\mathrm{V},\qquad V_{DS} = V_D - V_S = 9\,\mathrm{V}
 \]
-$V_{DS} = 7.7\,\mathrm{V} > V_{GS}-V_P = 1\,\mathrm{V}$: saturation region.
+$V_{DS} = 9\,\mathrm{V} > V_{GS}-V_P = 1\,\mathrm{V}$: saturation region.
 \end{solution}
 
 \subsubsection*{Simulation}
@@ -50,14 +50,14 @@ Run an operating-point analysis and read the values on the schematic (place the 
 
 \subsubsection*{Theory vs. Simulation}
 \begin{comparison}{Theory vs. simulation, Exercise 5.3}
-\cmprow{$I_{DQ}$}{mA}{1.00}{}{}
-\cmprow{$V_{GSQ}$}{V}{$-1.00$}{}{}
-\cmprow{$V_S$}{V}{1.00}{}{}
-\cmprow{$V_D$}{V}{8.70}{}{}
-\cmprow{$V_{DS}$}{V}{7.70}{}{}
+\cmprow{$I_{DQ}$}{mA}{1.00}{1.00001}{0.001}
+\cmprow{$V_{GSQ}$}{V}{$-1.00$}{$-1.00000$}{0.0003}
+\cmprow{$V_S$}{V}{1.00}{1.00001}{0.001}
+\cmprow{$V_D$}{V}{10.00}{9.99999}{0.0001}
+\cmprow{$V_{DS}$}{V}{9.00}{8.99998}{0.0002}
 \end{comparison}
 \answerspace{3}
 \begin{solution}
-The gate current of the model is negligible (pA range), so $V_G \approx 0$ and the results should agree within rounding.
-\todo{Fill in the simulation column from the LTspice run.}
+The simulation agrees with the theory to better than 0.01\,\%. The gate current is only $-1.1\times10^{-11}$\,A, so
+$V_G = 7.49\,\mu$V $\approx 0$, which confirms that $V_{GS} = -I_D R_S$.
 \end{solution}
