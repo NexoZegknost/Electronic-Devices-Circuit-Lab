@@ -1,0 +1,32 @@
+% =====================================================================
+%  LTspice QUICK REFERENCE (bản rút gọn tiếng Anh của Bảng ánh xạ)
+%  Phụ trách: Cường (TV1). Bản đầy đủ: Manage/Project3_BangAnhXa_CongViec.md
+%  Mọi dòng phải kiểm trên LTspice \ltspiceVersion trước khi nộp.
+% =====================================================================
+\renewcommand{\arraystretch}{1.3}
+\begin{longtable}{>{\raggedright}p{0.27\linewidth} >{\raggedright}p{0.33\linewidth} p{0.32\linewidth}}
+\caption{PSpice for TI to LTspice quick reference}\\
+\toprule
+\textbf{PSpice for TI} & \textbf{LTspice} & \textbf{Note} \\ \midrule
+\endfirsthead
+\toprule
+\textbf{PSpice for TI} & \textbf{LTspice} & \textbf{Note} \\ \midrule
+\endhead
+Project + Simulation Profile & Schematic \texttt{.asc} + SPICE directive & Directive is text on the schematic \\
+Bias Point & \texttt{.op} & Hover or place \texttt{.op} data labels \\
+DC Sweep & \texttt{.dc V1 0 5 10m} & \\
+Nested DC Sweep & \texttt{.dc V1 ... V2 ...} & First source = x-axis \\
+Parametric Sweep & \texttt{.step param R 1k 10k 1k} & Use \texttt{\{R\}} as value \\
+Time Domain (Transient) & \texttt{.tran 0 Tstop 0 Tmax} & Mind the max time step \\
+AC Sweep & \texttt{.ac dec N fstart fstop} & Source needs \texttt{AC 1} \\
+Add Trace / Cursor & Click node or part; click trace label & \\
+Measurement & \texttt{.meas} & Results in SPICE Error Log \\
+Copy to Clipboard & File $\rightarrow$ Export data as text & \\
+VCVS / CCCS / VCCS / CCVS & \texttt{E} / \texttt{F} / \texttt{G} / \texttt{H} & \\
+ABM & Behavioural source \texttt{B} & \\
+VSIN / VPULSE & SINE(...) / PULSE(...) & \\
+Dbreak & \texttt{D} with default \texttt{.model} & \\
+External model & \texttt{.lib file.lib} / \texttt{.include} & Relative path \\
+\todo{add rows} & & \\
+\bottomrule
+\end{longtable}

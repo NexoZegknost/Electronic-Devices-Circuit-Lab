@@ -1,0 +1,51 @@
+% Trang bìa dùng chung. Mỗi file gốc định nghĩa trước khi \input:
+%   \coverKind   (vd. BÀI TẬP LỚN -- DỰ ÁN 3)
+%   \coverTitle  (tiêu đề lớn)
+%   \coverSub    (tiêu đề phụ, in nghiêng)
+\begin{titlepage}
+  \begin{tikzpicture}[remember picture,overlay,inner sep=0,outer sep=0]
+    \draw[blue!70!black,line width=4pt] ([xshift=-1.5cm,yshift=-2cm]current page.north east) coordinate (A)--([xshift=1.5cm,yshift=-2cm]current page.north west) coordinate (B)--([xshift=1.5cm,yshift=2cm]current page.south west) coordinate (C)--([xshift=-1.5cm,yshift=2cm]current page.south east) coordinate (D)--cycle;
+    \draw ([yshift=0.5cm,xshift=-0.5cm]A)--([yshift=0.5cm,xshift=0.5cm]B)--([yshift=-0.5cm,xshift=0.5cm]B)--([yshift=-0.5cm,xshift=-0.5cm]B)--([yshift=0.5cm,xshift=-0.5cm]C)--([yshift=0.5cm,xshift=0.5cm]C)--([yshift=-0.5cm,xshift=0.5cm]C)--([yshift=-0.5cm,xshift=-0.5cm]D)--([yshift=0.5cm,xshift=-0.5cm]D)--([yshift=0.5cm,xshift=0.5cm]D)--([yshift=-0.5cm,xshift=0.5cm]A)--([yshift=-0.5cm,xshift=-0.5cm]A)--([yshift=0.5cm,xshift=-0.5cm]A);
+    \draw ([yshift=-0.3cm,xshift=0.3cm]A)--([yshift=-0.3cm,xshift=-0.3cm]B)--([yshift=0.3cm,xshift=-0.3cm]B)--([yshift=0.3cm,xshift=0.3cm]B)--([yshift=-0.3cm,xshift=0.3cm]C)--([yshift=-0.3cm,xshift=-0.3cm]C)--([yshift=0.3cm,xshift=-0.3cm]C)--([yshift=0.3cm,xshift=0.3cm]D)--([yshift=-0.3cm,xshift=0.3cm]D)--([yshift=-0.3cm,xshift=-0.3cm]D)--([yshift=0.3cm,xshift=-0.3cm]A)--([yshift=0.3cm,xshift=0.3cm]A)--([yshift=-0.3cm,xshift=0.3cm]A);
+  \end{tikzpicture}
+  \vspace{0.25cm}
+  \begin{center}
+    \textbf{ĐẠI HỌC QUỐC GIA TP. HỒ CHÍ MINH}\\[0.05cm]
+    \textbf{TRƯỜNG ĐẠI HỌC BÁCH KHOA}\\[0.05cm]
+    \textbf{KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH}
+  \end{center}
+  \vspace{0.45cm}
+  \begin{center}
+    \IfFileExists{images/common/hcmut.png}{\includegraphics[scale=0.5]{images/common/hcmut.png}}{\fbox{\parbox[c][3cm][c]{3cm}{\centering\itshape Logo}}}
+  \end{center}
+  \vspace{0.45cm}
+  \begin{center}
+    \begin{tabular}{c}
+      \textbf{{\Large \MakeUppercase{\courseName}\ (\courseCode)}} \\[0.1cm]
+      \textit{\courseNameEN}                                    \\
+      \hline
+      \\
+      \textbf{{\large \coverKind}}                               \\[0.3cm]
+      \textbf{{\huge \coverTitle}}                               \\[0.3cm]
+      \textbf{\textit{{\large \coverSub}}}                       \\
+      \\
+      \hline
+    \end{tabular}
+
+    \vspace{1cm}
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabular}{r l l}
+      \textbf{GVHD:} & \multicolumn{2}{l}{\lecturer}                 \\
+      \textbf{Lớp:}  & \multicolumn{2}{l}{\className\ -- \semester}  \\[0.3cm]
+      \textbf{SVTH:} & \textit{Họ và tên} & \textit{MSSV}           \\
+                     & \memA              & \idA                    \\
+                     & \memB              & \idB                    \\
+                     & \memC              & \idC                    \\
+    \end{tabular}
+  \end{center}
+  \vfill
+  \begin{center}
+    \textbf{TP. HỒ CHÍ MINH, \coverDate}
+  \end{center}
+  \vspace{1.2cm}
+\end{titlepage}

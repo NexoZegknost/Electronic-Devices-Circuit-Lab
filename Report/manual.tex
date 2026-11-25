@@ -1,0 +1,33 @@
+% =====================================================================
+%  SẢN PHẨM 1 -- LAB MANUAL (bản phát cho sinh viên, KHÔNG có lời giải)
+%  Biên dịch: latexmk manual.tex   ->  build/manual.pdf
+% =====================================================================
+\documentclass[a4paper,11pt]{report}
+\newif\ifsolution \solutionfalse
+\input{shared/preamble}
+\input{shared/config}
+
+\newcommand{\coverKind}{LABORATORY MANUAL}
+\newcommand{\coverTitle}{LTspice Simulation Labs}
+\newcommand{\coverSub}{Lab 1 -- Lab 6 (migrated from PSpice for TI)}
+
+\begin{document}
+\input{shared/cover}
+
+\pagenumbering{roman}
+\tableofcontents
+\clearpage
+\input{shared/preface}
+\clearpage
+\pagenumbering{arabic}
+
+\input{shared/labs_all}
+
+\appendix
+\renewcommand{\thechapter}{\Alph{chapter}}
+\titleformat{\chapter}[display]{\bfseries\huge\color{blue!60!black}}{\Large Appendix \thechapter}{0.3em}{}[\vspace{2pt}{\color{blue!60!black}\titlerule[1pt]}]
+\chapter{LTspice Offline Installation}
+\input{install/body}
+\chapter{PSpice for TI to LTspice Quick Reference}
+\input{appendix/quickref}
+\end{document}

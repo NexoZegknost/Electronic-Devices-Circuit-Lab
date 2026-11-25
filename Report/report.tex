@@ -1,0 +1,44 @@
+% =====================================================================
+%  SẢN PHẨM 5 -- BÁO CÁO DỰ ÁN (theo mẫu Phần B, tiếng Việt)
+%  Biên dịch: latexmk report.tex -> build/report.pdf
+%  Lưu ý: đề yêu cầu nộp cả .docx -- xem README mục "Báo cáo .docx".
+% =====================================================================
+\documentclass[a4paper,11pt]{report}
+\newif\ifsolution \solutionfalse
+\input{shared/preamble}
+\input{shared/config}
+\renewcommand{\thesection}{\arabic{section}}
+\renewcommand{\thetable}{\arabic{table}}
+\renewcommand{\thefigure}{\arabic{figure}}
+\fancyfoot[R]{\itshape Trang \thepage}
+
+\newcommand{\coverKind}{BÀI TẬP LỚN -- DỰ ÁN 3}
+\newcommand{\coverTitle}{BÁO CÁO DỰ ÁN}
+\newcommand{\coverSub}{Xây dựng tài liệu thực hành mới với LTspice}
+
+% Hướng dẫn (chữ xám nghiêng) và ô nội dung (khung cam) -- xoá \hint khi hoàn thành
+\newcommand{\hint}[1]{\ifshowtodo{\color{gray}\itshape #1\par}\fi}
+\newtcolorbox{fillbox}{enhanced,breakable,colback=yellow!6,colframe=orange!80!black,boxrule=0.8pt,arc=1.5mm,left=8pt,right=8pt,top=6pt,bottom=6pt}
+
+\begin{document}
+\selectlanguage{vietnamese}
+\input{shared/cover}
+\pagenumbering{roman}
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+
+\input{report/sec00_info}
+\input{report/sec01_intro}
+\input{report/sec02_install}
+\input{report/sec03_mapping}
+\input{report/sec04_overview}
+\input{report/sec05_labs}
+\input{report/sec06_replaced}
+\input{report/sec07_questions}
+\input{report/sec08_crosstest}
+\input{report/sec09_instructor}
+\input{report/sec10_ailog}
+\input{report/sec11_tasks}
+\input{report/sec12_conclusion}
+\end{document}

@@ -1,0 +1,4 @@
+# Bien dich: latexmk  (hoac VS Code LaTeX Workshop)
+$pdf_mode = 5;          # XeLaTeX (ho tro tieng Viet bang fontspec)
+$out_dir  = 'build';    # file trung gian + PDF nam trong build/
+@default_files = ('manual.tex', 'solutions.tex', 'install_guide.tex', 'report.tex');

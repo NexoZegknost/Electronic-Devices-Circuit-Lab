@@ -1,0 +1,33 @@
+% Lab 4 -- Exercise 6  |  Đạt (TV2)  |  Original: Ch.5 Ex.6  |  Status: Keep
+\exercise{Active High-pass Filter}{Keep}{Ch.5 Ex.6}
+\statusreason{Only the tool changes (PSpice for TI $\rightarrow$ LTspice); circuit and values unchanged.}
+
+\task{\todo{Problem statement: what is given and what must be found (see Ch.5 Ex.6).}}
+
+\subsection*{Circuit}
+\circuitfig{ex06}{Circuit of Exercise 4.6}
+\components{\todo{List every component value and model, e.g. R1 = 1\,k$\Omega$, D1: 1N4148.}}
+
+\subsection*{Theoretical Calculation}
+\answerspace{8}
+\begin{solution}
+\todo{Worked solution with formulas and steps.}
+\end{solution}
+
+\subsection*{Simulation}
+\todo{Describe the LTspice setup: sources, analysis, what to plot or measure.}
+\begin{spice}
+* TODO: replace with the directives of this exercise
+.ac dec 100 10 1meg
+\end{spice}
+\simfig{ex06_sim}{Simulation result of Exercise 4.6}
+
+\subsection*{Theory vs. Simulation}
+\begin{comparison}{Theory vs. simulation, Exercise 4.6}
+\cmprow{$f_c$}{Hz}{}{}{}
+\cmprow{$A_{v\infty}$}{dB}{}{}{}
+\end{comparison}
+\answerspace{3}
+\begin{solution}
+\todo{Explain the deviations (device model, assumptions such as $V_D = 0.7$\,V, $\beta$, ...).}
+\end{solution}

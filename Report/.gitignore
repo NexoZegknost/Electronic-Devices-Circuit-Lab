@@ -1,0 +1,17 @@
+build/
+submit/
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.xdv
+# LTspice: file sinh ra khi chạy mô phỏng
+*.raw
+*.op.raw
+*.net
+*.plt.bak

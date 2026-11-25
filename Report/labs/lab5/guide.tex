@@ -1,0 +1,29 @@
+\section*{LTspice Guide}
+\addcontentsline{toc}{section}{LTspice Guide}
+
+This guide is written for students using LTspice for the first time. All screenshots are taken from
+LTspice \ltspiceVersion.
+
+\subsection*{Step 1: JFET and MOSFET symbols and models}
+\todo{\texttt{njf}, \texttt{nmos}; Pick New JFET/MOSFET.}
+
+\guidefig{step01_fet_model}{JFET and MOSFET symbols and models}
+
+\subsection*{Step 2: Writing a custom \texttt{.model}}
+\todo{\texttt{.model MD NMOS(VTO=-2 KP=1m)}.}
+
+\guidefig{step02_model}{Writing a custom \texttt{.model}}
+
+\subsection*{Step 3: Transfer and output characteristics}
+\todo{\texttt{.dc V2 0 15 0.1 V1 -4 0 0.5}.}
+
+\guidefig{step03_nested_dc}{Transfer and output characteristics}
+
+\subsection*{Step 4: Switching an inductive load}
+\todo{PULSE gate drive, flyback diode, \texttt{.tran}.}
+
+\guidefig{step04_tran}{Switching an inductive load}
+
+\begin{tipbox}
+\todo{Add one practical tip for this lab (common error, shortcut, or setting).}
+\end{tipbox}

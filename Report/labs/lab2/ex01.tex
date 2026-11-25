@@ -1,0 +1,33 @@
+% Lab 2 -- Exercise 1  |  Cường (TV1)  |  Original: Ch.2 Ex.1  |  Status: Adjust
+\exercise{Complete Diode Model (V--I Characteristic)}{Adjust}{Ch.2 Ex.1}
+\statusreason{\todo{Explain what was changed (component, model, value or merging) and why the learning objective is preserved.}}
+
+\task{\todo{Problem statement: what is given and what must be found (see Ch.2 Ex.1).}}
+
+\subsection*{Circuit}
+\circuitfig{ex01}{Circuit of Exercise 2.1}
+\components{\todo{List every component value and model, e.g. R1 = 1\,k$\Omega$, D1: 1N4148.}}
+
+\subsection*{Theoretical Calculation}
+\answerspace{8}
+\begin{solution}
+\todo{Worked solution with formulas and steps.}
+\end{solution}
+
+\subsection*{Simulation}
+\todo{Describe the LTspice setup: sources, analysis, what to plot or measure.}
+\begin{spice}
+* TODO: replace with the directives of this exercise
+.dc V1 0 5 10m
+\end{spice}
+\simfig{ex01_sim}{Simulation result of Exercise 2.1}
+
+\subsection*{Theory vs. Simulation}
+\begin{comparison}{Theory vs. simulation, Exercise 2.1}
+\cmprow{$I_D$ at $V_1=1$ V}{mA}{}{}{}
+\cmprow{$V_D$}{V}{}{}{}
+\end{comparison}
+\answerspace{3}
+\begin{solution}
+\todo{Explain the deviations (device model, assumptions such as $V_D = 0.7$\,V, $\beta$, ...).}
+\end{solution}

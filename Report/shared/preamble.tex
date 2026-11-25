@@ -1,0 +1,176 @@
+% =====================================================================
+%  PREAMBLE DÙNG CHUNG (dựa trên mẫu Lab1--Lab4 của nhóm)
+%  File gốc phải khai báo TRƯỚC khi \input file này:
+%     \newif\ifsolution  \solutiontrue / \solutionfalse
+% =====================================================================
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[utf8]{inputenc}
+  \usepackage[T5]{fontenc}
+  \usepackage{lmodern}
+\else
+  \usepackage{fontspec}
+\fi
+\usepackage[vietnamese,english]{babel}   % ngôn ngữ chính: English; báo cáo gọi \selectlanguage{vietnamese}
+\usepackage[top=2cm,bottom=2cm,left=2cm,right=2cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{titlesec}
+\usepackage{comment}
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=black]{hyperref}
+\usepackage[most]{tcolorbox}
+\usepackage{needspace}
+\usepackage{tocloft}
+\setlength{\cftsecnumwidth}{2.8em}
+\setlength{\cftsubsecnumwidth}{3.6em}
+
+\captionsetup{font=it,labelfont=it}
+
+% ---------------------------------------------------------------------
+%  Header / footer
+% ---------------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[L]{\itshape \courseNameEN\ (\courseCode)}
+\fancyfoot[R]{\itshape Page \thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[L]{\itshape \courseNameEN\ (\courseCode)}\fancyfoot[R]{\itshape Page \thepage}}
+
+% ---------------------------------------------------------------------
+%  Mỗi chương = 1 bài lab  ("Lab 1: ...")
+% ---------------------------------------------------------------------
+\titleformat{\chapter}[display]{\bfseries\huge\color{blue!60!black}}{\Large Lab \thechapter}{0.3em}{}[\vspace{2pt}{\color{blue!60!black}\titlerule[1pt]}]
+\titlespacing*{\chapter}{0pt}{-1.2cm}{1.2em}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{1}
+
+% ---------------------------------------------------------------------
+%  Đường dẫn ảnh của lab hiện tại:  \setlab{3}  ->  labs/lab3/images/...
+% ---------------------------------------------------------------------
+\newcommand{\labdir}{labs/lab0}
+\newcommand{\setlab}[1]{\renewcommand{\labdir}{labs/lab#1}}
+
+% Ô dán ảnh: tự hiện ảnh nếu tệp tồn tại, nếu chưa có thì hiện khung cam
+\newcommand{\figslot}[4]{%
+  \begin{figure}[H]
+    \centering
+    \IfFileExists{#1}{\includegraphics[#2]{#1}}{%
+      \begin{tcolorbox}[enhanced,center,width=0.92\linewidth,height=#4,valign=center,halign=center,
+          colback=yellow!8,colframe=orange!80!black,boxrule=1pt,arc=1.5mm]
+        \textbf{IMAGE SLOT}\\[2pt]
+        \edef\figpath{#1}%
+        {\small\itshape Save the LTspice screenshot as\\ \texttt{\expandafter\detokenize\expandafter{\figpath}}\\ (this box disappears once the file exists)}
+      \end{tcolorbox}}%
+    \caption{#3}
+  \end{figure}}
+
+% \guidefig{tệp}{chú thích}      -> labs/labN/images/guide/tệp.png  (ảnh hướng dẫn thao tác)
+% \circuitfig{tệp}{chú thích}    -> labs/labN/images/circuit/tệp.png (schematic chụp từ LTspice)
+% \simfig[cao]{tệp}{chú thích}   -> labs/labN/images/sim/tệp.png    (đồ thị / kết quả)
+% \installfig{tệp}{chú thích}    -> images/install/tệp.png
+\newcommand{\guidefig}[2]{\figslot{\labdir/images/guide/#1.png}{width=0.85\linewidth,height=0.36\textheight,keepaspectratio}{#2}{4.5cm}}
+\newcommand{\circuitfig}[2]{\figslot{\labdir/images/circuit/#1.png}{width=0.75\linewidth,height=0.32\textheight,keepaspectratio}{#2}{5cm}}
+\newcommand{\simfig}[3][6cm]{\figslot{\labdir/images/sim/#2.png}{width=0.94\linewidth,height=0.42\textheight,keepaspectratio}{#3}{#1}}
+\newcommand{\installfig}[2]{\figslot{images/install/#1.png}{width=0.85\linewidth,height=0.36\textheight,keepaspectratio}{#2}{4.5cm}}
+
+% ---------------------------------------------------------------------
+%  BÀI TẬP
+% ---------------------------------------------------------------------
+\newcounter{exercise}[chapter]
+\newcounter{advexercise}[chapter]
+\newcommand{\twodigit}[1]{\ifnum\value{#1}<10 0\fi\arabic{#1}}
+
+% Nhãn trạng thái: Keep / Adjust / Replace
+\newcommand{\statusbadge}[1]{%
+  \def\st{#1}\def\stK{Keep}\def\stA{Adjust}\def\stR{Replace}%
+  \ifx\st\stK\def\stcol{green!45!black}\else
+  \ifx\st\stA\def\stcol{orange!85!black}\else
+  \ifx\st\stR\def\stcol{red!70!black}\else\def\stcol{gray}\fi\fi\fi
+  \tcbox[on line,colback=\stcol,colframe=\stcol,coltext=white,boxsep=1pt,left=4pt,right=4pt,top=1pt,bottom=1pt,arc=1mm]{\small\bfseries #1}}
+
+% \exercise{Tiêu đề}{Keep|Adjust|Replace}{Bài gốc}
+\newcommand{\exercise}[3]{%
+  \clearpage
+  \refstepcounter{exercise}%
+  \section*{Exercise \thechapter.\arabic{exercise}: #1}%
+  \addcontentsline{toc}{section}{Exercise \thechapter.\arabic{exercise}: #1}%
+  \noindent\statusbadge{#2}\hfill{\small\itshape Original: #3 \quad|\quad LTspice file: \texttt{Lab\thechapter/Ex\twodigit{exercise}.asc}}\par\medskip}
+
+% \advexercise{Tiêu đề}{Kỹ thuật chính (.step, .meas, .temp, Monte Carlo, .four ...)}
+\newcommand{\advexercise}[2]{%
+  \clearpage
+  \refstepcounter{advexercise}%
+  \section*{Advanced Exercise \thechapter.A\arabic{advexercise}: #1}%
+  \addcontentsline{toc}{section}{Advanced Exercise \thechapter.A\arabic{advexercise}: #1}%
+  \noindent\tcbox[on line,colback=violet!70!black,colframe=violet!70!black,coltext=white,boxsep=1pt,left=4pt,right=4pt,top=1pt,bottom=1pt,arc=1mm]{\small\bfseries Advanced}%
+  \hfill{\small\itshape Technique: #2 \quad|\quad LTspice file: \texttt{Lab\thechapter/Adv\twodigit{advexercise}.asc}}\par\medskip}
+
+% Lý do thay đổi (chỉ in trong bản lời giải)
+\newcommand{\statusreason}[1]{\ifsolution\begin{tcolorbox}[colback=orange!6,colframe=orange!70!black,boxrule=0.6pt,arc=1mm,left=6pt,right=6pt,top=3pt,bottom=3pt,fonttitle=\bfseries\small,title=Reason for status (instructor only)]\small #1\end{tcolorbox}\fi}
+
+% Đề bài
+\newcommand{\task}[1]{\noindent #1\par\medskip}
+
+% Linh kiện & mô hình
+\newcommand{\components}[1]{\begin{tcolorbox}[colback=blue!3,colframe=blue!50!black,boxrule=0.6pt,arc=1mm,left=6pt,right=6pt,top=3pt,bottom=3pt,fonttitle=\bfseries\small,title=Components and models]\small #1\end{tcolorbox}}
+
+% ---------------------------------------------------------------------
+%  PHẦN DÀNH CHO SINH VIÊN / GIẢNG VIÊN
+% ---------------------------------------------------------------------
+\newcommand{\dotline}[1]{\noindent #1\dotfill\par\vspace{0.8em}}
+\newcommand{\dotlines}[1]{\foreach \i in {1,...,#1}{\noindent\dotfill\par\vspace{1em}}}
+
+% \answerspace{n}: n dòng chấm để sinh viên điền (ẩn trong bản lời giải)
+\newcommand{\answerspace}[1]{\ifsolution\else\dotlines{#1}\fi}
+
+% \ans{giá trị}: bản SV in ô trống, bản lời giải in giá trị
+\newcommand{\fillcell}{\fcolorbox{orange!80!black}{yellow!25}{\rule{0pt}{1.1em}\rule{1.3cm}{0pt}}}
+\newcommand{\ans}[1]{\ifsolution #1\else\fillcell\fi}
+
+% Môi trường lời giải: chỉ xuất hiện khi \solutiontrue
+\newtcolorbox{solbox}{enhanced,breakable,colback=blue!3!white,colframe=blue!60!black,fonttitle=\bfseries,
+  title=Solution,arc=1.5mm,boxrule=0.8pt,left=8pt,right=8pt,top=6pt,bottom=6pt}
+\ifsolution
+  \newenvironment{solution}{\begin{solbox}}{\end{solbox}}
+\else
+  \excludecomment{solution}
+\fi
+
+% Bảng so sánh lý thuyết -- mô phỏng
+%   \begin{comparison}{chú thích} \cmprow{Đại lượng}{Đơn vị}{LT}{MP}{Sai số} ... \end{comparison}
+\newenvironment{comparison}[1]{%
+  \def\cmpcaption{#1}%
+  \begin{table}[H]\centering\renewcommand{\arraystretch}{1.3}%
+  \begin{tabular}{l c c c c}\toprule
+  \textbf{Quantity} & \textbf{Unit} & \textbf{Theory} & \textbf{Simulation} & \textbf{Error (\%)}\\\midrule}
+  {\bottomrule\end{tabular}\caption{\cmpcaption}\end{table}}
+\newcommand{\cmprow}[5]{#1 & #2 & \ans{#3} & \ans{#4} & \ans{#5}\\}
+
+% Ô ghi nhận xét
+\newtcolorbox{notebox}[2][]{enhanced,breakable,colback=gray!7,colframe=gray!65!black,fonttitle=\bfseries,
+  title={#2},boxrule=0.8pt,arc=1.5mm,left=8pt,right=8pt,top=6pt,bottom=6pt,#1}
+
+% Mẹo LTspice
+\newtcolorbox{tipbox}{enhanced,breakable,colback=green!4,colframe=green!45!black,fonttitle=\bfseries,
+  title=LTspice tip,boxrule=0.6pt,arc=1.5mm,left=8pt,right=8pt,top=4pt,bottom=4pt}
+
+% Khối lệnh SPICE
+\newtcblisting{spice}[1][]{listing only,colback=gray!5,colframe=gray!60!black,boxrule=0.6pt,arc=1mm,
+  title=SPICE directives,fonttitle=\bfseries\small,
+  listing options={basicstyle=\ttfamily\small,columns=fullflexible,keepspaces=true},#1}
+
+% Ghi chú TODO cho nhóm (đổi \showtodotrue -> \showtodofalse khi nộp)
+\newif\ifshowtodo \showtodotrue
+\newcommand{\todo}[1]{\ifshowtodo{\color{red!70!black}\small\itshape [TODO: #1]}\fi}

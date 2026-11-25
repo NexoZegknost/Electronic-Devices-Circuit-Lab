@@ -1,0 +1,26 @@
+% Lab 5 -- Advanced Exercise 2  |  Đức (TV3)
+\advexercise{Switching Loss with an Inductive Load}{\texttt{.tran}, \texttt{.meas}}
+
+\subsection*{Objective}
+\todo{State the objective and why it is more challenging than the main exercises.}
+
+\subsection*{Task}
+\task{\todo{Problem statement.}}
+\circuitfig{adv02}{Circuit of Advanced Exercise 5.A2}
+
+\subsection*{Simulation}
+\begin{spice}
+.tran 0 2m 0 10n
+.meas TRAN Eon INTEG V(d)*Id(M1) FROM=1m TO=1.0005m
+\end{spice}
+\simfig{adv02_sim}{Simulation result of Advanced Exercise 5.A2}
+
+\subsection*{Questions}
+\begin{enumerate}[itemsep=2pt]
+  \item \todo{Question 1}
+  \item \todo{Question 2}
+\end{enumerate}
+\answerspace{6}
+\begin{solution}
+\todo{Expected results and discussion.}
+\end{solution}

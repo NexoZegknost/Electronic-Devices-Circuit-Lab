@@ -1,0 +1,24 @@
+% =====================================================================
+%  SẢN PHẨM 2 -- SOLUTIONS MANUAL (chỉ dành cho giảng viên)
+%  Cùng nguồn với manual.tex; chỉ khác \solutiontrue
+%  Biên dịch: latexmk solutions.tex  ->  build/solutions.pdf
+% =====================================================================
+\documentclass[a4paper,11pt]{report}
+\newif\ifsolution \solutiontrue
+\input{shared/preamble}
+\input{shared/config}
+
+\newcommand{\coverKind}{SOLUTIONS MANUAL -- FOR INSTRUCTORS ONLY}
+\newcommand{\coverTitle}{LTspice Simulation Labs}
+\newcommand{\coverSub}{Worked solutions, simulation results and comparison tables}
+
+\begin{document}
+\input{shared/cover}
+
+\pagenumbering{roman}
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+
+\input{shared/labs_all}
+\end{document}
