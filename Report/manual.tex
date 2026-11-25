@@ -25,6 +25,7 @@
 
 \appendix
 \renewcommand{\thechapter}{\Alph{chapter}}
+\addtocontents{toc}{\protect\renewcommand{\protect\cftchappresnum}{Appendix~}\protect\cftsetindents{chapter}{0em}{7em}}
 \titleformat{\chapter}[display]{\bfseries\huge\color{blue!60!black}}{\Large Appendix \thechapter}{0.3em}{}[\vspace{2pt}{\color{blue!60!black}\titlerule[1pt]}]
 \chapter{LTspice Offline Installation}
 \input{install/body}

@@ -1,35 +1,34 @@
-\section*{LTspice Guide}
-\addcontentsline{toc}{section}{LTspice Guide}
+\section{LTspice Guide}
 
 This guide is written for students using LTspice for the first time. All screenshots are taken from
 LTspice \ltspiceVersion.
 
-\subsection*{Step 1: Choosing a diode model}
+\subsection{Step 1: Choosing a diode model}
 \todo{Place \texttt{diode}, right-click $\rightarrow$ Pick New Diode (1N4148, 1N4007, Zener).}
 
 \guidefig{step01_diode_model}{Choosing a diode model}
 
-\subsection*{Step 2: DC sweep analysis}
+\subsection{Step 2: DC sweep analysis}
 \todo{\texttt{.dc V1 0 5 10m}; plot \texttt{I(D1)} versus \texttt{V(a)}.}
 
 \guidefig{step02_dc_sweep}{DC sweep analysis}
 
-\subsection*{Step 3: Sinusoidal sources}
+\subsection{Step 3: Sinusoidal sources}
 \todo{Voltage source $\rightarrow$ Advanced $\rightarrow$ SINE(Voffset Vamp Freq).}
 
 \guidefig{step03_sine}{Sinusoidal sources}
 
-\subsection*{Step 4: Transient analysis and maximum time step}
+\subsection{Step 4: Transient analysis and maximum time step}
 \todo{\texttt{.tran 0 40m 0 10u}; compare two different max steps.}
 
 \guidefig{step04_tran}{Transient analysis and maximum time step}
 
-\subsection*{Step 5: Transformers}
+\subsection{Step 5: Transformers}
 \todo{Two inductors coupled with \texttt{K1 L1 L2 1}.}
 
 \guidefig{step05_transformer}{Transformers}
 
-\subsection*{Step 6: Measuring ripple and peaks}
+\subsection{Step 6: Measuring ripple and peaks}
 \todo{\texttt{.meas TRAN Vr PP V(out) FROM=20m TO=40m}.}
 
 \guidefig{step06_meas}{Measuring ripple and peaks}

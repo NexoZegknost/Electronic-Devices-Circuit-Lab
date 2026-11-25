@@ -1,25 +1,24 @@
-\section*{LTspice Guide}
-\addcontentsline{toc}{section}{LTspice Guide}
+\section{LTspice Guide}
 
 This guide is written for students using LTspice for the first time. All screenshots are taken from
 LTspice \ltspiceVersion.
 
-\subsection*{Step 1: Placing an op-amp and supplies}
+\subsection{Step 1: Placing an op-amp and supplies}
 \todo{Place an op-amp (e.g. LT1001 / UniversalOpAmp); add $\pm V_{CC}$.}
 
 \guidefig{step01_opamp}{Placing an op-amp and supplies}
 
-\subsection*{Step 2: AC analysis and Bode plots}
+\subsection{Step 2: AC analysis and Bode plots}
 \todo{Set source \texttt{AC 1}; \texttt{.ac dec 100 10 1meg}; log axes.}
 
 \guidefig{step02_ac}{AC analysis and Bode plots}
 
-\subsection*{Step 3: Transient analysis of amplifiers}
+\subsection{Step 3: Transient analysis of amplifiers}
 \todo{SINE input, \texttt{.tran}; plot input and output together.}
 
 \guidefig{step03_tran}{Transient analysis of amplifiers}
 
-\subsection*{Step 4: Measuring gain and cut-off frequency}
+\subsection{Step 4: Measuring gain and cut-off frequency}
 \todo{\texttt{.meas AC f3db WHEN mag(V(out))=0.707}.}
 
 \guidefig{step04_meas}{Measuring gain and cut-off frequency}

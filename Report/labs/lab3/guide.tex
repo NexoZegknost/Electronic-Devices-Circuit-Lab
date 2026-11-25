@@ -1,30 +1,29 @@
-\section*{LTspice Guide}
-\addcontentsline{toc}{section}{LTspice Guide}
+\section{LTspice Guide}
 
 This guide is written for students using LTspice for the first time. All screenshots are taken from
 LTspice \ltspiceVersion.
 
-\subsection*{Step 1: Choosing BJT models}
+\subsection{Step 1: Choosing BJT models}
 \todo{Place \texttt{npn}/\texttt{pnp}, Pick New Transistor (2N3904, 2N3906, 2N2222).}
 
 \guidefig{step01_bjt_model}{Choosing BJT models}
 
-\subsection*{Step 2: Bias point of a BJT circuit}
+\subsection{Step 2: Bias point of a BJT circuit}
 \todo{Run \texttt{.op}; read $I_B$, $I_C$, $V_{CE}$.}
 
 \guidefig{step02_op}{Bias point of a BJT circuit}
 
-\subsection*{Step 3: Output characteristics with a nested DC sweep}
+\subsection{Step 3: Output characteristics with a nested DC sweep}
 \todo{\texttt{.dc V2 0 10 0.05 I1 0 100u 20u}.}
 
 \guidefig{step03_nested_dc}{Output characteristics with a nested DC sweep}
 
-\subsection*{Step 4: Parametric sweep of $\beta$}
+\subsection{Step 4: Parametric sweep of $\beta$}
 \todo{\texttt{.step} a model parameter or a resistor.}
 
 \guidefig{step04_step}{Parametric sweep of $\beta$}
 
-\subsection*{Step 5: Switching waveforms}
+\subsection{Step 5: Switching waveforms}
 \todo{PULSE source and \texttt{.tran}.}
 
 \guidefig{step05_tran}{Switching waveforms}
