@@ -4,8 +4,8 @@ Bộ khung LaTeX cho **toàn bộ sản phẩm** của Dự án 3, dựng theo m
 
 | Thành viên | MSSV | Phụ trách |
 |---|---|---|
-| Cường | _(điền)_ | Lab 1, Lab 2, Bảng ánh xạ, câu hỏi [1] [3] [5] [7] |
-| Đạt | _(điền)_ | Lab 3, Lab 4, Biên tập – đóng gói, câu hỏi [4] [6] [8] |
+| Đỗ Việt Cường | 2510280 | Lab 1, Lab 2, Bảng ánh xạ, câu hỏi [1] [3] [5] [7] |
+| Nguyễn Quốc Đạt | 2510287 | Lab 3, Lab 4, Biên tập – đóng gói, câu hỏi [4] [6] [8] |
 | Nguyễn Huỳnh Hữu Đức | 2510290 | Lab 5, Lab 6, Hướng dẫn cài đặt, câu hỏi [2] [9] |
 
 > Họ tên, MSSV, GVHD, lớp, phiên bản LTspice: sửa **một chỗ duy nhất** ở `shared/config.tex`.
@@ -32,14 +32,16 @@ Report/
 │   ├── preamble.tex           gói, macro bài tập, ô dán ảnh, bảng so sánh
 │   ├── cover.tex              trang bìa (SVTH: 3 thành viên – MSSV)
 │   ├── preface.tex            "How to use this manual"
+│   ├── output_common.tex      phần chung của mục Output Requirements
 │   └── labs_all.tex           danh sách 6 lab
 ├── labs/
 │   └── labN/                  (N = 1..6)
-│       ├── lab.tex            khung chương: intro → guide → 10 Ex → Adv
+│       ├── lab.tex            khung chương: Introduction → LTspice Guide → Exercises → Advanced → Output Requirements
 │       ├── intro.tex          Introduction
 │       ├── guide.tex          LTspice Guide (các bước + ảnh)
 │       ├── ex01.tex … ex10.tex
 │       ├── adv01.tex  adv02.tex
+│       ├── output.tex         Output Requirements: checklist đầu ra từng bài
 │       └── images/
 │           ├── guide/         stepNN_xxx.png  (ảnh thao tác)
 │           ├── circuit/       exNN.png, advNN.png (schematic)
@@ -50,7 +52,7 @@ Report/
 ├── images/common/hcmut.png    logo
 ├── images/install/            ảnh cài đặt
 ├── ltspice/                   (3) file .asc: Lab1/Ex01.asc … Lab6/Adv02.asc, lib/
-└── tools/pack.ps1             đóng gói MSSV1_MSSV2_MSSV3_Project3.zip
+└── tools/pack.ps1             đóng gói 2510280_2510287_2510290_Project3.zip
 ```
 
 ## 3. Cách viết một bài tập (`labs/labN/exNN.tex`)
@@ -85,7 +87,7 @@ Cần TeX Live/MiKTeX có gói tiếng Việt (`babel-vietnamese`) như các lab
 ## 5. Đóng gói nộp bài
 
 ```
-powershell -ExecutionPolicy Bypass -File tools\pack.ps1 -Name 2510290_MSSV2_MSSV3_Project3
+powershell -ExecutionPolicy Bypass -File tools\pack.ps1 -Name 2510280_2510287_2510290_Project3
 ```
 
 ## 6. Báo cáo .docx

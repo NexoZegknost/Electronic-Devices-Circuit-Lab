@@ -1,7 +1,7 @@
 # Đóng gói bài nộp: chạy trong PowerShell tại thư mục gốc (Report)
 #   powershell -ExecutionPolicy Bypass -File tools\pack.ps1
 # Yêu cầu: đã chạy `latexmk` để có các PDF trong build\
-param([string]$Name = "MSSV1_MSSV2_MSSV3_Project3")
+param([string]$Name = "2510280_2510287_2510290_Project3")
 
 $out = "submit\$Name"
 Remove-Item -Recurse -Force $out -ErrorAction SilentlyContinue
