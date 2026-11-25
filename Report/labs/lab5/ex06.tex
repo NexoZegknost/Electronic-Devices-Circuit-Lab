@@ -1,33 +1,63 @@
-% Lab 5 -- Exercise 6  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 Enhancement MOSFET  |  Status: Keep
-\exercise{Enhancement-type MOSFET}{Keep}{Ch.6 Enhancement MOSFET}
-\statusreason{Only the tool changes (PSpice for TI $\rightarrow$ LTspice); circuit and values unchanged.}
+% Lab 5 -- Exercise 6  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 3.2 (Enhancement-mode MOSFET)  |  Status: Adjust
+% Netlist:
+%   VDS d 0 10 ; VGS g 0 0 ; M1 d g 0 0 EM l=1u w=1u     (symbol nmos4)
+\exercise{Enhancement-type MOSFET}{Adjust}{Ch.6 3.2 -- Enhancement-mode MOSFET validation}
+\statusreason{The original section is a demonstration with the PSpice part \texttt{MbreakN}. It becomes an exercise in
+which students extract $V_{GS(\mathrm{Th})}$ and $k$ from the transfer curve; the device is defined with an explicit
+level-1 \texttt{.model} so that the result can be compared with theory.}
 
-\task{\todo{Problem statement: what is given and what must be found (see Ch.6 Enhancement MOSFET).}}
+\task{An n-channel enhancement-type MOSFET is biased with $V_{DS} = 10$\,V. Sweep $V_{GS}$ from $0$ to $6$\,V and plot
+$I_D(V_{GS})$. From the curve, determine the threshold voltage $V_{GS(\mathrm{Th})}$ and the constant $k$ of
+$I_D = k\,(V_{GS} - V_{GS(\mathrm{Th})})^2$.}
 
 \subsubsection*{Circuit}
-\circuitfig{ex06}{Circuit of Exercise 5.6}
-\components{\todo{List every component value and model, e.g. R1 = 1\,k$\Omega$, D1: 1N4148.}}
+\circuitfig{ex06}{Circuit of Exercise 5.6: E-MOSFET transfer characteristic}
+\components{
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+  \item $V_{DS} = 10$\,V drain to ground, $V_{GS}$ gate to ground (swept), source and bulk grounded.
+  \item M1 (symbol \texttt{nmos4}, $L = W = 1\,\mu$m): \texttt{.model EM NMOS(Level=1 Vto=2 Kp=1m Lambda=0)}
+\end{itemize}}
 
 \subsubsection*{Theoretical Calculation}
+\begin{enumerate}[itemsep=2pt]
+  \item From the model, write $V_{GS(\mathrm{Th})}$ and $k = \tfrac{K_P}{2}\tfrac{W}{L}$.
+  \item Compute $I_D$ at $V_{GS} = 3$, $4$, $5$ and $6$\,V.
+  \item Explain how $k$ can be obtained from one measured point $(V_{GS}, I_D)$ once $V_{GS(\mathrm{Th})}$ is known.
+\end{enumerate}
 \answerspace{8}
 \begin{solution}
-\todo{Worked solution with formulas and steps.}
+$V_{GS(\mathrm{Th})} = 2$\,V, $k = 0.5\,\mathrm{mA/V^2}$.
+\begin{center}
+\begin{tabular}{c c c c c}
+\toprule
+$V_{GS}$ (V) & 3 & 4 & 5 & 6\\ \midrule
+$I_D$ (mA) & 0.5 & 2.0 & 4.5 & 8.0\\
+\bottomrule
+\end{tabular}
+\end{center}
+From a measured point: $k = I_D/(V_{GS}-V_{GS(\mathrm{Th})})^2$, e.g.\ $k = 2\,\mathrm{mA}/(2\,\mathrm{V})^2 = 0.5\,\mathrm{mA/V^2}$.
 \end{solution}
 
 \subsubsection*{Simulation}
-\todo{Describe the LTspice setup: sources, analysis, what to plot or measure.}
+\begin{enumerate}[itemsep=2pt]
+  \item Run the DC sweep and plot \texttt{Id(M1)}.
+  \item Read $V_{GS}$ where $I_D$ starts to rise and $I_D$ at $V_{GS} = 4$\,V and $6$\,V with the cursor.
+\end{enumerate}
 \begin{spice}
-* TODO: replace with the directives of this exercise
-.dc V2 0 15 0.1 V1 -4 0 0.5
+.model EM NMOS(Level=1 Vto=2 Kp=1m Lambda=0)
+.dc VGS 0 6 0.01
 \end{spice}
-\simfig{ex06_sim}{Simulation result of Exercise 5.6}
+\simfig{ex06_sim}{Transfer characteristic $I_D(V_{GS})$ of Exercise 5.6}
 
 \subsubsection*{Theory vs. Simulation}
 \begin{comparison}{Theory vs. simulation, Exercise 5.6}
-\cmprow{$V_{GS(th)}$}{V}{}{}{}
-\cmprow{$I_D$}{mA}{}{}{}
+\cmprow{$V_{GS(\mathrm{Th})}$}{V}{2.00}{}{}
+\cmprow{$I_D$ at $V_{GS}=4$\,V}{mA}{2.00}{}{}
+\cmprow{$I_D$ at $V_{GS}=6$\,V}{mA}{8.00}{}{}
+\cmprow{$k$}{mA/V$^2$}{0.50}{}{}
 \end{comparison}
 \answerspace{3}
 \begin{solution}
-\todo{Explain the deviations (device model, assumptions such as $V_D = 0.7$\,V, $\beta$, ...).}
+Reading the threshold from the knee of the curve is less precise than computing it from two points; both methods can be
+discussed. \todo{Fill in the simulation column from the LTspice run.}
 \end{solution}

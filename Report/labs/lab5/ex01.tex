@@ -1,33 +1,70 @@
-% Lab 5 -- Exercise 1  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 JFET DC Sweep  |  Status: Adjust
-\exercise{JFET Transfer Characteristic}{Adjust}{Ch.6 JFET DC Sweep}
-\statusreason{\todo{Explain what was changed (component, model, value or merging) and why the learning objective is preserved.}}
+% Lab 5 -- Exercise 1  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 2.1 (JFET DC sweep)  |  Status: Adjust
+% Netlist để vẽ schematic (LabN/Ex01.asc):
+%   V2  d 0 10          ; nguồn drain
+%   V3  g 0 0           ; nguồn gate (được quét)
+%   J1  d g 0 JN        ; JFET kênh N, source nối đất
+\exercise{JFET Transfer Characteristic}{Adjust}{Ch.6 2.1 -- JFET DC sweep}
+\statusreason{In the original manual this sweep is a demonstration with the PSpice part \texttt{JbreakN}.
+It is turned into an exercise with a theoretical part, and the device is defined with an explicit LTspice
+\texttt{.model} ($V_P=-2$\,V, $I_{DSS}=4$\,mA) so that students can predict the curve with Shockley's equation.
+The learning objective (reading $I_{DSS}$ and $V_P$ from a DC sweep) is unchanged.}
 
-\task{\todo{Problem statement: what is given and what must be found (see Ch.6 JFET DC Sweep).}}
+\task{An n-channel JFET is biased with a fixed drain--source voltage $V_{DS} = 10$\,V. The gate--source voltage
+$V_{GS}$ is swept from $-3$\,V to $0$\,V. Predict the drain current with Shockley's equation, then plot the
+transfer characteristic $I_D(V_{GS})$ in LTspice and read $I_{DSS}$ and $V_P$ from the curve.}
 
 \subsubsection*{Circuit}
-\circuitfig{ex01}{Circuit of Exercise 5.1}
-\components{\todo{List every component value and model, e.g. R1 = 1\,k$\Omega$, D1: 1N4148.}}
+\circuitfig{ex01}{Circuit of Exercise 5.1: JFET transfer characteristic}
+\components{
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+  \item $V_2 = 10$\,V between drain and ground; $V_3$ (swept) between gate and ground; source grounded.
+  \item J1: n-channel JFET (symbol \texttt{njf}), model \texttt{JN}:\\
+        \texttt{.model JN NJF(Vto=-2 Beta=1m Lambda=0)}
+\end{itemize}}
 
 \subsubsection*{Theoretical Calculation}
+\begin{enumerate}[itemsep=2pt]
+  \item From the model, find $V_P$ and $I_{DSS}$. (In LTspice, $V_P$ = \texttt{Vto} and $I_{DSS} = \texttt{Beta}\cdot V_P^2$.)
+  \item Use Shockley's equation $I_D = I_{DSS}\left(1 - V_{GS}/V_P\right)^2$ to compute $I_D$ at
+        $V_{GS} = 0$, $-0.5$, $-1$, $-1.5$ and $-2$\,V.
+\end{enumerate}
 \answerspace{8}
 \begin{solution}
-\todo{Worked solution with formulas and steps.}
+$V_P = -2$\,V and $I_{DSS} = \beta V_P^2 = (1\,\mathrm{mA/V^2})(4\,\mathrm{V^2}) = 4$\,mA.
+\[
+  I_D = 4\,\mathrm{mA}\left(1+\frac{V_{GS}}{2}\right)^2
+\]
+\begin{center}
+\begin{tabular}{c c c c c c}
+\toprule
+$V_{GS}$ (V) & 0 & $-0.5$ & $-1$ & $-1.5$ & $-2$\\ \midrule
+$I_D$ (mA) & 4.00 & 2.25 & 1.00 & 0.25 & 0\\
+\bottomrule
+\end{tabular}
+\end{center}
 \end{solution}
 
 \subsubsection*{Simulation}
-\todo{Describe the LTspice setup: sources, analysis, what to plot or measure.}
+\begin{enumerate}[itemsep=2pt]
+  \item Draw the circuit, place the \texttt{.model} line as a SPICE directive and set the model name of J1 to \texttt{JN}.
+  \item Add the DC sweep below and run. Plot \texttt{Id(J1)}.
+  \item Use the cursor to read $I_D$ at $V_{GS}=0$ ($I_{DSS}$), the voltage where $I_D$ becomes zero ($V_P$), and $I_D$ at $V_{GS}=-1$\,V.
+\end{enumerate}
 \begin{spice}
-* TODO: replace with the directives of this exercise
-.dc V2 0 15 0.1 V1 -4 0 0.5
+.model JN NJF(Vto=-2 Beta=1m Lambda=0)
+.dc V3 -3 0 0.01
 \end{spice}
-\simfig{ex01_sim}{Simulation result of Exercise 5.1}
+\simfig{ex01_sim}{Transfer characteristic $I_D(V_{GS})$ of Exercise 5.1}
 
 \subsubsection*{Theory vs. Simulation}
 \begin{comparison}{Theory vs. simulation, Exercise 5.1}
-\cmprow{$I_{DSS}$}{mA}{}{}{}
-\cmprow{$V_P$}{V}{}{}{}
+\cmprow{$I_{DSS}$}{mA}{4.00}{}{}
+\cmprow{$V_P$}{V}{$-2.00$}{}{}
+\cmprow{$I_D$ at $V_{GS}=-1$\,V}{mA}{1.00}{}{}
+\cmprow{$I_D$ at $V_{GS}=-1.5$\,V}{mA}{0.25}{}{}
 \end{comparison}
 \answerspace{3}
 \begin{solution}
-\todo{Explain the deviations (device model, assumptions such as $V_D = 0.7$\,V, $\beta$, ...).}
+With \texttt{Lambda=0} the model follows Shockley's equation exactly, so the deviation should be limited to the cursor
+resolution (step 10\,mV). \todo{Fill in the simulation column from the LTspice run.}
 \end{solution}

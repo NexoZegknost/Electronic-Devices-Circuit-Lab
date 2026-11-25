@@ -1,33 +1,71 @@
-% Lab 5 -- Exercise 10  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: New (added)  |  Status: Replace
-\exercise{CMOS Inverter}{Replace}{New (added)}
-\statusreason{\todo{Explain why the original exercise cannot be reproduced in LTspice (or why it was added) and how the new exercise keeps an equivalent learning objective.}}
+% Lab 5 -- Exercise 10  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 4.3 (Complementary MOSFET motor controller)  |  Status: Adjust
+% Netlist:
+%   VDD vdd 0 5 ; VSS vss 0 -5
+%   M2 out g vdd vdd SWP l=1u w=1u    (P-channel, symbol pmos4, source + bulk tại +5 V)
+%   M1 out g vss vss SW  l=1u w=1u    (N-channel, symbol nmos4, source + bulk tại -5 V)
+%   RM out x 20 ; LM x 0 2m           (động cơ = RM nối tiếp LM, giữa out và đất)
+%   VIN g 0 PULSE(-5 5 0 1u 1u 1m 2m)
+\exercise{Bidirectional Motor Driver with N- and P-channel MOSFETs}{Adjust}{Ch.6 4.3 -- Complementary MOSFET motor controller (optional)}
+\statusreason{The original exercise is optional and uses a motor symbol with $\pm V_{DD}$ supplies. It becomes a required
+exercise with $\pm 5$\,V supplies (so that $|V_{GS}| = 10$\,V stays within the usual gate rating) and a motor modelled
+as $R_M$ in series with $L_M$. Level-1 models replace the PSpice parts. The objective (direction control by high-side
+P-channel and low-side N-channel switching) is kept, and the shoot-through current during transitions is added as an observation.}
 
-\task{\todo{Problem statement: what is given and what must be found (see New (added)).}}
+\task{A P-channel MOSFET connects the motor to $+5$\,V and an N-channel MOSFET connects it to $-5$\,V; both gates are driven by
+the same input that switches between $-5$\,V and $+5$\,V. Explain which transistor conducts for each input level,
+compute the motor current in both directions, and observe the current drawn from the supplies during the transitions.}
 
 \subsubsection*{Circuit}
-\circuitfig{ex10}{Circuit of Exercise 5.10}
-\components{\todo{List every component value and model, e.g. R1 = 1\,k$\Omega$, D1: 1N4148.}}
+\circuitfig{ex10}{Circuit of Exercise 5.10: bidirectional motor driver}
+\components{
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+  \item $V_{DD} = +5$\,V, $V_{SS} = -5$\,V; motor: $R_M = 20\,\Omega$ in series with $L_M = 2$\,mH, between the common drain and ground.
+  \item $V_{IN}$: \texttt{PULSE(-5 5 0 1u 1u 1m 2m)} applied to both gates.
+  \item M1 (N, symbol \texttt{nmos4}): \texttt{.model SW NMOS(Level=1 Vto=2 Kp=0.5 Lambda=0)}\\
+        M2 (P, symbol \texttt{pmos4}): \texttt{.model SWP PMOS(Level=1 Vto=-2 Kp=0.5 Lambda=0)}; $L = W = 1\,\mu$m for both.
+\end{itemize}}
 
 \subsubsection*{Theoretical Calculation}
-\answerspace{8}
+\begin{enumerate}[itemsep=2pt]
+  \item For $V_{IN} = -5$\,V and $V_{IN} = +5$\,V, compute $V_{GS}$ of each transistor and state which one is ON.
+  \item Compute $R_{DS(\mathrm{on})}$ for $|V_{GS}| = 10$\,V and the steady motor current $I_M$ in each direction.
+  \item Compute the time constant $\tau = L_M/(R_M + R_{DS(\mathrm{on})})$.
+  \item For which range of $V_{IN}$ are both transistors ON at the same time? What does this mean for the supply current?
+\end{enumerate}
+\answerspace{12}
 \begin{solution}
-\todo{Worked solution with formulas and steps.}
+$V_{IN} = -5$\,V: $V_{GS,P} = -5-5 = -10$\,V (ON), $V_{GS,N} = -5-(-5) = 0$ (OFF): the motor is connected to $+5$\,V.
+$V_{IN} = +5$\,V: $V_{GS,P} = 0$ (OFF), $V_{GS,N} = +10$\,V (ON): the motor is connected to $-5$\,V.
+\[
+  R_{DS(\mathrm{on})} \approx \frac{1}{0.5\cdot(10-2)} = 0.25\,\Omega,\qquad
+  I_M = \pm\frac{5}{20+0.25} \approx \pm 247\,\mathrm{mA},\qquad
+  \tau = \frac{2\,\mathrm{mH}}{20.25\,\Omega} \approx 99\,\mu\mathrm{s}
+\]
+Both transistors conduct when $V_{GS,N} > 2$\,V and $V_{GS,P} < -2$\,V, i.e.\ $-3\,\mathrm{V} < V_{IN} < 3\,\mathrm{V}$.
+During each 1\,$\mu$s edge the input crosses this range and a large current flows directly from $+5$\,V to $-5$\,V
+(shoot-through). Real drivers add a dead time to avoid it.
 \end{solution}
 
 \subsubsection*{Simulation}
-\todo{Describe the LTspice setup: sources, analysis, what to plot or measure.}
+\begin{enumerate}[itemsep=2pt]
+  \item Run the transient analysis. Plot \texttt{V(g)}, \texttt{V(out)} and \texttt{I(RM)}; read $I_M$ in both directions.
+  \item Plot \texttt{I(VDD)} and zoom on an input edge to see the shoot-through peak.
+\end{enumerate}
 \begin{spice}
-* TODO: replace with the directives of this exercise
-.dc V2 0 15 0.1 V1 -4 0 0.5
+.model SW  NMOS(Level=1 Vto=2  Kp=0.5 Lambda=0)
+.model SWP PMOS(Level=1 Vto=-2 Kp=0.5 Lambda=0)
+.tran 0 4m 0 0.1u
 \end{spice}
-\simfig{ex10_sim}{Simulation result of Exercise 5.10}
+\simfig{ex10_sim}{Input, motor voltage and motor current of Exercise 5.10}
 
 \subsubsection*{Theory vs. Simulation}
 \begin{comparison}{Theory vs. simulation, Exercise 5.10}
-\cmprow{$V_M$}{V}{}{}{}
-\cmprow{$t_{pd}$}{ns}{}{}{}
+\cmprow{$I_M$ ($V_{IN}=-5$\,V)}{mA}{$+247$}{}{}
+\cmprow{$I_M$ ($V_{IN}=+5$\,V)}{mA}{$-247$}{}{}
+\cmprow{$\tau$}{$\mu$s}{99}{}{}
 \end{comparison}
 \answerspace{3}
 \begin{solution}
-\todo{Explain the deviations (device model, assumptions such as $V_D = 0.7$\,V, $\beta$, ...).}
+The steady currents should agree within rounding. The shoot-through peak has no simple hand value; students should
+report it from the plot and explain its origin. \todo{Fill in the simulation column and the shoot-through peak.}
 \end{solution}

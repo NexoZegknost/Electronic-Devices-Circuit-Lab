@@ -1,32 +1,63 @@
-% Lab 5 -- Exercise 2  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 Nested DC Sweep  |  Status: Adjust
-\exercise{JFET Output Characteristics (Nested Sweep)}{Adjust}{Ch.6 Nested DC Sweep}
-\statusreason{\todo{Explain what was changed (component, model, value or merging) and why the learning objective is preserved.}}
+% Lab 5 -- Exercise 2  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 2.2 (Nested DC sweep)  |  Status: Keep
+% Netlist (dùng lại mạch Ex01):
+%   V2  d 0 10 ; V3 g 0 0 ; J1 d g 0 JN
+\exercise{JFET Output Characteristics (Nested Sweep)}{Keep}{Ch.6 2.2 -- Nested DC sweep}
+\statusreason{Same circuit and objective as the original nested DC sweep. Only the tool changes: the two-source
+\texttt{.dc} command of LTspice replaces the primary/secondary sweep of PSpice. The model of Exercise 5.1 is reused.}
 
-\task{\todo{Problem statement: what is given and what must be found (see Ch.6 Nested DC Sweep).}}
+\task{Using the circuit of Exercise 5.1, plot the family of output characteristics $I_D(V_{DS})$ for
+$V_{GS} = 0$, $-0.5$, $-1$, $-1.5$ and $-2$\,V. Identify the ohmic region, the saturation region and the
+pinch-off boundary, and compare the saturation currents with Shockley's equation.}
 
 \subsubsection*{Circuit}
-\circuitfig{ex02}{Circuit of Exercise 5.2}
-\components{\todo{List every component value and model, e.g. R1 = 1\,k$\Omega$, D1: 1N4148.}}
+\circuitfig{ex02}{Circuit of Exercise 5.2 (same as Exercise 5.1)}
+\components{
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+  \item $V_2$ (drain, primary sweep 0--10\,V), $V_3$ (gate, secondary sweep $-2$--0\,V).
+  \item J1 with model \texttt{.model JN NJF(Vto=-2 Beta=1m Lambda=0)}.
+\end{itemize}}
 
 \subsubsection*{Theoretical Calculation}
-\answerspace{8}
+\begin{enumerate}[itemsep=2pt]
+  \item For each $V_{GS}$, compute the saturation current $I_D$ with Shockley's equation.
+  \item Compute the pinch-off boundary $V_{DS(\mathrm{sat})} = V_{GS} - V_P$ for each curve.
+\end{enumerate}
+\answerspace{6}
 \begin{solution}
-\todo{Worked solution with formulas and steps.}
+\begin{center}
+\begin{tabular}{c c c c c c}
+\toprule
+$V_{GS}$ (V) & 0 & $-0.5$ & $-1$ & $-1.5$ & $-2$\\ \midrule
+$I_D$ in saturation (mA) & 4.00 & 2.25 & 1.00 & 0.25 & 0\\
+$V_{DS(\mathrm{sat})} = V_{GS}-V_P$ (V) & 2.0 & 1.5 & 1.0 & 0.5 & 0\\
+\bottomrule
+\end{tabular}
+\end{center}
+For $V_{DS} < V_{DS(\mathrm{sat})}$ the device is in the ohmic region; above it the curves are flat because $\lambda = 0$.
 \end{solution}
 
 \subsubsection*{Simulation}
-\todo{Describe the LTspice setup: sources, analysis, what to plot or measure.}
+\begin{enumerate}[itemsep=2pt]
+  \item Replace the sweep of Exercise 5.1 by the nested sweep below: $V_2$ is the inner (primary) sweep, $V_3$ the outer one.
+  \item Plot \texttt{Id(J1)}; LTspice draws one curve per value of $V_3$.
+  \item Read $I_D$ at $V_{DS} = 8$\,V on each curve and the knee of the $V_{GS}=0$ curve.
+\end{enumerate}
 \begin{spice}
-* TODO: replace with the directives of this exercise
-.dc V2 0 15 0.1 V1 -4 0 0.5
+.model JN NJF(Vto=-2 Beta=1m Lambda=0)
+.dc V2 0 10 0.05 V3 -2 0 0.5
 \end{spice}
-\simfig{ex02_sim}{Simulation result of Exercise 5.2}
+\simfig{ex02_sim}{Output characteristics $I_D(V_{DS})$ of Exercise 5.2}
 
 \subsubsection*{Theory vs. Simulation}
 \begin{comparison}{Theory vs. simulation, Exercise 5.2}
-\cmprow{$I_D$ at $V_{GS}=-1$ V}{mA}{}{}{}
+\cmprow{$I_D$ ($V_{GS}=0$, $V_{DS}=8$\,V)}{mA}{4.00}{}{}
+\cmprow{$I_D$ ($V_{GS}=-0.5$\,V)}{mA}{2.25}{}{}
+\cmprow{$I_D$ ($V_{GS}=-1$\,V)}{mA}{1.00}{}{}
+\cmprow{$I_D$ ($V_{GS}=-1.5$\,V)}{mA}{0.25}{}{}
+\cmprow{$V_{DS(\mathrm{sat})}$ ($V_{GS}=0$)}{V}{2.0}{}{}
 \end{comparison}
 \answerspace{3}
 \begin{solution}
-\todo{Explain the deviations (device model, assumptions such as $V_D = 0.7$\,V, $\beta$, ...).}
+The saturation currents should match Shockley's equation. The knee is gradual in the simulation, so
+$V_{DS(\mathrm{sat})}$ read with the cursor is approximate. \todo{Fill in the simulation column from the LTspice run.}
 \end{solution}

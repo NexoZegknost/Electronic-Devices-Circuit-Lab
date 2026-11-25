@@ -1,33 +1,62 @@
-% Lab 5 -- Exercise 4  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 Voltage-divider bias  |  Status: Keep
-\exercise{JFET Voltage-Divider Bias}{Keep}{Ch.6 Voltage-divider bias}
-\statusreason{Only the tool changes (PSpice for TI $\rightarrow$ LTspice); circuit and values unchanged.}
+% Lab 5 -- Exercise 4  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 2.3.2 (Voltage-divider bias)  |  Status: Keep
+% Netlist:
+%   VDD vdd 0 16
+%   R1  vdd g 3Meg
+%   R2  g 0 1Meg
+%   RD  vdd d 2.2k
+%   J1  d g s JN
+%   RS  s 0 2k
+\exercise{JFET Voltage-Divider Bias}{Keep}{Ch.6 2.3.2 -- Voltage-divider configuration}
+\statusreason{Same configuration and objective as the original exercise. Values are chosen so that the operating point
+falls on a simple point of the transfer curve ($V_{GS} = -0.5$\,V) and can be checked by hand.}
 
-\task{\todo{Problem statement: what is given and what must be found (see Ch.6 Voltage-divider bias).}}
+\task{For the voltage-divider bias circuit below, find $V_G$, $I_{DQ}$, $V_{GSQ}$, $V_D$, $V_S$ and $V_{DS}$.
+Verify the operating point with LTspice.}
 
 \subsubsection*{Circuit}
-\circuitfig{ex04}{Circuit of Exercise 5.4}
-\components{\todo{List every component value and model, e.g. R1 = 1\,k$\Omega$, D1: 1N4148.}}
+\circuitfig{ex04}{Circuit of Exercise 5.4: JFET voltage-divider bias}
+\components{
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+  \item $V_{DD} = 16$\,V, $R_1 = 3\,\mathrm{M}\Omega$ (top), $R_2 = 1\,\mathrm{M}\Omega$ (bottom), $R_D = 2.2\,\mathrm{k}\Omega$, $R_S = 2\,\mathrm{k}\Omega$.
+  \item J1: \texttt{.model JN NJF(Vto=-2 Beta=1m Lambda=0)}.
+\end{itemize}}
 
 \subsubsection*{Theoretical Calculation}
-\answerspace{8}
+\begin{enumerate}[itemsep=2pt]
+  \item Compute $V_G$ from the divider (gate current is zero).
+  \item Write $V_{GS} = V_G - I_D R_S$, combine with Shockley's equation and solve for $I_D$.
+  \item Compute $V_S$, $V_D$, $V_{DS}$ and check the region of operation.
+\end{enumerate}
+\answerspace{10}
 \begin{solution}
-\todo{Worked solution with formulas and steps.}
+\[
+  V_G = V_{DD}\frac{R_2}{R_1+R_2} = 16\cdot\frac{1}{4} = 4\,\mathrm{V},\qquad V_{GS} = 4 - 2I_D \;(I_D\ \text{in mA})
+\]
+\[
+  I_D = 4\left(1+\frac{4-2I_D}{2}\right)^2 = 4(3-I_D)^2 \;\Rightarrow\; 4I_D^2 - 25I_D + 36 = 0 \;\Rightarrow\; I_D = 2.25\ \text{or}\ 4\ \mathrm{mA}
+\]
+$I_D = 4$\,mA gives $V_{GS} = -4\,\mathrm{V} < V_P$ (not valid), so $I_{DQ} = 2.25$\,mA and $V_{GSQ} = -0.5$\,V.
+\[
+  V_S = 4.5\,\mathrm{V},\qquad V_D = 16 - 2.25\cdot 2.2 = 11.05\,\mathrm{V},\qquad V_{DS} = 6.55\,\mathrm{V} > V_{GS}-V_P = 1.5\,\mathrm{V}
+\]
 \end{solution}
 
 \subsubsection*{Simulation}
-\todo{Describe the LTspice setup: sources, analysis, what to plot or measure.}
 \begin{spice}
-* TODO: replace with the directives of this exercise
-.dc V2 0 15 0.1 V1 -4 0 0.5
+.model JN NJF(Vto=-2 Beta=1m Lambda=0)
+.op
 \end{spice}
-\simfig{ex04_sim}{Simulation result of Exercise 5.4}
+\simfig{ex04_sim}{Operating point of Exercise 5.4}
 
 \subsubsection*{Theory vs. Simulation}
 \begin{comparison}{Theory vs. simulation, Exercise 5.4}
-\cmprow{$I_{DQ}$}{mA}{}{}{}
-\cmprow{$V_{DS}$}{V}{}{}{}
+\cmprow{$V_G$}{V}{4.00}{}{}
+\cmprow{$I_{DQ}$}{mA}{2.25}{}{}
+\cmprow{$V_{GSQ}$}{V}{$-0.50$}{}{}
+\cmprow{$V_D$}{V}{11.05}{}{}
+\cmprow{$V_{DS}$}{V}{6.55}{}{}
 \end{comparison}
 \answerspace{3}
 \begin{solution}
-\todo{Explain the deviations (device model, assumptions such as $V_D = 0.7$\,V, $\beta$, ...).}
+Agreement is expected within rounding. \todo{Fill in the simulation column from the LTspice run.}
 \end{solution}

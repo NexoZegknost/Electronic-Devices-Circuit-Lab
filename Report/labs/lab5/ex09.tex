@@ -1,33 +1,80 @@
-% Lab 5 -- Exercise 9  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: New (added)  |  Status: Replace
-\exercise{Common-Source Amplifier}{Replace}{New (added)}
-\statusreason{\todo{Explain why the original exercise cannot be reproduced in LTspice (or why it was added) and how the new exercise keeps an equivalent learning objective.}}
+% Lab 5 -- Exercise 9  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 4.2 (MOSFET motor controller)  |  Status: Adjust
+% Netlist:
+%   VDD vdd 0 12 ; RL vdd x 100 ; L1 x d 10m ; D1 d vdd 1N4148   (anode ở drain, cathode ở VDD)
+%   Lần chạy 2: bỏ D1, thêm CDS d 0 1n
+%   M1 d g 0 0 SW l=1u w=1u     (symbol nmos4)
+%   VIN in 0 PULSE(0 5 0 10n 10n 1m 2m) ; RIN in g 4.7k ; RGS g 0 47k
+\exercise{Driving an Inductive Load with a Flyback Diode}{Adjust}{Ch.6 4.2 -- MOSFET motor controller (optional)}
+\statusreason{The original exercise is optional and uses a motor symbol. It becomes a required exercise; the motor (or relay
+coil) is modelled by its winding resistance and inductance ($R_L$ in series with $L$), which LTspice can simulate and
+students can analyse with the RL time constant. The objective (protecting the MOSFET with a flywheel diode) is kept.}
 
-\task{\todo{Problem statement: what is given and what must be found (see New (added)).}}
+\task{The switch of Exercise 5.8 now drives an inductive load: $R_L = 100\,\Omega$ in series with $L = 10$\,mH.
+A diode D1 is connected across the load. Determine the steady ON current, the time constant of the current rise and decay,
+and the peak drain voltage at turn-off. Then replace D1 by a capacitor $C_{DS} = 1$\,nF (the output capacitance of
+a real MOSFET) and observe what happens to $V_{DS}$.}
 
 \subsubsection*{Circuit}
-\circuitfig{ex09}{Circuit of Exercise 5.9}
-\components{\todo{List every component value and model, e.g. R1 = 1\,k$\Omega$, D1: 1N4148.}}
+\circuitfig{ex09}{Circuit of Exercise 5.9: inductive load with flyback diode}
+\components{
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+  \item $V_{DD} = 12$\,V, $R_L = 100\,\Omega$, $L = 10$\,mH, D1: \texttt{1N4148} (anode at the drain, cathode at $V_{DD}$).
+  \item Gate drive as in Exercise 5.8: $R_{IN} = 4.7\,\mathrm{k}\Omega$, $R_{GS} = 47\,\mathrm{k}\Omega$,
+        $V_{IN}$: \texttt{PULSE(0 5 0 10n 10n 1m 2m)}.
+  \item M1: \texttt{.model SW NMOS(Level=1 Vto=2 Kp=0.5 Lambda=0)}, $L = W = 1\,\mu$m.
+\end{itemize}}
 
 \subsubsection*{Theoretical Calculation}
-\answerspace{8}
+\begin{enumerate}[itemsep=2pt]
+  \item Compute the steady load current when the MOSFET is ON (use $R_{DS(\mathrm{on})}$ of Exercise 5.8).
+  \item Compute the time constant $\tau_{\mathrm{on}}$ of the current rise and $\tau_{\mathrm{off}}$ of the decay through the diode.
+        Is a 1\,ms ON time long enough to reach the steady current?
+  \item With the diode, estimate the peak $V_{DS}$ at turn-off (take $V_F \approx 0.7$\,V).
+  \item Without the diode, the inductor current charges $C_{DS}$. Using energy conservation
+        $\tfrac12 L I_{\mathrm{on}}^2 = \tfrac12 C_{DS} V_{\mathrm{pk}}^2$, estimate the peak of $V_{DS}$.
+\end{enumerate}
+\answerspace{10}
 \begin{solution}
-\todo{Worked solution with formulas and steps.}
+\[
+  I_{\mathrm{on}} = \frac{12}{100+0.79} \approx 119\,\mathrm{mA},\qquad
+  \tau_{\mathrm{on}} = \frac{L}{R_L+R_{DS(\mathrm{on})}} \approx 99\,\mu\mathrm{s},\qquad
+  \tau_{\mathrm{off}} \approx \frac{L}{R_L} = 100\,\mu\mathrm{s}
+\]
+$1\,\mathrm{ms} \approx 10\tau$, so the current reaches its final value. At turn-off the inductor keeps its current, which
+flows through D1: $V_{DS(\mathrm{peak})} \approx V_{DD} + V_F \approx 12.7$\,V.
+
+Without D1 the current can only charge $C_{DS}$:
+\[
+  V_{\mathrm{pk}} \approx I_{\mathrm{on}}\sqrt{\frac{L}{C_{DS}}} = 0.119\sqrt{\frac{10\,\mathrm{mH}}{1\,\mathrm{nF}}} \approx 376\,\mathrm{V},
+  \qquad V_{DS(\mathrm{peak})} \approx V_{DD} + V_{\mathrm{pk}} \approx 388\,\mathrm{V}
+\]
+(ignoring losses). A real MOSFET would break down long before this, which is why the flywheel diode is needed.
 \end{solution}
 
 \subsubsection*{Simulation}
-\todo{Describe the LTspice setup: sources, analysis, what to plot or measure.}
+\begin{enumerate}[itemsep=2pt]
+  \item Run the transient analysis with D1. Plot \texttt{I(L1)} and \texttt{V(d)}; read the steady current, the peak of $V_{DS}$
+        and the time for the current to fall to 37\,\% after turn-off ($\tau_{\mathrm{off}}$).
+  \item Delete D1, connect $C_{DS} = 1$\,nF between drain and source, and run again. Note the peak of $V_{DS}$ and the ringing.
+        (Without any capacitor the inductor current has no path and LTspice stops with \textit{Time step too small}.)
+\end{enumerate}
 \begin{spice}
-* TODO: replace with the directives of this exercise
-.dc V2 0 15 0.1 V1 -4 0 0.5
+.model SW NMOS(Level=1 Vto=2 Kp=0.5 Lambda=0)
+.tran 0 4m 0 0.2u
 \end{spice}
-\simfig{ex09_sim}{Simulation result of Exercise 5.9}
+\simfig{ex09_sim}{Load current and drain voltage of Exercise 5.9 with and without the flyback diode}
 
 \subsubsection*{Theory vs. Simulation}
-\begin{comparison}{Theory vs. simulation, Exercise 5.9}
-\cmprow{$A_v$}{V/V}{}{}{}
-\cmprow{$I_{DQ}$}{mA}{}{}{}
+\begin{comparison}{Theory vs. simulation, Exercise 5.9 (with D1)}
+\cmprow{$I_{\mathrm{on}}$}{mA}{119}{}{}
+\cmprow{$\tau_{\mathrm{on}}$}{$\mu$s}{99}{}{}
+\cmprow{$\tau_{\mathrm{off}}$}{$\mu$s}{100}{}{}
+\cmprow{$V_{DS(\mathrm{peak})}$ with D1}{V}{12.7}{}{}
+\cmprow{$V_{DS(\mathrm{peak})}$ without D1, $C_{DS}=1$\,nF}{V}{388}{}{}
 \end{comparison}
 \answerspace{3}
 \begin{solution}
-\todo{Explain the deviations (device model, assumptions such as $V_D = 0.7$\,V, $\beta$, ...).}
+The decay is not exactly exponential because the diode voltage is not constant, and the peak $V_{DS}$ depends on the
+\texttt{1N4148} model at about 120\,mA. Without D1 the simulated peak is lower than the lossless estimate because
+$R_L$ damps the oscillation. \todo{Fill in the simulation column from the LTspice run.}
 \end{solution}

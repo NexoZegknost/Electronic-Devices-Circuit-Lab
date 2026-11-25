@@ -1,34 +1,63 @@
-% Lab 5 -- Exercise 3  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 Self-bias  |  Status: Keep
-\exercise{JFET Self-Bias}{Keep}{Ch.6 Self-bias}
-\statusreason{Only the tool changes (PSpice for TI $\rightarrow$ LTspice); circuit and values unchanged.}
+% Lab 5 -- Exercise 3  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 2.3.1 (Self-bias)  |  Status: Keep
+% Netlist:
+%   VDD vdd 0 12
+%   RD  vdd d 3.3k
+%   J1  d g s JN
+%   RS  s 0 1k
+%   RG  g 0 1Meg
+\exercise{JFET Self-Bias}{Keep}{Ch.6 2.3.1 -- Self-bias configuration}
+\statusreason{Same configuration and objective as the original exercise (gate returned to ground, bias set by $R_S$).
+Component values are chosen so that the operating point can be found by hand with the model of Exercise 5.1.}
 
-\task{\todo{Problem statement: what is given and what must be found (see Ch.6 Self-bias).}}
+\task{For the self-bias circuit below, determine the quiescent values $I_{DQ}$, $V_{GSQ}$, $V_D$, $V_S$ and $V_{DS}$.
+Check that the JFET operates in the saturation region, then verify the results with an operating-point analysis.}
 
 \subsubsection*{Circuit}
-\circuitfig{ex03}{Circuit of Exercise 5.3}
-\components{\todo{List every component value and model, e.g. R1 = 1\,k$\Omega$, D1: 1N4148.}}
+\circuitfig{ex03}{Circuit of Exercise 5.3: JFET self-bias}
+\components{
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+  \item $V_{DD} = 12$\,V, $R_D = 3.3\,\mathrm{k}\Omega$, $R_S = 1\,\mathrm{k}\Omega$, $R_G = 1\,\mathrm{M}\Omega$ (gate to ground).
+  \item J1: \texttt{.model JN NJF(Vto=-2 Beta=1m Lambda=0)} \quad ($I_{DSS} = 4$\,mA, $V_P = -2$\,V).
+\end{itemize}}
 
 \subsubsection*{Theoretical Calculation}
-\answerspace{8}
+\begin{enumerate}[itemsep=2pt]
+  \item Write the self-bias line $V_{GS} = -I_D R_S$ (no gate current, $V_G = 0$).
+  \item Substitute it into Shockley's equation and solve the quadratic equation for $I_D$. Reject the root that gives $V_{GS} < V_P$.
+  \item Compute $V_S$, $V_D$ and $V_{DS}$, and check $V_{DS} > V_{GS} - V_P$.
+\end{enumerate}
+\answerspace{10}
 \begin{solution}
-\todo{Worked solution with formulas and steps.}
+With $I_D$ in mA and $R_S = 1\,\mathrm{k}\Omega$: $V_{GS} = -I_D$ (V).
+\[
+  I_D = 4\left(1 - \frac{I_D}{2}\right)^2 \;\Rightarrow\; I_D^2 - 5I_D + 4 = 0 \;\Rightarrow\; I_D = 1\ \text{or}\ 4\ \mathrm{mA}
+\]
+$I_D = 4$\,mA gives $V_{GS} = -4\,\mathrm{V} < V_P$ (not valid), so
+$I_{DQ} = 1$\,mA, $V_{GSQ} = -1$\,V.
+\[
+  V_S = I_D R_S = 1\,\mathrm{V},\qquad V_D = V_{DD} - I_D R_D = 8.7\,\mathrm{V},\qquad V_{DS} = V_D - V_S = 7.7\,\mathrm{V}
+\]
+$V_{DS} = 7.7\,\mathrm{V} > V_{GS}-V_P = 1\,\mathrm{V}$: saturation region.
 \end{solution}
 
 \subsubsection*{Simulation}
-\todo{Describe the LTspice setup: sources, analysis, what to plot or measure.}
+Run an operating-point analysis and read the values on the schematic (place the cursor on a node or a wire) or in the \textit{SPICE Error Log}.
 \begin{spice}
-* TODO: replace with the directives of this exercise
-.dc V2 0 15 0.1 V1 -4 0 0.5
+.model JN NJF(Vto=-2 Beta=1m Lambda=0)
+.op
 \end{spice}
-\simfig{ex03_sim}{Simulation result of Exercise 5.3}
+\simfig{ex03_sim}{Operating point of Exercise 5.3}
 
 \subsubsection*{Theory vs. Simulation}
 \begin{comparison}{Theory vs. simulation, Exercise 5.3}
-\cmprow{$I_{DQ}$}{mA}{}{}{}
-\cmprow{$V_{GSQ}$}{V}{}{}{}
-\cmprow{$V_{DS}$}{V}{}{}{}
+\cmprow{$I_{DQ}$}{mA}{1.00}{}{}
+\cmprow{$V_{GSQ}$}{V}{$-1.00$}{}{}
+\cmprow{$V_S$}{V}{1.00}{}{}
+\cmprow{$V_D$}{V}{8.70}{}{}
+\cmprow{$V_{DS}$}{V}{7.70}{}{}
 \end{comparison}
 \answerspace{3}
 \begin{solution}
-\todo{Explain the deviations (device model, assumptions such as $V_D = 0.7$\,V, $\beta$, ...).}
+The gate current of the model is negligible (pA range), so $V_G \approx 0$ and the results should agree within rounding.
+\todo{Fill in the simulation column from the LTspice run.}
 \end{solution}

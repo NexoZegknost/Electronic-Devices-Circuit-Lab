@@ -1,33 +1,71 @@
-% Lab 5 -- Exercise 5  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 Depletion MOSFET  |  Status: Adjust
-\exercise{Depletion-type MOSFET}{Adjust}{Ch.6 Depletion MOSFET}
-\statusreason{\todo{Explain what was changed (component, model, value or merging) and why the learning objective is preserved.}}
+% Lab 5 -- Exercise 5  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 3.1 (Depletion-mode MOSFET)  |  Status: Adjust
+% Netlist phần A (đặc tuyến):
+%   VDS d 0 15 ; VGS g 0 0 ; M1 d g 0 0 DM l=1u w=1u     (symbol nmos4, bulk nối source)
+% Netlist phần B (tự phân cực):
+%   VDD vdd 0 18 ; RD vdd d 2.2k ; M1 d g s s DM l=1u w=1u ; RS s 0 250 ; RG g 0 1Meg
+\exercise{Depletion-type MOSFET}{Adjust}{Ch.6 3.1 -- Depletion-mode MOSFET (verification + self-bias)}
+\statusreason{LTspice has no ready-made depletion-type MOSFET equivalent to the PSpice part \texttt{MbreakND}; the device
+is defined with a level-1 \texttt{.model} with a negative threshold ($V_P = -3$\,V, $I_{DSS} = 9$\,mA).
+The two parts of the original section (characterisation and self-bias) are merged into one exercise because they
+use the same device model.}
 
-\task{\todo{Problem statement: what is given and what must be found (see Ch.6 Depletion MOSFET).}}
+\task{(a) Plot the transfer characteristic $I_D(V_{GS})$ of the depletion-type MOSFET for $V_{GS}$ from $-4$\,V to $+2$\,V
+at $V_{DS} = 15$\,V. Read $I_{DSS}$ and $V_P$, and note that the device still conducts for $V_{GS} > 0$.
+(b) Find the operating point of the self-bias circuit below and verify it with LTspice.}
 
 \subsubsection*{Circuit}
-\circuitfig{ex05}{Circuit of Exercise 5.5}
-\components{\todo{List every component value and model, e.g. R1 = 1\,k$\Omega$, D1: 1N4148.}}
+\circuitfig{ex05}{Circuits of Exercise 5.5: (a) characterisation, (b) self-bias}
+\components{
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+  \item M1: 4-terminal n-channel MOSFET (symbol \texttt{nmos4}), bulk connected to source, $L = W = 1\,\mu$m:\\
+        \texttt{.model DM NMOS(Level=1 Vto=-3 Kp=2m Lambda=0)}
+  \item (a) $V_{DS} = 15$\,V drain to ground, $V_{GS}$ gate to ground (swept), source grounded.
+  \item (b) $V_{DD} = 18$\,V, $R_D = 2.2\,\mathrm{k}\Omega$, $R_S = 250\,\Omega$, $R_G = 1\,\mathrm{M}\Omega$.
+\end{itemize}}
 
 \subsubsection*{Theoretical Calculation}
-\answerspace{8}
+\begin{enumerate}[itemsep=2pt]
+  \item For a level-1 model, $I_D = \tfrac{K_P}{2}\tfrac{W}{L}(V_{GS}-V_{to})^2$ in saturation. Show that this is Shockley's
+        equation with $V_P = V_{to}$ and $I_{DSS} = \tfrac{K_P}{2}V_P^2$, and compute $I_{DSS}$.
+  \item Compute $I_D$ at $V_{GS} = -2$, $-1$ and $+1$\,V.
+  \item (b) Solve the self-bias circuit for $I_{DQ}$, $V_{GSQ}$ and $V_{DS}$.
+\end{enumerate}
+\answerspace{10}
 \begin{solution}
-\todo{Worked solution with formulas and steps.}
+With $W/L = 1$: $I_D = 1\,\mathrm{mA/V^2}\,(V_{GS}+3)^2 = 9\,\mathrm{mA}\,(1+V_{GS}/3)^2$, so $V_P = -3$\,V and $I_{DSS} = 9$\,mA.
+$I_D(-2\,\mathrm{V}) = 1$\,mA, $I_D(-1\,\mathrm{V}) = 4$\,mA, $I_D(+1\,\mathrm{V}) = 16$\,mA (enhancement region).
+
+(b) $V_{GS} = -0.25\,I_D$ ($I_D$ in mA):
+\[
+  I_D = 9\left(1-\frac{I_D}{12}\right)^2 \;\Rightarrow\; I_D^2 - 40I_D + 144 = 0 \;\Rightarrow\; I_D = 4\ \text{or}\ 36\ \mathrm{mA}
+\]
+$I_D = 36$\,mA gives $V_{GS} = -9\,\mathrm{V} < V_P$ (not valid), so $I_{DQ} = 4$\,mA, $V_{GSQ} = -1$\,V,
+$V_D = 18 - 4\cdot2.2 = 9.2$\,V, $V_S = 1$\,V, $V_{DS} = 8.2\,\mathrm{V} > V_{GS}-V_P = 2$\,V (saturation).
 \end{solution}
 
 \subsubsection*{Simulation}
-\todo{Describe the LTspice setup: sources, analysis, what to plot or measure.}
+\begin{enumerate}[itemsep=2pt]
+  \item Part (a): run the DC sweep and plot \texttt{Id(M1)}.
+  \item Part (b): build the self-bias circuit in the same file (or a second sheet) and run \texttt{.op}.
+\end{enumerate}
 \begin{spice}
-* TODO: replace with the directives of this exercise
-.dc V2 0 15 0.1 V1 -4 0 0.5
+.model DM NMOS(Level=1 Vto=-3 Kp=2m Lambda=0)
+.dc VGS -4 2 0.01
+* part (b): replace the line above with
+* .op
 \end{spice}
-\simfig{ex05_sim}{Simulation result of Exercise 5.5}
+\simfig{ex05_sim}{Transfer characteristic and self-bias operating point of Exercise 5.5}
 
 \subsubsection*{Theory vs. Simulation}
 \begin{comparison}{Theory vs. simulation, Exercise 5.5}
-\cmprow{$I_{DSS}$}{mA}{}{}{}
-\cmprow{$V_P$}{V}{}{}{}
+\cmprow{$I_{DSS}$}{mA}{9.00}{}{}
+\cmprow{$V_P$}{V}{$-3.00$}{}{}
+\cmprow{$I_D$ at $V_{GS}=+1$\,V}{mA}{16.0}{}{}
+\cmprow{$I_{DQ}$ (self-bias)}{mA}{4.00}{}{}
+\cmprow{$V_{DS}$ (self-bias)}{V}{8.20}{}{}
 \end{comparison}
 \answerspace{3}
 \begin{solution}
-\todo{Explain the deviations (device model, assumptions such as $V_D = 0.7$\,V, $\beta$, ...).}
+The level-1 model with \texttt{Lambda=0} reproduces the square law exactly; check that $L$ and $W$ are equal on the
+schematic, otherwise $I_D$ is scaled by $W/L$. \todo{Fill in the simulation column from the LTspice run.}
 \end{solution}

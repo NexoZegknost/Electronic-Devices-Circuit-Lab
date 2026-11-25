@@ -1,33 +1,66 @@
-% Lab 5 -- Exercise 8  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 Motor control  |  Status: Adjust
-\exercise{MOSFET Motor Driver}{Adjust}{Ch.6 Motor control}
-\statusreason{\todo{Explain what was changed (component, model, value or merging) and why the learning objective is preserved.}}
+% Lab 5 -- Exercise 8  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 4.1 (MOSFET as a switch)  |  Status: Keep
+% Netlist:
+%   VDD vdd 0 12 ; RL vdd d 100 ; M1 d g 0 0 SW l=1u w=1u     (symbol nmos4)
+%   VIN in 0 PULSE(0 5 0 10n 10n 0.5m 1m) ; RIN in g 4.7k ; RGS g 0 47k
+\exercise{MOSFET as a Switch}{Keep}{Ch.6 4.1 -- MOSFET as a switch}
+\statusreason{Same circuit, values and objective as the original ($R_{IN} = 4.7\,\mathrm{k}\Omega$, $R_{GS} = 47\,\mathrm{k}\Omega$,
+TTL input, $100\,\Omega$ load instead of the lamp, $V_{DD} = 12$\,V). A switching-type level-1 \texttt{.model} replaces the
+PSpice part so that $R_{DS(\mathrm{on})}$ can be estimated by hand.}
 
-\task{\todo{Problem statement: what is given and what must be found (see Ch.6 Motor control).}}
+\task{An n-channel E-MOSFET switches a $100\,\Omega$ load (replacing a lamp) from $V_{DD} = 12$\,V. The gate is driven by a
+TTL signal (0\,V / 5\,V) through $R_{IN}$, and $R_{GS}$ pulls the gate down when the input is low.
+Determine $V_{GS}$, the load current, $V_{DS}$ and the load power in the ON state, and $V_{DS}$ in the OFF state.
+Verify with a transient simulation.}
 
 \subsubsection*{Circuit}
-\circuitfig{ex08}{Circuit of Exercise 5.8}
-\components{\todo{List every component value and model, e.g. R1 = 1\,k$\Omega$, D1: 1N4148.}}
+\circuitfig{ex08}{Circuit of Exercise 5.8: MOSFET as a switch}
+\components{
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+  \item $V_{DD} = 12$\,V, $R_L = 100\,\Omega$, $R_{IN} = 4.7\,\mathrm{k}\Omega$, $R_{GS} = 47\,\mathrm{k}\Omega$.
+  \item $V_{IN}$: \texttt{PULSE(0 5 0 10n 10n 0.5m 1m)} (1\,kHz, 50\,\% duty cycle).
+  \item M1 (symbol \texttt{nmos4}, $L = W = 1\,\mu$m): \texttt{.model SW NMOS(Level=1 Vto=2 Kp=0.5 Lambda=0)}
+\end{itemize}}
 
 \subsubsection*{Theoretical Calculation}
-\answerspace{8}
+\begin{enumerate}[itemsep=2pt]
+  \item Compute $V_{GS}$ in the ON state from the divider $R_{IN}$--$R_{GS}$.
+  \item In the ohmic region with small $V_{DS}$, $R_{DS(\mathrm{on})} \approx 1/[K_P(V_{GS}-V_{GS(\mathrm{Th})})]$. Compute it.
+  \item Compute the load current $I_L$, $V_{DS(\mathrm{on})}$ and the load power $P_L$. What is $V_{DS}$ when the input is low?
+\end{enumerate}
+\answerspace{10}
 \begin{solution}
-\todo{Worked solution with formulas and steps.}
+\[
+  V_{GS} = 5\cdot\frac{47}{4.7+47} = 4.55\,\mathrm{V},\qquad
+  R_{DS(\mathrm{on})} \approx \frac{1}{0.5\cdot(4.55-2)} = 0.79\,\Omega
+\]
+\[
+  I_L = \frac{12}{100+0.79} = 119\,\mathrm{mA},\qquad V_{DS(\mathrm{on})} = I_L R_{DS(\mathrm{on})} \approx 0.094\,\mathrm{V},\qquad
+  P_L = I_L^2 R_L \approx 1.42\,\mathrm{W}
+\]
+Solving the full triode equation $I_D = K_P[(V_{GS}-V_{GS(\mathrm{Th})})V_{DS} - V_{DS}^2/2]$ gives $V_{DS} = 0.095$\,V,
+practically the same. In the OFF state $V_{GS} = 0$, $I_D = 0$ and $V_{DS} = V_{DD} = 12$\,V.
 \end{solution}
 
 \subsubsection*{Simulation}
-\todo{Describe the LTspice setup: sources, analysis, what to plot or measure.}
+\begin{enumerate}[itemsep=2pt]
+  \item Run the transient analysis below. Plot \texttt{V(in)}, \texttt{V(g)}, \texttt{V(d)} and \texttt{I(RL)}.
+  \item Read $V_{GS}$, $I_L$ and $V_{DS}$ in the ON half-period and $V_{DS}$ in the OFF half-period.
+\end{enumerate}
 \begin{spice}
-* TODO: replace with the directives of this exercise
-.dc V2 0 15 0.1 V1 -4 0 0.5
+.model SW NMOS(Level=1 Vto=2 Kp=0.5 Lambda=0)
+.tran 0 3m 0 1u
 \end{spice}
-\simfig{ex08_sim}{Simulation result of Exercise 5.8}
+\simfig{ex08_sim}{Input, gate and drain waveforms of Exercise 5.8}
 
 \subsubsection*{Theory vs. Simulation}
 \begin{comparison}{Theory vs. simulation, Exercise 5.8}
-\cmprow{$I_{motor}$}{A}{}{}{}
-\cmprow{$V_{DS,peak}$}{V}{}{}{}
+\cmprow{$V_{GS}$ (ON)}{V}{4.55}{}{}
+\cmprow{$I_L$ (ON)}{mA}{119}{}{}
+\cmprow{$V_{DS}$ (ON)}{V}{0.095}{}{}
+\cmprow{$V_{DS}$ (OFF)}{V}{12.0}{}{}
 \end{comparison}
 \answerspace{3}
 \begin{solution}
-\todo{Explain the deviations (device model, assumptions such as $V_D = 0.7$\,V, $\beta$, ...).}
+Agreement is expected; the level-1 model has no gate capacitance by default, so the edges are as fast as the input.
+\todo{Fill in the simulation column from the LTspice run.}
 \end{solution}

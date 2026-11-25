@@ -1,33 +1,53 @@
-% Lab 5 -- Exercise 7  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 MOSFET switch  |  Status: Keep
-\exercise{MOSFET as a Switch}{Keep}{Ch.6 MOSFET switch}
-\statusreason{Only the tool changes (PSpice for TI $\rightarrow$ LTspice); circuit and values unchanged.}
+% Lab 5 -- Exercise 7  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: New (added)  |  Status: Replace
+% Netlist:
+%   VDD vdd 0 10 ; RD vdd d 3k ; RG d g 10Meg ; M1 d g 0 0 EM l=1u w=1u   (symbol nmos4)
+\exercise{E-MOSFET Drain-Feedback Bias}{Replace}{New (added)}
+\statusreason{Chapter 6 of the original manual contains fewer than ten simulation exercises. This exercise is added to
+reach ten and to cover biasing of an enhancement-type MOSFET, which the original chapter only characterises.
+It uses the device of Exercise 5.6 and the drain-feedback configuration of the FET-biasing chapter of the textbook.}
 
-\task{\todo{Problem statement: what is given and what must be found (see Ch.6 MOSFET switch).}}
+\task{In the drain-feedback bias circuit below, the gate is connected to the drain through a large resistor $R_G$.
+Determine $I_{DQ}$, $V_{GSQ}$ and $V_{DSQ}$, and verify them with an operating-point analysis.}
 
 \subsubsection*{Circuit}
-\circuitfig{ex07}{Circuit of Exercise 5.7}
-\components{\todo{List every component value and model, e.g. R1 = 1\,k$\Omega$, D1: 1N4148.}}
+\circuitfig{ex07}{Circuit of Exercise 5.7: E-MOSFET drain-feedback bias}
+\components{
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+  \item $V_{DD} = 10$\,V, $R_D = 3\,\mathrm{k}\Omega$, $R_G = 10\,\mathrm{M}\Omega$ (drain to gate), source and bulk grounded.
+  \item M1: \texttt{.model EM NMOS(Level=1 Vto=2 Kp=1m Lambda=0)} \quad ($V_{GS(\mathrm{Th})} = 2$\,V, $k = 0.5\,\mathrm{mA/V^2}$).
+\end{itemize}}
 
 \subsubsection*{Theoretical Calculation}
-\answerspace{8}
+\begin{enumerate}[itemsep=2pt]
+  \item Explain why $V_{GS} = V_{DS}$ in this circuit.
+  \item Write $V_{GS} = V_{DD} - I_D R_D$, combine with $I_D = k(V_{GS}-V_{GS(\mathrm{Th})})^2$ and solve for $V_{GS}$.
+  \item Compute $I_{DQ}$ and check the region of operation.
+\end{enumerate}
+\answerspace{10}
 \begin{solution}
-\todo{Worked solution with formulas and steps.}
+$I_G = 0$, so no voltage drops across $R_G$ and $V_G = V_D$, i.e.\ $V_{GS} = V_{DS}$.
+\[
+  \frac{10 - V_{GS}}{3\,\mathrm{k}\Omega} = 0.5\,\mathrm{mA/V^2}\,(V_{GS}-2)^2
+  \;\Rightarrow\; 1.5V_{GS}^2 - 5V_{GS} - 4 = 0 \;\Rightarrow\; V_{GS} = 4\ \text{or}\ -0.67\ \mathrm{V}
+\]
+The negative root is below the threshold (not valid), so $V_{GSQ} = V_{DSQ} = 4$\,V and $I_{DQ} = (10-4)/3 = 2$\,mA.
+Since $V_{DS} = V_{GS} > V_{GS}-V_{GS(\mathrm{Th})}$, the device is always in saturation in this configuration.
 \end{solution}
 
 \subsubsection*{Simulation}
-\todo{Describe the LTspice setup: sources, analysis, what to plot or measure.}
 \begin{spice}
-* TODO: replace with the directives of this exercise
-.dc V2 0 15 0.1 V1 -4 0 0.5
+.model EM NMOS(Level=1 Vto=2 Kp=1m Lambda=0)
+.op
 \end{spice}
-\simfig{ex07_sim}{Simulation result of Exercise 5.7}
+\simfig{ex07_sim}{Operating point of Exercise 5.7}
 
 \subsubsection*{Theory vs. Simulation}
 \begin{comparison}{Theory vs. simulation, Exercise 5.7}
-\cmprow{$I_D$}{mA}{}{}{}
-\cmprow{$V_{DS(on)}$}{V}{}{}{}
+\cmprow{$V_{GSQ}$}{V}{4.00}{}{}
+\cmprow{$V_{DSQ}$}{V}{4.00}{}{}
+\cmprow{$I_{DQ}$}{mA}{2.00}{}{}
 \end{comparison}
 \answerspace{3}
 \begin{solution}
-\todo{Explain the deviations (device model, assumptions such as $V_D = 0.7$\,V, $\beta$, ...).}
+Agreement is expected within rounding. \todo{Fill in the simulation column from the LTspice run.}
 \end{solution}
