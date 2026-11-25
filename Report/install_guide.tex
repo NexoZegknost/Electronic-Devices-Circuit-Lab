@@ -1,0 +1,23 @@
+% =====================================================================
+%  SẢN PHẨM 4 -- HƯỚNG DẪN CÀI ĐẶT OFFLINE (PDF riêng)
+%  Nội dung dùng chung với Appendix A của manual: install/body.tex
+%  Biên dịch: latexmk install_guide.tex -> build/install_guide.pdf
+% =====================================================================
+\documentclass[a4paper,11pt]{report}
+\newif\ifsolution \solutionfalse
+\input{shared/preamble}
+\input{shared/config}
+\renewcommand{\thesection}{\arabic{section}}
+
+\newcommand{\coverKind}{INSTALLATION GUIDE}
+\newcommand{\coverTitle}{LTspice Offline Installation}
+\newcommand{\coverSub}{Deployment for computer labs without Internet access}
+
+\begin{document}
+\input{shared/cover}
+\pagenumbering{roman}
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+\input{install/body}
+\end{document}

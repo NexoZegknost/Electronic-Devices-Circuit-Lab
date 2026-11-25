@@ -1,0 +1,158 @@
+% =====================================================================
+%  LTspice INSTALLATION GUIDE (offline)   -- phụ trách: Đức (TV3)
+%  Dùng chung cho install_guide.tex (PDF riêng) và Appendix A của manual.tex
+%  Bộ cài LTspice64.msi được gửi KÈM báo cáo => guide không có bước tải từ Internet.
+%  Ảnh có sẵn: images/install/install_1.png, install_2.png, install_3.png
+% =====================================================================
+
+\section{Overview}
+This guide explains how to install LTspice on a Windows computer that has \textbf{no Internet access},
+such as a computer lab, and how to bring its component library up to date.
+
+The installer \texttt{LTspice64.msi} is \textbf{delivered together with this report}.
+You do \emph{not} need to download anything from the Internet.
+
+\begin{table}[H]\centering\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{0.95\linewidth}{l X}
+\toprule
+\textbf{Item} & \textbf{Value} \\ \midrule
+Software & LTspice (Analog Devices) \\
+Version & \ltspiceVersion \\
+Installer file & \texttt{LTspice64.msi} (about 138~MB), supplied with the report \\
+Operating system & Windows 10/11, 64-bit (x64) \\
+Rights needed & Administrator rights on the computer \\
+Internet connection & Not required \\
+\bottomrule
+\end{tabularx}
+\caption{Package information}
+\end{table}
+
+\subsection*{What is in the installation package}
+\begin{itemize}[itemsep=2pt]
+  \item \texttt{LTspice64.msi} -- the installer;
+  \item the folder \texttt{lib} -- a copy of the LTspice component library, used in Section~\ref{sec:lib} to bring the library of the computer up to date without Internet;
+\end{itemize}
+The lab files (\texttt{.asc}) are delivered separately and are not part of this package.
+
+% =====================================================================
+\section{Installation Steps}
+
+\subsection{Step 1: Copy the installation package to the computer}
+The installation package is delivered together with this report. Copy the \textbf{whole package folder}
+(for example from a USB drive) to a folder on the computer, such as \texttt{C:\textbackslash Install}.
+Do not copy only the \texttt{.msi} file: the folder \texttt{lib} is also needed in Section~\ref{sec:lib}.
+
+\subsection{Step 2: Start the installer}
+Double-click \texttt{LTspice64.msi}. If Windows asks for permission to make changes, click \textit{Yes}
+(administrator rights are required). The \textit{LTspice Setup Wizard} opens. Click \textit{Next}.
+\installfig{install_1}{Welcome screen of the LTspice Setup Wizard}
+
+\subsection{Step 3: Choose the installation folder}
+The wizard shows the folder where LTspice will be installed (in the figure below:
+\texttt{P:\textbackslash ADI\textbackslash LTspice\textbackslash}). Keep the proposed folder, or click
+\textit{Browse\ldots} to choose another one, then click \textit{Install}.
+\installfig{install_2}{Select Installation Folder}
+
+\subsection{Step 4: Wait for the installation to finish}
+The installer copies the program and the LTspice libraries (component models and examples).
+No network connection is needed. Wait until the last page appears.
+
+\subsection{Step 5: Finish}
+The last page, \textit{Completing the LTspice Setup Wizard}, confirms that the installation is done.
+Tick \textit{Launch LTspice} if you want to start the program immediately, then click \textit{Finish}.
+\installfig{install_3}{Installation completed on a computer without Internet}
+
+\begin{notebox}{Message about the Internet connection}
+On a computer without Internet, the last page shows:
+\textit{``No Internet connection was detected. The LTspice libraries installed by this package may be
+out of date. When online, run Tools $>$ Update components in LTspice.''}
+This is only a notice. The libraries \emph{are} installed from the package, so LTspice can be used offline.
+To bring the libraries up to date without Internet, follow Section~\ref{sec:lib}.
+\end{notebox}
+
+% =====================================================================
+\section{First Start}\label{sec:first}
+\begin{enumerate}[itemsep=2pt]
+  \item Open LTspice from the Start menu (or tick \textit{Launch LTspice} in Step~5).
+  \item Check that the program opens without asking for an Internet connection or a licence key.
+  \item Open \textit{Help $\rightarrow$ About LTspice} and check that the version is \ltspiceVersion.
+\end{enumerate}
+\installfig{ltspice_version_crop}{Help $\rightarrow$ About LTspice showing version \ltspiceVersion}
+\begin{enumerate}[itemsep=2pt,resume]
+  \item \textbf{Close LTspice.} It must be closed before the library is copied in the next section.
+\end{enumerate}
+
+% =====================================================================
+\section{Installing the Updated Library}\label{sec:lib}
+LTspice keeps its component library (\texttt{lib}), its example circuits (\texttt{examples}) and its
+reference files (\texttt{reference}) in the folder \texttt{\%LOCALAPPDATA\%\textbackslash LTspice}.
+The installer fills this folder with the library of the installer, which \emph{may be out of date}
+(see the message at the end of Step~5). The folder \texttt{lib} supplied in the package contains the
+updated library. Replace the library of the computer with it as follows.
+
+\begin{tipbox}
+\texttt{\%LOCALAPPDATA\%} belongs to \emph{one Windows user}. On a computer used by several accounts,
+repeat Steps 6--9 in every account.
+\end{tipbox}
+
+\subsection{Step 6: Open the LTspice library folder}
+The package folder contains the installer \texttt{LTspice64.msi} and the folder \texttt{lib}.
+\textbf{Copy the whole folder \texttt{lib}} (the folder itself with everything inside it, not single
+files) into the LTspice folder, as described in Step~8.
+\installfig{install_4}{Installation package: the installer LTspice64.msi and the folder lib}
+
+Before copying, open the destination folder. Open File Explorer, click the address bar, type
+\texttt{\%LOCALAPPDATA\%\textbackslash LTspice} and press \textit{Enter}.
+\installfig{install_5}{Opening the folder \%LOCALAPPDATA\%\textbackslash LTspice from the address bar of File Explorer}
+
+\subsection{Step 7: Check the content of the folder}
+The folder contains:
+\begin{itemize}[itemsep=1pt]
+  \item the sub-folders \texttt{examples}, \texttt{lib} and \texttt{reference};
+  \item the compressed copies \texttt{examples.zip}, \texttt{lib.zip} and \texttt{reference.zip};
+  \item the files \texttt{ChangeLog.txt}, \texttt{Remove.exe} and \texttt{Remove.txt}.
+\end{itemize}
+If the folder does not exist, start LTspice once (Section~\ref{sec:first}), close it, and try again.
+\installfig{install_6}{Content of \%LOCALAPPDATA\%\textbackslash LTspice after the installation}
+
+\subsection{Step 8: Copy the updated library}
+\begin{enumerate}[itemsep=2pt]
+  \item Make sure LTspice is closed.
+  \item Open the package folder (Step~1), select the \textbf{whole folder} \texttt{lib} and copy it (\textit{Ctrl+C}); do not open it and copy single files.
+  \item Go to \texttt{\%LOCALAPPDATA\%\textbackslash LTspice} (Step~6) and paste (\textit{Ctrl+V}).
+  \item Windows reports that the destination already has files with the same names (in the figure:
+        11\,724 files). Choose \textbf{Replace the files in the destination}. The numbers may differ on your computer.
+  \item Wait until the copying is finished. Do not close the window or disconnect the USB drive before that.
+\end{enumerate}
+\installfig{install_7}{Replacing the files of the library: ``Replace the files in the destination''}
+
+\subsection{Step 9: Check the result}
+The \textit{Date modified} of the folder \texttt{lib} changes to the time of the copy. Start LTspice again
+and check that it opens without error and that \textit{Help $\rightarrow$ About LTspice} still shows version \ltspiceVersion.
+
+% =====================================================================
+\section{Updating Later (optional)}\label{sec:update}
+\begin{itemize}[itemsep=2pt]
+  \item \textbf{With Internet:} in LTspice choose \textit{Tools $\rightarrow$ Update components}, as suggested by the installer in Step~5.
+  \item \textbf{Without Internet:} use a newer package supplied by the lecturer or the administrator: install the new \texttt{LTspice64.msi} (Steps~1--5) if it is a new version, and copy its \texttt{lib} folder as in Section~\ref{sec:lib}.
+\end{itemize}
+
+% =====================================================================
+\section{Troubleshooting}
+\begin{table}[H]\centering\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.34\linewidth} X}
+\toprule
+\textbf{Problem} & \textbf{What to do} \\ \midrule
+Windows does not allow the installation & Run as administrator, or ask the computer administrator to install. \\
+File copied from USB does not install & Copy the package again; do not install a damaged file. \\
+Error about DLL files during installation & Uninstall old LTspice versions from \textit{Settings $\rightarrow$ Apps}, then install again. \\
+Parts or examples are missing when LTspice starts & Check that Section~\ref{sec:lib} was done for \emph{this} Windows user. Otherwise close LTspice, start it again; if the problem remains, uninstall and install again. \\
+Windows refuses to copy the \texttt{lib} folder or says a file is in use & Close LTspice completely (also in the system tray) and copy again. \\
+``Unknown model'' or ``subcircuit not found'' when running a circuit & Do Section~\ref{sec:lib} (copy the whole folder \texttt{lib}), then close and start LTspice again. \\
+Works for one Windows account but not for another & LTspice settings and libraries may be stored per user: start LTspice once in that account and repeat Steps 6--9. \\
+\bottomrule
+\end{tabularx}
+\caption{Common problems}
+\end{table}
+
+\noindent\textit{This guide covers Windows 10/11 (x64) only.}
