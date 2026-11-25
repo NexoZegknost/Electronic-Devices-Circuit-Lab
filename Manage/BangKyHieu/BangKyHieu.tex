@@ -1,0 +1,457 @@
+% =====================================================================
+%  CO2037 – Dự án 3 · BẢNG KÝ HIỆU THỐNG NHẤT (tài liệu nội bộ, KHÔNG nộp)
+%  Biên dịch: latexmk  (XeLaTeX, xem latexmkrc cùng thư mục)
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\usepackage[vietnamese]{babel}
+\usepackage[top=1.8cm,bottom=1.8cm,left=1.6cm,right=1.6cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{array,booktabs,longtable,tabularx}
+\usepackage[table]{xcolor}
+\usepackage{enumitem}
+\usepackage[most]{tcolorbox}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{needspace}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,urlcolor=blue]{hyperref}
+
+\setlist{itemsep=1pt,topsep=3pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\renewcommand{\arraystretch}{1.25}
+\setlength{\tabcolsep}{4pt}
+\setlength{\LTpre}{4pt}\setlength{\LTpost}{6pt}
+
+\pretocmd{\section}{\Needspace{10\baselineskip}}{}{}
+\titleformat{\section}{\large\bfseries\color{blue!50!black}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{blue!50!black}}{\thesubsection}{0.6em}{}
+
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\itshape CO2037 – Dự án 3 · Bảng ký hiệu thống nhất}
+\fancyhead[R]{\small\itshape Tài liệu nội bộ – không nộp}
+\fancyfoot[C]{\small\thepage}
+
+% ---- tiện ích -------------------------------------------------------
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}          % mã LTspice / LaTeX
+\newcommand{\warn}{\textcolor{red!70!black}{\textbf{(!)}}}
+\newcommand{\thead}[1]{\textbf{#1}}
+\newcommand{\rowhead}{\rowcolor{blue!8}}
+\newtcolorbox{note}[1][Lưu ý]{colback=gray!6,colframe=gray!60!black,boxrule=0.6pt,arc=1mm,
+  left=6pt,right=6pt,top=3pt,bottom=3pt,fonttitle=\bfseries\small,title=#1}
+\lstset{basicstyle=\ttfamily\small,columns=fullflexible,keepspaces=true,frame=single,
+  backgroundcolor=\color{gray!5},rulecolor=\color{gray!60}}
+
+% ---- ký hiệu thống nhất (dùng trong chính file này) -----------------
+\newcommand{\VCEsat}{V_{CE(\mathrm{sat})}}
+\newcommand{\ICsat}{I_{C(\mathrm{sat})}}
+\newcommand{\VGSth}{V_{GS(\mathrm{Th})}}
+\newcommand{\RDSon}{R_{DS(\mathrm{on})}}
+\newcommand{\Vrpp}{V_{r(p\text{-}p)}}
+\newcommand{\IRS}{I_{R_S}}
+\newcommand{\Iref}{I_{\mathrm{REF}}}
+
+\begin{document}
+
+\begin{center}
+  {\Large\bfseries CO2037 – Dự án 3\\[2pt] BẢNG KÝ HIỆU THỐNG NHẤT}\\[4pt]
+  {\itshape Notation Guide cho 6 lab LTspice · tài liệu nội bộ của nhóm, không nộp}
+\end{center}
+
+\begin{note}[Mục đích và cách dùng]
+\begin{itemize}[leftmargin=*]
+  \item Đáp ứng yêu cầu 9.2 của đề: \emph{``thuật ngữ và ký hiệu nhất quán giữa các bài''}.
+        Cả 3 thành viên dùng chung bảng này khi viết Lab Manual, Solutions, file \code{.asc} và báo cáo.
+  \item \textbf{Nguồn rà soát:} \code{Lab1_Manual_Ch1.pdf}, \code{Ch2.pdf}, \code{Ch3.pdf}, \code{Ch5.pdf},
+        \code{Ch6.pdf} (thư mục \code{Docs}). \code{Ch4.pdf} (Altium) ngoài phạm vi. \textbf{Chưa có Ch.7}
+        (nguồn của Lab~6), xem mục~\ref{sec:lab6}.
+  \item Cột \emph{LaTeX} là cách viết trong tài liệu; cột \emph{LTspice} là biểu thức dùng khi vẽ đồ thị hoặc
+        \code{.meas}; cột \emph{Đề gốc} là các cách viết cũ cần \textbf{thay bằng} ký hiệu chuẩn.
+  \item Rà từ phần chữ của PDF; ký hiệu chỉ xuất hiện trên hình mạch cần đối chiếu thêm khi vẽ lại.
+\end{itemize}
+\end{note}
+
+\begin{center}\small
+\begin{tabular}{l l l l}
+\toprule\rowhead
+\thead{Lab mới} & \thead{Chương gốc} & \thead{File trong \code{Docs}} & \thead{Phụ trách}\\ \midrule
+Lab 1 & Ch.1 First Project on PSpice & \code{Lab1_Manual_Ch1.pdf} & Cường\\
+Lab 2 & Ch.2 Diode Circuits Analysis & \code{Ch2.pdf} & Cường\\
+Lab 3 & Ch.3 Bipolar Junction Transistor & \code{Ch3.pdf} & Đạt\\
+Lab 4 & Ch.5 Operational Amplifier & \code{Ch5.pdf} (bỏ mục 4 Altium) & Đạt\\
+Lab 5 & Ch.6 Field Effect Transistor & \code{Ch6.pdf} (bỏ mục 5 Altium) & Đức\\
+Lab 6 & Ch.7 24 Hour Project for Midterm & \textbf{chưa có} & Đức\\
+--    & Ch.4 Altium Designer & \code{Ch4.pdf} & ngoài phạm vi\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% =====================================================================
+\section{Quy tắc chung}
+{\small
+\begin{longtable}{C{0.9cm} L{6.4cm} L{4.6cm} L{4.6cm}}
+\toprule\rowhead
+\thead{\#} & \thead{Quy tắc} & \thead{Đúng} & \thead{Tránh}\\ \midrule\endhead
+G1 & Đại lượng \textbf{DC / giá trị tĩnh}: chữ in hoa, chỉ số in hoa & $V_{CE}$, $I_D$, $V_{GS}$ & \code{vce}, \code{Vce}\\
+G2 & Đại lượng \textbf{tức thời / theo thời gian}: chữ thường, có $(t)$ & $v_o(t)$, $i_D(t)$ & dùng $V_o$ cho dạng sóng\\
+G3 & \textbf{Biên độ}: chỉ số $m$ (đỉnh), $p\text{-}p$ (đỉnh–đỉnh) & $V_m$, $\Vrpp$ & \code{Vmax}, \code{Vpeak} lẫn lộn\\
+G4 & Chỉ số là \textbf{tên viết tắt} (CE, GS, sat, th, REF\ldots) viết thẳng; chỉ số là biến/số thứ tự viết nghiêng & $\VCEsat$, $R_1$, $I_{B1}$ & --\\
+G5 & Trạng thái đặc biệt đặt trong ngoặc ở chỉ số & $\VCEsat$, $\ICsat$, $\RDSon$, $\VGSth$ & \code{VCE(Sat)}, \code{Vce_sat}\\
+G6 & \textbf{Một nút}: $V_A$ = điện áp nút A so với đất. \textbf{Hai nút}: $V_{AB}=V_A-V_B$ & $V_{AB}$ & $U_{CD}$ (Ch.1 dùng U)\\
+G7 & \textbf{Dòng nhánh}: $I_{AB}$ = dòng từ A sang B; dòng qua linh kiện $I_{R1}$, $I_{D2}$ & $I_{R1}$ & \code{IR1}, \code{I R1}\\
+G8 & \textbf{Công suất hấp thụ} theo quy ước dấu thụ động: $P>0$ hấp thụ, $P<0$ phát & $P_{R_S}$, $P_Z$ & \code{p2} trong lời văn (chỉ giữ khi khớp nhãn hình)\\
+G9 & \textbf{Ký hiệu trong lời văn phải khớp nhãn trên hình}; hình vẽ lại bằng LTspice đặt nhãn theo bảng này & -- & đề hỏi \code{ID3}, bảng ghi \code{ID1} (Ch.2 3.5)\\
+G10 & Giá trị trong \textbf{lời văn}: số -- khoảng trắng hẹp -- đơn vị SI; dấu thập phân là dấu chấm & $1.5\,\mathrm{k\Omega}$, $10\,\mu\mathrm{F}$, $0.7\,\mathrm{V}$ & \code{1.5K Ohm}, \code{1,5k}, \code{10uF}\\
+G11 & Giá trị trên \textbf{schematic / netlist}: hậu tố SPICE, không khoảng trắng, không ghi đơn vị & \code{1.5k}, \code{10u}, \code{1Meg} & \code{1.5 kΩ}, \code{1M} (= 1 milli)\\
+G12 & Thuật ngữ tiếng Anh: một cách gọi duy nhất cho cả 6 lab (mục~\ref{sec:sim}) & \emph{operating point} & lúc \emph{bias point}, lúc \emph{DC operating point}\\
+\bottomrule
+\end{longtable}}
+
+% =====================================================================
+\section{Đơn vị và hậu tố SPICE}
+\begin{center}\small
+\begin{tabular}{l l l L{6.5cm}}
+\toprule\rowhead
+\thead{Hậu tố} & \thead{Hệ số} & \thead{Ví dụ} & \thead{Ghi chú}\\ \midrule
+\code{T} & $10^{12}$ & -- & \\
+\code{G} & $10^{9}$ & -- & \\
+\code{Meg} & $10^{6}$ & \code{1Meg} & \textbf{Không} viết \code{1M}\\
+\code{k} & $10^{3}$ & \code{4.7k} & \\
+\code{m} & $10^{-3}$ & \code{100m} & \code{M} và \code{m} đều là milli trong SPICE\\
+\code{u} hoặc \code{µ} & $10^{-6}$ & \code{680u} & \\
+\code{n} & $10^{-9}$ & \code{1n} & \\
+\code{p} & $10^{-12}$ & \code{10p} & \\
+\code{f} & $10^{-15}$ & -- & \warn{} \code{1F} = 1 femto, không phải 1 farad\\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{itemize}
+  \item Chữ cái đứng sau hậu tố bị bỏ qua (\code{10uF} = \code{10u}), nhưng tài liệu thống nhất \textbf{không ghi đơn vị} trên schematic.
+  \item Thời gian, điện áp trong lệnh không ghi đơn vị: \code{.tran 100m}, không ghi \code{.tran 100ms}.
+\end{itemize}
+
+% =====================================================================
+\section{Tên linh kiện (reference designator)}
+{\small
+\begin{longtable}{C{1.2cm} L{4.4cm} L{3.2cm} L{7.4cm}}
+\toprule\rowhead
+\thead{Tiền tố} & \thead{Linh kiện} & \thead{Ví dụ} & \thead{Ghi chú}\\ \midrule\endhead
+\code{R} & Điện trở & \code{R1}, \code{RL}, \code{RS} & Tên riêng: \code{RL} (tải), \code{RS} (nối tiếp Zener), \code{RB}, \code{RC}, \code{RE}, \code{RD}, \code{RG}, \code{RF} (hồi tiếp)\\
+\code{C} & Tụ điện & \code{C1} & \\
+\code{L} & Cuộn cảm & \code{L1} & \\
+\code{K} & Hệ số ghép (biến áp) & \code{K1 L1 L2 1} & Thay \emph{Transformer} của PSpice\\
+\code{D} & Diode, Zener, LED & \code{D1}, \code{D2} & LTspice dùng chung prefix \code{D}; Zener ghi rõ model\\
+\code{Q} & BJT & \code{Q1}, \code{Q2} & \\
+\code{J} & JFET & \code{J1} & \\
+\code{M} & MOSFET & \code{M1} & \\
+\code{U} & Op-amp, IC (subcircuit từ thư viện) & \code{U1} & \\
+\code{X} & Subcircuit tự khai báo & \code{X1} & \\
+\code{V} & Nguồn áp độc lập & \code{V1}, \code{VCC}, \code{VIN} & \\
+\code{I} & Nguồn dòng độc lập & \code{I1} & \\
+\code{E} & Nguồn áp điều khiển bằng áp (VCVS) & \code{E1} & Ch.1 Ex.1\\
+\code{F} & Nguồn dòng điều khiển bằng dòng (CCCS) & \code{F1} & \\
+\code{G} & Nguồn dòng điều khiển bằng áp (VCCS) & \code{G1} & \\
+\code{H} & Nguồn áp điều khiển bằng dòng (CCVS) & \code{H1} & Ch.1 Ex.9\\
+\code{B} & Nguồn hành vi (behavioral) & \code{B1} & Dùng khi cần mô hình thay thế\\
+\code{S}, \code{W} & Công tắc điều khiển áp / dòng & \code{S1} & Thay công tắc trong mạch opto (Ch.3 3.13)\\
+\bottomrule
+\end{longtable}}
+\textbf{Đánh số:} giữ \textbf{đúng số thứ tự như hình gốc} khi bài ở trạng thái \emph{Keep}/\emph{Adjust} (để lời văn,
+bảng so sánh, lời giải khớp nhau). Bài \emph{Replace}: đánh số từ 1, trái sang phải, trên xuống dưới.
+
+% =====================================================================
+\section{Tên nút (net label) trong LTspice}
+\begin{center}\small
+\begin{tabular}{L{6.2cm} L{4.8cm} L{4.6cm}}
+\toprule\rowhead
+\thead{Quy tắc} & \thead{LTspice} & \thead{Trong lời văn}\\ \midrule
+Đất & \code{0} (ký hiệu ground) & GND, 0~V\\
+Nút có tên chữ cái trong đề & \code{a}, \code{b}, \code{c}\ldots{} (chữ thường) & $V_A$, $V_B$\\
+Ngõ vào / ngõ ra & \code{in}, \code{out} & $V_i$, $V_o$\\
+Đường nguồn & \code{vcc}, \code{vdd}, \code{vee}, \code{vbb} & $V_{CC}$, $V_{DD}$, $V_{EE}$, $V_{BB}$\\
+Chân BJT cần đo & \code{b}, \code{c}, \code{e}; nhiều transistor: \code{b1}, \code{c1}\ldots & $V_B$, $V_C$, $V_E$\\
+Chân FET & \code{g}, \code{d}, \code{s} & $V_G$, $V_D$, $V_S$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\begin{itemize}
+  \item LTspice không phân biệt hoa/thường tên nút (\code{V(OUT)} = \code{V(out)}); thống nhất viết \textbf{chữ thường}.
+  \item Mọi nút được hỏi trong đề \textbf{phải có net label} để sinh viên đọc được \code{V(tên)}.
+\end{itemize}
+
+% =====================================================================
+%  Bảng ký hiệu đại lượng: 6 cột
+\newcommand{\symtable}{%
+  \begin{longtable}{L{1.9cm} L{2.5cm} L{3.9cm} C{1.1cm} L{3.0cm} L{3.4cm}}
+  \toprule\rowhead
+  \thead{Ký hiệu} & \thead{LaTeX} & \thead{Ý nghĩa} & \thead{Đơn vị} & \thead{LTspice} & \thead{Đề gốc}\\ \midrule\endhead}
+\newcommand{\symend}{\bottomrule\end{longtable}}
+
+\section{Mạch điện cơ bản (Lab 1, dùng chung)}
+{\footnotesize\symtable
+$V_S$ & \code{V_S} & Nguồn áp & V & \code{V(n)} & \code{V}, \code{V1}\\
+$I_S$ & \code{I_S} & Dòng do nguồn cung cấp & A & \code{-I(V1)} \warn & \code{I S} (Ch.1 Ex.7)\\
+$V_A$ & \code{V_A} & Điện áp nút A & V & \code{V(a)} & \code{VA}, \code{Va}\\
+$V_{AB}$ & \code{V_{AB}} & $V_A-V_B$ & V & \code{V(a,b)} & \code{V AB}, \code{UCD}\\
+$I_{AB}$ & \code{I_{AB}} & Dòng từ A đến B & A & \code{I(Rx)} & \code{I AB}\\
+$I_{R1}$ & \code{I_{R1}} & Dòng qua R1 & A & \code{I(R1)} \warn & \code{I R1}, \code{IR1}\\
+$R_{eq}$ & \code{R_{eq}} & Điện trở tương đương & $\Omega$ & -- & \code{R equivalent}\\
+$R_{AB}$ & \code{R_{AB}} & Điện trở tương đương giữa A–B & $\Omega$ & \code{.meas} hoặc $V/I$ & \code{R ab}, \code{R AF}\\
+$R_{AB(1234)}$ & \code{R_{AB(1234)}} & $R$ giữa A–B chỉ gồm R1–R4 & $\Omega$ & -- & \code{R AB _1234} (Ex.2)\\
+$P_X$ & \code{P_X} & Công suất hấp thụ của phần tử X & W & \code{V(n1,n2)*I(X)} hoặc Alt+click & \code{p 2}, \code{PR}\\
+$P_{R(\mathrm{rated})}$ & \texttt{P\_\{R(\textbackslash{}mathrm\{\allowbreak{}rated\})\}} & Công suất định mức điện trở & W & -- & \code{PR} (Ex.5)\\
+$\varepsilon$ & \texttt{\textbackslash{}varepsilon} & Sai số phần trăm & \% & \code{.meas} & ``percent error''\\
+\symend}
+
+\begin{note}[\warn{} Dấu dòng điện trong LTspice]
+\code{I(V1)} dương khi dòng đi vào cực + của nguồn (nguồn đang hấp thụ). Nguồn cấp điện sẽ hiện \textbf{giá trị âm}
+$\Rightarrow$ dòng cấp là \code{-I(V1)}. \code{I(R1)} dương theo chiều chân 1 $\to$ chân 2, phụ thuộc chiều đặt
+điện trở $\Rightarrow$ \textbf{kiểm tra dấu khi đọc kết quả} và ghi chú trong LTspice Guide.
+\end{note}
+
+Công thức sai số dùng chung cho mọi bảng so sánh:
+\[
+  \varepsilon = \frac{\left|X_{\mathrm{sim}} - X_{\mathrm{theory}}\right|}{\left|X_{\mathrm{theory}}\right|}\times 100\%
+\]
+
+% =====================================================================
+\section{Diode (Lab 2)}
+{\footnotesize\symtable
+$V_D$ & \code{V_D} & Điện áp trên diode (đo / tính được) & V & \code{V(a,k)} & \code{VD}, \code{V} (bảng 3.1)\\
+$I_D$ & \code{I_D} & Dòng qua diode & A & \code{I(D1)} & \code{I}, \code{I D2}\\
+$V_F$ & \code{V_F} & Áp ngưỡng \textbf{giả định} trong mô hình lý thuyết & V & -- & \code{V f}, ``forward / drop-down voltage''\\
+$r_d$ & \code{r_d} & Điện trở trong (mô hình đầy đủ) & $\Omega$ & \code{Rs} (model) & ``internal resistor''\\
+$V_R$ & \code{V_R} & Điện áp trên điện trở & V & \code{V(n1,n2)} & \code{VR}, \code{VR1}\\
+$V_Z$ & \code{V_Z} & Điện áp Zener & V & \code{BV} (model) & \code{V Z}\\
+$I_Z$ & \code{I_Z} & Dòng qua Zener & A & \code{I(D1)} \warn{} (âm khi phân cực ngược) & \code{I Z}\\
+$I_L$ & \code{I_L} & Dòng tải & A & \code{I(RL)} & \code{I L}, \code{I RL}\\
+$\IRS$ & \code{I_{R_S}} & Dòng qua điện trở nối tiếp $R_S$ & A & \code{I(RS)} & \code{IS} (3.8) -- \textbf{đổi} vì trùng $I_S$\\
+$V_L$ & \code{V_L} & Điện áp tải & V & \code{V(out)} & \code{VL}, \code{VRL}\\
+$P_Z$, $P_{R_S}$ & \code{P_Z}, \code{P_{R_S}} & Công suất Zener, công suất $R_S$ & W & -- & \code{PZ}, \code{P RS}\\
+$V_m$ & \code{V_m} & Biên độ đỉnh nguồn sin & V & \code{SINE(0 Vm f)} & \code{VAMPL}\\
+$V_{dc}$ & \code{V_{dc}} & Giá trị trung bình điện áp ra & V & \code{.meas AVG} & --\\
+$\Vrpp$ & \texttt{\textbackslash{}Vrpp} & Độ gợn đỉnh–đỉnh & V & \code{.meas PP} & --\\
+$f$, $T$ & \code{f}, \code{T} & Tần số, chu kỳ & Hz, s & -- & \code{FREQ}\\
+$n$ & \code{n=N_1/N_2} & Tỉ số vòng biến áp & -- & $L_1/L_2=n^2$ & \code{N 1/N 2}\\
+$I_s$ & \code{I_s} & Dòng bão hoà ngược (tham số model) & A & \code{Is} & -- (bài nâng cao, câu [3])\\
+\symend}
+\begin{itemize}
+  \item Phân biệt \textbf{$V_F$} (hằng số giả định: 0.7~V, 0.7223~V, 0.78~V tuỳ bài) với \textbf{$V_D$} (giá trị thực trên diode). Đề gốc trộn lẫn hai khái niệm.
+  \item Tên mô hình diode chuẩn hoá ở mục~\ref{sec:models}; mỗi bài ghi rõ model trong hộp \emph{Components and models}.
+\end{itemize}
+
+% =====================================================================
+\section{BJT (Lab 3)}
+{\footnotesize\symtable
+$I_B$, $I_C$, $I_E$ & \code{I_B}\ldots & Dòng base, collector, emitter & A & \code{Ib(Q1)}, \code{Ic(Q1)}, \code{Ie(Q1)} \warn & \code{I B}, \code{IB}\\
+$V_B$, $V_C$, $V_E$ & \code{V_B}\ldots & Điện áp nút base / collector / emitter & V & \code{V(b)}, \code{V(c)}, \code{V(e)} & \code{VB}, \code{VC}\\
+$V_{BE}$ & \code{V_{BE}} & Áp base–emitter (NPN) & V & \code{V(b,e)} & \code{VB E}\\
+$V_{EB}$ & \code{V_{EB}} & Áp emitter–base (PNP) & V & \code{V(e,b)} & \code{VE B}\\
+$V_{CE}$ & \code{V_{CE}} & Áp collector–emitter & V & \code{V(c,e)} & \code{VC E}, \code{V CE}\\
+$\VCEsat$ & \texttt{\textbackslash{}VCEsat} & $V_{CE}$ khi bão hoà & V & -- & \code{VC E (Sat )}\\
+$\ICsat$ & \texttt{\textbackslash{}ICsat} & Dòng collector bão hoà & A & -- & \code{I Sat}, \code{IC (Sat )}\\
+$\beta$ & \texttt{\textbackslash{}beta} & Hệ số khuếch đại dòng DC, $\beta=I_C/I_B$ & -- & \code{Bf} (model) & ``current gain''\\
+$\beta_D$ & \texttt{\textbackslash{}beta\_D} & Hệ số Darlington, $\approx\beta_1\beta_2$ & -- & -- & \code{I AL / I BE}\\
+$V_{CC}$, $V_{BB}$ & \code{V_{CC}}\ldots & Nguồn collector, nguồn base & V & \code{V(vcc)} & \code{Vcc}, \code{VCC}\\
+$R_B$, $R_C$, $R_E$, $R_L$ & \code{R_B}\ldots & Điện trở base, collector, emitter, tải & $\Omega$ & \code{RB}\ldots & \code{R B}, \code{RC}\\
+$I_{B(\min)}$, $I_{B(\max)}$ & \texttt{I\_\{B(\allowbreak\textbackslash{}min)\}} & Giới hạn dòng base & A & -- & \code{I B(mi n)}\\
+$\Iref$ & \texttt{\textbackslash{}Iref} & Dòng tham chiếu gương dòng & A & \code{I(R1)} & \code{IC T RL} (3.11)\\
+$I_O$ & \code{I_O} & Dòng ra gương dòng & A & \code{Ic(Q2)} & \code{IL}\\
+$I_F$ & \code{I_F} & Dòng thuận LED (opto) & A & \code{I(D...)} & \code{I F}\\
+$\mathrm{CTR}$ & \texttt{\textbackslash{}mathrm\{CTR\}} & Tỉ số truyền dòng, $I_C/I_F$ & -- & -- & \code{CTR}\\
+$V_{F(\mathrm{LED})}$ & \texttt{V\_\{F(\allowbreak\textbackslash{}mathrm\{LED\})\}} & Áp ngưỡng LED & V & -- & \code{VF}\\
+\symend}
+\begin{note}[\warn{} Dấu dòng BJT]
+LTspice báo dòng dương khi \textbf{đi vào} chân linh kiện $\Rightarrow$ với NPN, \code{Ie(Q1)} hiện giá trị âm; với PNP,
+\code{Ib}, \code{Ic} âm. Ghi vào LTspice Guide của Lab~3 (kiểm chứng lại trên bản 26.1.1 khi chạy).
+\end{note}
+\textbf{Vùng làm việc:} \emph{active region}, \emph{saturation region}, \emph{cutoff region}. \textbf{Không} dùng
+``linear mode'' (Ch.3 dùng lẫn ``linear (or active)'').
+
+% =====================================================================
+\section{Op-amp (Lab 4)}
+{\footnotesize\symtable
+$V_+$, $V_-$ & \code{V_+}, \code{V_-} & Áp tại ngõ vào không đảo / đảo & V & \code{V(inp)}, \code{V(inn)} & \code{V (+)}, \code{V (−)}\\
+$V_i$ & \code{V_i} & Điện áp vào & V & \code{V(in)} & \code{V1}, ``input voltage''\\
+$V_o$ & \code{V_o} & Điện áp ra & V & \code{V(out)} & \code{VOUT}, \code{VOU T}\\
+$A_v$ & \code{A_v} & Độ lợi điện áp kín, $V_o/V_i$ & V/V & \code{V(out)/V(in)} & ``gain'', ``amplifier factor''\\
+$A_v$ (dB) & \texttt{20\textbackslash{}log\_\{10\}\allowbreak{}|A\_v|} & Độ lợi theo dB & dB & \code{dB(V(out)/V(in))} & \code{20l og (10)}\\
+$R_f$, $R_i$ & \code{R_f}, \code{R_i} & Điện trở hồi tiếp, điện trở vào & $\Omega$ & \code{RF}, \code{RI} & \code{Rf}, \code{Ri}\\
+$f_H$ & \code{f_H} & Tần số cắt trên (lọc thông thấp) & Hz & \code{.meas ... WHEN} & \code{f H}\\
+$f_L$ & \code{f_L} & Tần số cắt dưới (lọc thông cao) & Hz & \code{.meas} & --\\
+$V_{UT}$, $V_{LT}$ & \code{V_{UT}}, \code{V_{LT}} & Ngưỡng trên / dưới (Schmitt trigger) & V & -- & ``high / low threshold''\\
+$V_H$ & \code{V_H} & Độ trễ (hysteresis), $V_H=V_{UT}-V_{LT}$ & V & -- & --\\
+$V_{o(\max)}$, $V_{o(\min)}$ & \texttt{V\_\{o(\allowbreak\textbackslash{}max)\}} & Mức bão hoà ngõ ra & V & -- & ``toggled at +4V and −4V''\\
+$\pm V_{CC}$ & \texttt{\textbackslash{}pm V\_\{CC\}} & Nguồn nuôi op-amp & V & \code{V(vcc)}, \code{V(vee)} & \code{VPOS}, \code{VNEG}\\
+GBW, SR & \texttt{\textbackslash{}mathrm\{GBW\}} & Tích độ lợi–băng thông, tốc độ quét & Hz, V/µs & tham số model & -- (bài nâng cao)\\
+\symend}
+
+% =====================================================================
+\section{FET (Lab 5)}
+{\footnotesize\symtable
+$I_D$, $I_G$, $I_S$ & \code{I_D}\ldots & Dòng drain, gate, source & A & \code{Id(J1)}, \code{Ig(J1)}, \code{Is(J1)}; \code{Id(M1)} & \code{ID}\\
+$V_{GS}$ & \code{V_{GS}} & Áp gate–source & V & \code{V(g,s)} & \code{VGS}\\
+$V_{DS}$ & \code{V_{DS}} & Áp drain–source & V & \code{V(d,s)} & --\\
+$I_{DSS}$ & \code{I_{DSS}} & Dòng drain bão hoà khi $V_{GS}=0$ (JFET, D-MOSFET) & A & -- & \code{IDSS}\\
+$V_P$ & \code{V_P} & Điện áp thắt kênh (pinch-off) & V & \code{Vto} (model) & \code{VP}\\
+$\VGSth$ & \texttt{\textbackslash{}VGSth} & Điện áp ngưỡng (E-MOSFET) & V & \code{Vto} (model) & \code{VTH}, \code{V TH}\\
+$k$ & \code{k} & Hằng số E-MOSFET & A/V$^2$ & -- & --\\
+$g_m$ & \code{g_m} & Hỗ dẫn & S & -- & -- (bài nâng cao)\\
+$\RDSon$ & \texttt{\textbackslash{}RDSon} & Điện trở dẫn của MOSFET & $\Omega$ & \code{V(d,s)/Id(M1)} & -- (bài nâng cao)\\
+$V_{DD}$, $V_{GG}$ & \code{V_{DD}}\ldots & Nguồn drain, nguồn gate & V & \code{V(vdd)} & \code{VDD}, \code{+VDD}, \code{-VDD}\\
+$R_D$, $R_S$, $R_G$ & \code{R_D}\ldots & Điện trở drain, source, gate & $\Omega$ & \code{RD}\ldots & --\\
+$R_{IN}$, $R_{GS}$ & \code{R_{IN}}, \code{R_{GS}} & Điện trở vào, điện trở kéo xuống gate & $\Omega$ & \code{RIN}, \code{RGS} & giữ nguyên\\
+$V_{IN}$ & \code{V_{IN}} & Mức logic điều khiển (TTL 0~V / 5~V) & V & \code{PULSE(0 5 ...)} & \code{VIN}\\
+\symend}
+Phương trình Shockley (JFET, D-MOSFET) và phương trình E-MOSFET -- dùng một dạng duy nhất:
+\[
+  I_D = I_{DSS}\left(1 - \frac{V_{GS}}{V_P}\right)^2,
+  \qquad
+  I_D = k\left(V_{GS} - \VGSth\right)^2
+\]
+\textbf{Thuật ngữ:} \emph{JFET}, \emph{depletion-type MOSFET (D-MOSFET)}, \emph{enhancement-type MOSFET (E-MOSFET)};
+\emph{ohmic region}, \emph{saturation region}, \emph{cutoff region}. \textbf{Không} dùng DFET, EFET, JUGFET, eMOSFET như đề gốc.
+
+% =====================================================================
+\section{Nguồn tín hiệu và lệnh mô phỏng}\label{sec:sim}
+\subsection{Thông số nguồn (đổi từ PSpice)}
+\begin{center}\small
+\begin{tabular}{l L{3.4cm} L{5.4cm} L{4.2cm}}
+\toprule\rowhead
+\thead{PSpice} & \thead{Tham số PSpice} & \thead{LTspice} & \thead{Ghi chú}\\ \midrule
+\code{VDC} & \code{DC} & \code{V1 n 0 5} & \\
+\code{VSIN} & \code{VOFF VAMPL FREQ} & \code{SINE(Voffset Vamp Freq)} & \code{VAMPL} là \emph{amplitude} (đề gốc ghi ``Amplifier voltage'')\\
+\code{VPULSE} & \code{V1 V2 TD TR TF PW PER} & \code{PULSE(V1 V2 Tdelay Trise Tfall Ton Tperiod)} & Cùng thứ tự tham số (Ch.3 3.12)\\
+\code{VAC} & \code{ACMAG} & \code{AC 1} (Small signal AC analysis) & Dùng cho \code{.ac}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Kiểu phân tích -- tên gọi thống nhất}
+\begin{center}\small
+\begin{tabular}{L{3.6cm} L{3.6cm} l l}
+\toprule\rowhead
+\thead{Đề gốc} & \thead{Tài liệu mới} & \thead{Lệnh} & \thead{Ví dụ}\\ \midrule
+Bias Point & Operating point & \code{.op} & \code{.op}\\
+DC Sweep & DC sweep & \code{.dc} & \code{.dc V1 0 5 0.1}\\
+Nested DC Sweep & Nested DC sweep & \code{.dc} (2 nguồn) & \code{.dc V2 0 10 0.1 V3 -3 0 0.5}\\
+Time Domain (Transient) & Transient analysis & \code{.tran} & \code{.tran 0 100m 0 0.1m}\\
+AC Sweep & AC analysis & \code{.ac} & \code{.ac lin 200 1 50k}\\
+Parametric sweep & Parameter sweep & \code{.step} & \code{.step param R 1k 10k 1k}\\
+Cursor / đọc giá trị & Measurement & \code{.meas} & \code{.meas DC Iat1V FIND I(D1) AT 1}\\
+Temperature & Temperature sweep & \code{.temp}, \code{.step temp} & \code{.step temp -25 100 25}\\
+-- & Fourier analysis & \code{.four} & \code{.four 50 V(out)}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Thao tác -- tên gọi thống nhất}
+\begin{center}\small
+\begin{tabular}{L{6.6cm} L{9cm}}
+\toprule\rowhead
+\thead{Đề gốc (PSpice)} & \thead{Tài liệu mới (LTspice)}\\ \midrule
+Simulation Profile & \emph{simulation command} (SPICE directive)\\
+Trace / Add Trace & \emph{plot} / \emph{Add Traces}\\
+Voltage/Level Marker, Current Marker & \emph{voltage probe}, \emph{current probe} (click lên dây / chân linh kiện)\\
+Voltage Differential Markers & \emph{differential voltage probe} (kéo từ nút này sang nút kia)\\
+Probe Cursor / Toggle Cursor & \emph{cursor}\\
+Enable Bias Voltage/Current Display & \emph{operating point labels} / \emph{SPICE Error Log}\\
+Copy to Clipboard $\to$ Notepad & \emph{File $\to$ Export data as text}\\
+Favourites list / Place $\to$ PSpice Component & \emph{Component (F2)}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% =====================================================================
+\section{Mô hình linh kiện -- tên chuẩn hoá (đề xuất)}\label{sec:models}
+Mỗi bài ghi rõ model trong \texttt{\textbackslash{}components\{...\}}. Tên dưới đây là \textbf{đề xuất ban đầu}; bảng ánh xạ
+(Cường) chốt tên cuối cùng sau khi chạy thử trên bộ cài offline.
+\begin{center}\small
+\begin{tabular}{L{4.4cm} C{1.5cm} L{6.3cm} L{3.2cm}}
+\toprule\rowhead
+\thead{Đề gốc (PSpice for TI)} & \thead{Chương} & \thead{Đề xuất LTspice} & \thead{Trạng thái dự kiến}\\ \midrule
+\code{Dbreak} & Ch.2 & Diode mặc định \code{D} hoặc \code{1N4148} & Adjust (câu [3])\\
+\code{Zener_P} (\code{Zenner_P}) & Ch.2 & \code{.model} Zener tự khai báo, \code{BV} = $V_Z$ & Adjust\\
+\code{LM2596_5P0_TRANS} & Ch.2 & IC buck có sẵn trong thư viện ADI (câu [5]) & Replace\\
+Transformer & Ch.2 & \code{L1}, \code{L2} + \code{K1 L1 L2 1} & Adjust\\
+\code{QBreakN} ($\beta=100$) & Ch.3 & \code{.model} NPN \code{BF=100} hoặc \code{2N3904} & Adjust\\
+PNP (3.6--3.7) & Ch.3 & \code{.model} PNP \code{BF=100} hoặc \code{2N3906} & Adjust\\
+Optocoupler \code{OK1} & Ch.3 & Mô hình tương đương: LED + nguồn dòng điều khiển, CTR = 2 & Replace/Adjust\\
+\code{OPAMP} (VPOS, VNEG) & Ch.5 & \code{UniversalOpAmp} / op-amp ADI tương đương & Adjust\\
+\code{LM358} & Ch.5 & Kiểm tra thư viện; nếu không có thì op-amp ADI & Adjust\\
+\code{JbreakN} & Ch.6 & \code{NJF} với \code{Vto}, \code{Beta} khai báo rõ & Adjust\\
+\code{MbreakND} (D-MOSFET) & Ch.6 & \code{.model} tự khai báo, \code{Vto < 0} & Adjust\\
+\code{MbreakN} (E-MOSFET) & Ch.6 & \code{.model} NMOS / VDMOS, \code{Vto > 0} & Adjust\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% =====================================================================
+\section{Lab 6 (Ch.7 -- 24 Hour Project for Midterm)}\label{sec:lab6}
+Chưa có file nguồn trong thư mục \code{Docs}. Lab~6 là bài tổng hợp (điện trở tương đương, dòng điện, diode, Zener,
+BJT, BJT + Zener) nên \textbf{dùng lại ký hiệu của mục 5--7}. Khi có \code{Ch7.pdf}, rà lại và bổ sung ký hiệu riêng vào đây.
+
+% =====================================================================
+\section{Lỗi và chỗ không nhất quán trong đề gốc}
+Không chép các lỗi sau sang tài liệu mới.
+{\small
+\begin{longtable}{C{1.5cm} C{1.4cm} L{7.0cm} L{6.4cm}}
+\toprule\rowhead
+\thead{Chương} & \thead{Vị trí} & \thead{Vấn đề} & \thead{Sửa thành}\\ \midrule\endhead
+Ch.1 & Ex.2 & Quy ước \code{R AB _1234} khác cách viết \code{RC D_3456}, \code{RB E} & $R_{AB(1234)}$, $R_{CD(3456)}$, $R_{BE}$\\
+Ch.1 & Ex.9 & Dùng \code{UCD} (ký hiệu U cho điện áp) & $V_{CD}$\\
+Ch.1 & Ex.7 & \code{R equi v al ent} & $R_{eq}$\\
+Ch.2 & 3.1 & ``above simulation circuit (Figure 1.2)'' -- sai số hình & Hình 2.1\\
+Ch.2 & 3.1 & Cột PSpice ghi \code{V} thay cho $V_D$ & $V_D$\\
+Ch.2 & 3.3 & Cột PSpice ghi \code{VR4} thay cho $I_{R4}$ & $I_{R4}$\\
+Ch.2 & 3.5 & Lời văn hỏi \code{ID3}, \code{ID4}; bảng ghi \code{ID1}, \code{ID2} & Theo nhãn hình vẽ lại\\
+Ch.2 & 3.6, 3.7 & $V_f$ = 0.78~V và 0.7~V, viết \code{V f} & $V_F$, ghi giá trị trong từng bài\\
+Ch.2 & 3.8 & \code{IS} là dòng qua $R_S$ -- trùng $I_S$ & $\IRS$\\
+Ch.2 & 3.8 & \code{Zenner_P} & \code{Zener_P} (chỉ nhắc khi đối chiếu PSpice)\\
+Ch.2 & 3.10 & Tiêu đề ``Exercise 8'' trong mục 3.10 & Đánh số theo lab mới\\
+Ch.2 & 3.6 & ``Amplifier voltage'' (\code{VAMPL}) & \emph{amplitude}\\
+Ch.3 & 2 & ``linear (or active) mode'' & \emph{active region}\\
+Ch.3 & 3.4 & \code{Vt er} & $V_{\mathrm{ter}}$ hoặc $V_{\mathrm{logic}}$ (chọn 1)\\
+Ch.3 & 3.9 & \code{I BE}, \code{I AC}, \code{I AL} & $I_{B1}$, $I_C$, $I_L$ theo nhãn hình\\
+Ch.3 & 3.11 & \code{IC T RL} & $\Iref$\\
+Ch.3 & 3.11 & ``called circuit mirror'' & \emph{current mirror}\\
+Ch.5 & 1 & ``cooperator'' & \emph{comparator}\\
+Ch.5 & 2.1, 3.x & \code{VOUT}, \code{V (+)} & $V_o$, $V_+$\\
+Ch.5 & 3.5 & \code{20log(7) = 16.9} thiếu đơn vị & 16.9~dB\\
+Ch.6 & 1 & JFET input impedance ``thousands of Ohms'' & Kiểm tra lại (thường từ M$\Omega$ trở lên)\\
+Ch.6 & 2 & ``JUGFET''; ``has no PN-junctions'' (chỉ đúng với đường dẫn drain--source) & \emph{JFET}; nói rõ tiếp giáp PN nằm ở cực gate\\
+Ch.6 & 2.1 & $I_{DSS}$ = 400~mA với \code{JbreakN} & Kiểm tra lại đơn vị khi chạy model LTspice\\
+Ch.6 & 3.x & \code{DFET}, \code{EFET}, \code{eMOSFET}, \code{VTH} & D-MOSFET, E-MOSFET, $\VGSth$\\
+Chung & -- & ``bellow'', ``supple'', ``Volate'', ``half-ware'', ``archived'' & below, supply, Voltage, half-wave, achieved\\
+\bottomrule
+\end{longtable}}
+
+% =====================================================================
+\section{Macro LaTeX đề xuất}
+Thêm vào \code{Report/shared/preamble.tex} nếu nhóm đồng ý; đổi ký hiệu một chỗ là cập nhật cả 6 lab và bản lời giải.
+\begin{lstlisting}
+% ---- Ky hieu thong nhat (Manage/BangKyHieu/BangKyHieu.tex) ----
+\newcommand{\VCEsat}{V_{CE(\mathrm{sat})}}
+\newcommand{\ICsat}{I_{C(\mathrm{sat})}}
+\newcommand{\VGSth}{V_{GS(\mathrm{Th})}}
+\newcommand{\RDSon}{R_{DS(\mathrm{on})}}
+\newcommand{\Vrpp}{V_{r(p\text{-}p)}}
+\newcommand{\IRS}{I_{R_S}}
+\newcommand{\Iref}{I_{\mathrm{REF}}}
+\newcommand{\Req}{R_{eq}}
+\end{lstlisting}
+
+% =====================================================================
+\section{Việc cần làm}
+\begin{itemize}[label=$\square$]
+  \item Cả nhóm đọc và thống nhất (đặc biệt mục 1, 10 và 13) trước khi viết tiếp Lab 1--5.
+  \item Cường đối chiếu mục 10--11 với bảng ánh xạ PSpice $\to$ LTspice, kiểm trên LTspice 26.1.1.
+  \item Kiểm chứng các dòng có dấu \warn{} (dấu dòng điện) khi chạy bài đầu của Lab 1 và Lab 3.
+  \item Bổ sung mục~\ref{sec:lab6} khi có \code{Ch7.pdf}.
+  \item Rút gọn mục 1, 5--9 thành 1 trang tiếng Anh \emph{Notation} cho Appendix của Lab Manual.
+\end{itemize}
+
+\end{document}

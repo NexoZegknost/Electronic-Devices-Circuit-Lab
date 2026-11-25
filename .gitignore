@@ -16,4 +16,8 @@ Thumbs.db
 desktop.ini
 .DS_Store
 
-# LaTeX and LTspice build files are listed in Report/.gitignore
+# LaTeX build output of internal documents
+Manage/**/build/
+Manage/**/*.pdf
+
+# LaTeX and LTspice build files of the deliverables are listed in Report/.gitignore
