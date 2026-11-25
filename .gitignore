@@ -1,0 +1,19 @@
+# ---- Not published ----
+# Course materials of the lecturer (kept locally only)
+Docs/
+# LTspice offline installer and library (delivered with the report, too large for git)
+Setup/
+*.msi
+*.zip
+*.tar
+
+# ---- Local working files ----
+Implement/_git_upload.tar
+Report/kit/
+/Report/*.pdf
+~$*
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# LaTeX and LTspice build files are listed in Report/.gitignore
