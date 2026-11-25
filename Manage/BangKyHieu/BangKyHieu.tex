@@ -25,8 +25,8 @@
 \setlength{\LTpre}{4pt}\setlength{\LTpost}{6pt}
 
 \pretocmd{\section}{\Needspace{10\baselineskip}}{}{}
-\titleformat{\section}{\large\bfseries\color{blue!50!black}}{\thesection}{0.6em}{}
-\titleformat{\subsection}{\normalsize\bfseries\color{blue!50!black}}{\thesubsection}{0.6em}{}
+\titleformat{\section}{\large\bfseries\color{sec!75!black}}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries\color{sec!75!black}}{\thesubsection}{0.6em}{}
 
 \pagestyle{fancy}\fancyhf{}
 \fancyhead[L]{\small\itshape CO2037 – Dự án 3 · Bảng ký hiệu thống nhất}
@@ -39,11 +39,27 @@
 \newcommand{\code}[1]{\texttt{\detokenize{#1}}}          % mã LTspice / LaTeX
 \newcommand{\warn}{\textcolor{red!70!black}{\textbf{(!)}}}
 \newcommand{\thead}[1]{\textbf{#1}}
-\newcommand{\rowhead}{\rowcolor{blue!8}}
-\newtcolorbox{note}[1][Lưu ý]{colback=gray!6,colframe=gray!60!black,boxrule=0.6pt,arc=1mm,
-  left=6pt,right=6pt,top=3pt,bottom=3pt,fonttitle=\bfseries\small,title=#1}
+\colorlet{sec}{blue}
+% \setsec{màu}: đổi màu chủ đạo của mục (tiêu đề, hàng đầu bảng, sọc bảng)
+\newcommand{\setsec}[1]{\colorlet{sec}{#1}\rowcolors{2}{white}{sec!6}}
+\newcommand{\rowhead}{\rowcolor{sec!22}}
+\tcbset{mybox/.style={enhanced,breakable,boxrule=0.7pt,arc=1.5mm,left=7pt,right=7pt,top=9pt,bottom=4pt,before skip=10pt,
+  fonttitle=\bfseries\small,attach boxed title to top left={xshift=3mm,yshift=-2mm},
+  boxed title style={arc=1mm,boxrule=0pt}}}
+\newtcolorbox{infobox}[1][Thông tin]{mybox,colback=blue!5,colframe=blue!60!black,
+  boxed title style={colback=blue!60!black},title={#1}}
+\newtcolorbox{warnbox}[1][Cảnh báo]{mybox,colback=red!5,colframe=red!65!black,
+  boxed title style={colback=red!65!black},title={#1}}
+\newtcolorbox{tipbox}[1][Thuật ngữ]{mybox,colback=green!6,colframe=green!45!black,
+  boxed title style={colback=green!45!black},title={#1}}
+\newtcolorbox{formulabox}[1][Công thức]{mybox,colback=teal!6,colframe=teal!70!black,
+  boxed title style={colback=teal!70!black},title={#1}}
+\newtcolorbox{pendingbox}[1][Đang chờ]{mybox,colback=orange!8,colframe=orange!80!black,
+  boxed title style={colback=orange!80!black},title={#1}}
+\newtcolorbox{todobox}[1][Việc cần làm]{mybox,colback=violet!5,colframe=violet!65!black,
+  boxed title style={colback=violet!65!black},title={#1}}
 \lstset{basicstyle=\ttfamily\small,columns=fullflexible,keepspaces=true,frame=single,
-  backgroundcolor=\color{gray!5},rulecolor=\color{gray!60}}
+  backgroundcolor=\color{yellow!6},rulecolor=\color{brown!60}}
 
 % ---- ký hiệu thống nhất (dùng trong chính file này) -----------------
 \newcommand{\VCEsat}{V_{CE(\mathrm{sat})}}
@@ -55,13 +71,14 @@
 \newcommand{\Iref}{I_{\mathrm{REF}}}
 
 \begin{document}
+\setsec{blue}
 
 \begin{center}
   {\Large\bfseries CO2037 – Dự án 3\\[2pt] BẢNG KÝ HIỆU THỐNG NHẤT}\\[4pt]
   {\itshape Notation Guide cho 6 lab LTspice · tài liệu nội bộ của nhóm, không nộp}
 \end{center}
 
-\begin{note}[Mục đích và cách dùng]
+\begin{infobox}[Mục đích và cách dùng]
 \begin{itemize}[leftmargin=*]
   \item Đáp ứng yêu cầu 9.2 của đề: \emph{``thuật ngữ và ký hiệu nhất quán giữa các bài''}.
         Cả 3 thành viên dùng chung bảng này khi viết Lab Manual, Solutions, file \code{.asc} và báo cáo.
@@ -72,7 +89,7 @@
         \code{.meas}; cột \emph{Đề gốc} là các cách viết cũ cần \textbf{thay bằng} ký hiệu chuẩn.
   \item Rà từ phần chữ của PDF; ký hiệu chỉ xuất hiện trên hình mạch cần đối chiếu thêm khi vẽ lại.
 \end{itemize}
-\end{note}
+\end{infobox}
 
 \begin{center}\small
 \begin{tabular}{l l l l}
@@ -90,6 +107,7 @@ Lab 6 & Ch.7 24 Hour Project for Midterm & \textbf{chưa có} & Đức\\
 \end{center}
 
 % =====================================================================
+\setsec{blue}
 \section{Quy tắc chung}
 {\small
 \begin{longtable}{C{0.9cm} L{6.4cm} L{4.6cm} L{4.6cm}}
@@ -111,6 +129,7 @@ G12 & Thuật ngữ tiếng Anh: một cách gọi duy nhất cho cả 6 lab (m�
 \end{longtable}}
 
 % =====================================================================
+\setsec{teal}
 \section{Đơn vị và hậu tố SPICE}
 \begin{center}\small
 \begin{tabular}{l l l L{6.5cm}}
@@ -134,6 +153,7 @@ G12 & Thuật ngữ tiếng Anh: một cách gọi duy nhất cho cả 6 lab (m�
 \end{itemize}
 
 % =====================================================================
+\setsec{violet}
 \section{Tên linh kiện (reference designator)}
 {\small
 \begin{longtable}{C{1.2cm} L{4.4cm} L{3.2cm} L{7.4cm}}
@@ -159,10 +179,13 @@ G12 & Thuật ngữ tiếng Anh: một cách gọi duy nhất cho cả 6 lab (m�
 \code{S}, \code{W} & Công tắc điều khiển áp / dòng & \code{S1} & Thay công tắc trong mạch opto (Ch.3 3.13)\\
 \bottomrule
 \end{longtable}}
-\textbf{Đánh số:} giữ \textbf{đúng số thứ tự như hình gốc} khi bài ở trạng thái \emph{Keep}/\emph{Adjust} (để lời văn,
+\begin{tipbox}[Đánh số linh kiện]
+Giữ \textbf{đúng số thứ tự như hình gốc} khi bài ở trạng thái \emph{Keep}/\emph{Adjust} (để lời văn,
 bảng so sánh, lời giải khớp nhau). Bài \emph{Replace}: đánh số từ 1, trái sang phải, trên xuống dưới.
+\end{tipbox}
 
 % =====================================================================
+\setsec{cyan!70!blue}
 \section{Tên nút (net label) trong LTspice}
 \begin{center}\small
 \begin{tabular}{L{6.2cm} L{4.8cm} L{4.6cm}}
@@ -190,6 +213,7 @@ Chân FET & \code{g}, \code{d}, \code{s} & $V_G$, $V_D$, $V_S$\\
   \thead{Ký hiệu} & \thead{LaTeX} & \thead{Ý nghĩa} & \thead{Đơn vị} & \thead{LTspice} & \thead{Đề gốc}\\ \midrule\endhead}
 \newcommand{\symend}{\bottomrule\end{longtable}}
 
+\setsec{blue!70!cyan}
 \section{Mạch điện cơ bản (Lab 1, dùng chung)}
 {\footnotesize\symtable
 $V_S$ & \code{V_S} & Nguồn áp & V & \code{V(n)} & \code{V}, \code{V1}\\
@@ -206,18 +230,20 @@ $P_{R(\mathrm{rated})}$ & \texttt{P\_\{R(\textbackslash{}mathrm\{\allowbreak{}ra
 $\varepsilon$ & \texttt{\textbackslash{}varepsilon} & Sai số phần trăm & \% & \code{.meas} & ``percent error''\\
 \symend}
 
-\begin{note}[\warn{} Dấu dòng điện trong LTspice]
+\begin{warnbox}[(!) Dấu dòng điện trong LTspice]
 \code{I(V1)} dương khi dòng đi vào cực + của nguồn (nguồn đang hấp thụ). Nguồn cấp điện sẽ hiện \textbf{giá trị âm}
 $\Rightarrow$ dòng cấp là \code{-I(V1)}. \code{I(R1)} dương theo chiều chân 1 $\to$ chân 2, phụ thuộc chiều đặt
 điện trở $\Rightarrow$ \textbf{kiểm tra dấu khi đọc kết quả} và ghi chú trong LTspice Guide.
-\end{note}
+\end{warnbox}
 
-Công thức sai số dùng chung cho mọi bảng so sánh:
+\begin{formulabox}[Công thức sai số dùng chung cho mọi bảng so sánh]
 \[
   \varepsilon = \frac{\left|X_{\mathrm{sim}} - X_{\mathrm{theory}}\right|}{\left|X_{\mathrm{theory}}\right|}\times 100\%
 \]
+\end{formulabox}
 
 % =====================================================================
+\setsec{orange}
 \section{Diode (Lab 2)}
 {\footnotesize\symtable
 $V_D$ & \code{V_D} & Điện áp trên diode (đo / tính được) & V & \code{V(a,k)} & \code{VD}, \code{V} (bảng 3.1)\\
@@ -244,6 +270,7 @@ $I_s$ & \code{I_s} & Dòng bão hoà ngược (tham số model) & A & \code{Is} 
 \end{itemize}
 
 % =====================================================================
+\setsec{green!60!black}
 \section{BJT (Lab 3)}
 {\footnotesize\symtable
 $I_B$, $I_C$, $I_E$ & \code{I_B}\ldots & Dòng base, collector, emitter & A & \code{Ib(Q1)}, \code{Ic(Q1)}, \code{Ie(Q1)} \warn & \code{I B}, \code{IB}\\
@@ -264,14 +291,17 @@ $I_F$ & \code{I_F} & Dòng thuận LED (opto) & A & \code{I(D...)} & \code{I F}\
 $\mathrm{CTR}$ & \texttt{\textbackslash{}mathrm\{CTR\}} & Tỉ số truyền dòng, $I_C/I_F$ & -- & -- & \code{CTR}\\
 $V_{F(\mathrm{LED})}$ & \texttt{V\_\{F(\allowbreak\textbackslash{}mathrm\{LED\})\}} & Áp ngưỡng LED & V & -- & \code{VF}\\
 \symend}
-\begin{note}[\warn{} Dấu dòng BJT]
+\begin{warnbox}[(!) Dấu dòng BJT]
 LTspice báo dòng dương khi \textbf{đi vào} chân linh kiện $\Rightarrow$ với NPN, \code{Ie(Q1)} hiện giá trị âm; với PNP,
 \code{Ib}, \code{Ic} âm. Ghi vào LTspice Guide của Lab~3 (kiểm chứng lại trên bản 26.1.1 khi chạy).
-\end{note}
-\textbf{Vùng làm việc:} \emph{active region}, \emph{saturation region}, \emph{cutoff region}. \textbf{Không} dùng
+\end{warnbox}
+\begin{tipbox}[Thuật ngữ vùng làm việc BJT]
+\emph{active region}, \emph{saturation region}, \emph{cutoff region}. \textbf{Không} dùng
 ``linear mode'' (Ch.3 dùng lẫn ``linear (or active)'').
+\end{tipbox}
 
 % =====================================================================
+\setsec{magenta}
 \section{Op-amp (Lab 4)}
 {\footnotesize\symtable
 $V_+$, $V_-$ & \code{V_+}, \code{V_-} & Áp tại ngõ vào không đảo / đảo & V & \code{V(inp)}, \code{V(inn)} & \code{V (+)}, \code{V (−)}\\
@@ -290,6 +320,7 @@ GBW, SR & \texttt{\textbackslash{}mathrm\{GBW\}} & Tích độ lợi–băng th�
 \symend}
 
 % =====================================================================
+\setsec{brown}
 \section{FET (Lab 5)}
 {\footnotesize\symtable
 $I_D$, $I_G$, $I_S$ & \code{I_D}\ldots & Dòng drain, gate, source & A & \code{Id(J1)}, \code{Ig(J1)}, \code{Is(J1)}; \code{Id(M1)} & \code{ID}\\
@@ -306,16 +337,20 @@ $R_D$, $R_S$, $R_G$ & \code{R_D}\ldots & Điện trở drain, source, gate & $\O
 $R_{IN}$, $R_{GS}$ & \code{R_{IN}}, \code{R_{GS}} & Điện trở vào, điện trở kéo xuống gate & $\Omega$ & \code{RIN}, \code{RGS} & giữ nguyên\\
 $V_{IN}$ & \code{V_{IN}} & Mức logic điều khiển (TTL 0~V / 5~V) & V & \code{PULSE(0 5 ...)} & \code{VIN}\\
 \symend}
-Phương trình Shockley (JFET, D-MOSFET) và phương trình E-MOSFET -- dùng một dạng duy nhất:
+\begin{formulabox}[Phương trình Shockley (JFET, D-MOSFET) và phương trình E-MOSFET -- dùng một dạng duy nhất]
 \[
   I_D = I_{DSS}\left(1 - \frac{V_{GS}}{V_P}\right)^2,
   \qquad
   I_D = k\left(V_{GS} - \VGSth\right)^2
 \]
-\textbf{Thuật ngữ:} \emph{JFET}, \emph{depletion-type MOSFET (D-MOSFET)}, \emph{enhancement-type MOSFET (E-MOSFET)};
+\end{formulabox}
+\begin{tipbox}[Thuật ngữ FET]
+\emph{JFET}, \emph{depletion-type MOSFET (D-MOSFET)}, \emph{enhancement-type MOSFET (E-MOSFET)};
 \emph{ohmic region}, \emph{saturation region}, \emph{cutoff region}. \textbf{Không} dùng DFET, EFET, JUGFET, eMOSFET như đề gốc.
+\end{tipbox}
 
 % =====================================================================
+\setsec{teal!80!blue}
 \section{Nguồn tín hiệu và lệnh mô phỏng}\label{sec:sim}
 \subsection{Thông số nguồn (đổi từ PSpice)}
 \begin{center}\small
@@ -366,6 +401,7 @@ Favourites list / Place $\to$ PSpice Component & \emph{Component (F2)}\\
 \end{center}
 
 % =====================================================================
+\setsec{violet!80!blue}
 \section{Mô hình linh kiện -- tên chuẩn hoá (đề xuất)}\label{sec:models}
 Mỗi bài ghi rõ model trong \texttt{\textbackslash{}components\{...\}}. Tên dưới đây là \textbf{đề xuất ban đầu}; bảng ánh xạ
 (Cường) chốt tên cuối cùng sau khi chạy thử trên bộ cài offline.
@@ -390,11 +426,15 @@ Optocoupler \code{OK1} & Ch.3 & Mô hình tương đương: LED + nguồn dòng 
 \end{center}
 
 % =====================================================================
+\setsec{orange!80!black}
 \section{Lab 6 (Ch.7 -- 24 Hour Project for Midterm)}\label{sec:lab6}
+\begin{pendingbox}[Chưa có nguồn]
 Chưa có file nguồn trong thư mục \code{Docs}. Lab~6 là bài tổng hợp (điện trở tương đương, dòng điện, diode, Zener,
 BJT, BJT + Zener) nên \textbf{dùng lại ký hiệu của mục 5--7}. Khi có \code{Ch7.pdf}, rà lại và bổ sung ký hiệu riêng vào đây.
+\end{pendingbox}
 
 % =====================================================================
+\setsec{red}
 \section{Lỗi và chỗ không nhất quán trong đề gốc}
 Không chép các lỗi sau sang tài liệu mới.
 {\small
@@ -430,6 +470,7 @@ Chung & -- & ``bellow'', ``supple'', ``Volate'', ``half-ware'', ``archived'' & b
 \end{longtable}}
 
 % =====================================================================
+\setsec{brown!80!black}
 \section{Macro LaTeX đề xuất}
 Thêm vào \code{Report/shared/preamble.tex} nếu nhóm đồng ý; đổi ký hiệu một chỗ là cập nhật cả 6 lab và bản lời giải.
 \begin{lstlisting}
@@ -445,7 +486,9 @@ Thêm vào \code{Report/shared/preamble.tex} nếu nhóm đồng ý; đổi ký 
 \end{lstlisting}
 
 % =====================================================================
+\setsec{violet}
 \section{Việc cần làm}
+\begin{todobox}[Theo dõi]
 \begin{itemize}[label=$\square$]
   \item Cả nhóm đọc và thống nhất (đặc biệt mục 1, 10 và 13) trước khi viết tiếp Lab 1--5.
   \item Cường đối chiếu mục 10--11 với bảng ánh xạ PSpice $\to$ LTspice, kiểm trên LTspice 26.1.1.
@@ -453,5 +496,6 @@ Thêm vào \code{Report/shared/preamble.tex} nếu nhóm đồng ý; đổi ký 
   \item Bổ sung mục~\ref{sec:lab6} khi có \code{Ch7.pdf}.
   \item Rút gọn mục 1, 5--9 thành 1 trang tiếng Anh \emph{Notation} cho Appendix của Lab Manual.
 \end{itemize}
+\end{todobox}
 
 \end{document}
