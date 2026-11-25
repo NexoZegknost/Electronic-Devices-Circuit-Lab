@@ -6,7 +6,7 @@ example. All screenshots are taken from LTspice \ltspiceVersion. Operations alre
 
 \subsection{Step 1: Placing JFET and MOSFET symbols}
 \begin{enumerate}[itemsep=2pt]
-  \item Press \textit{F2} (or \textit{Edit $\rightarrow$ Component}) to open the component library.
+  \item Press \textit{P} (or the \textit{Component} button on the toolbar) to open the component library.
   \item Type the symbol name in the search box and place it:
         \begin{itemize}[itemsep=1pt]
           \item \texttt{njf} -- n-channel JFET (Exercises 5.1--5.4);
@@ -22,7 +22,7 @@ example. All screenshots are taken from LTspice \ltspiceVersion. Operations alre
 The devices of this lab are not taken from the LTspice library: each one is defined by a \texttt{.model} line, so that its
 parameters are known exactly.
 \begin{enumerate}[itemsep=2pt]
-  \item Press \textit{S} (or \textit{Edit $\rightarrow$ SPICE Directive}), type the model line and place it on the schematic, e.g.
+  \item Press \textit{.} (the period key, or the \texttt{.op} button on the toolbar), type the model line and place it on the schematic, e.g.
 \begin{spice}[title=Models used in Lab 5]
 .model JN  NJF(Vto=-2 Beta=1m Lambda=0)
 .model DM  NMOS(Level=1 Vto=-3 Kp=2m Lambda=0)
@@ -44,10 +44,10 @@ Both: & \texttt{Lambda=0} removes channel-length modulation (flat curves in satu
 
 \subsection{Step 3: Operating point of a bias circuit}
 \begin{enumerate}[itemsep=2pt]
-  \item Add the directive \texttt{.op} and run (\textit{Simulate $\rightarrow$ Run} or the running-man button).
+  \item Add the directive \texttt{.op} and run (the running-man button or \textit{Alt+R}).
   \item Move the mouse over a node: the node voltage appears in the status bar. Move it over a component to read its current.
   \item To show values on the schematic, right-click a node and choose \textit{Place .op Data Label}.
-  \item The complete list of node voltages and device currents is in \textit{View $\rightarrow$ SPICE Error Log}.
+  \item The complete list of node voltages and device currents is in the SPICE Error Log (\textit{Ctrl+L}).
 \end{enumerate}
 \guidefig{step03_op}{Operating point of the JFET self-bias circuit (Exercise 5.3)}
 
@@ -77,7 +77,7 @@ Both: & \texttt{Lambda=0} removes channel-length modulation (flat curves in satu
   \item Replace a component value or source value by a parameter in braces, e.g.\ the gate source value \texttt{\{VG\}}.
   \item Sweep it with \texttt{.step param VG list 3 4 5 6 8 10}.
   \item Compute a result automatically with \texttt{.meas}, e.g.\ \texttt{.meas OP Rds FIND V(d)/Id(M1)}.
-  \item Open \textit{View $\rightarrow$ SPICE Error Log}; right-click and choose \textit{Plot .step'ed .meas data} to plot the result versus the parameter.
+  \item Open the SPICE Error Log (\textit{Ctrl+L}); right-click and choose \textit{Plot .step'ed .meas data} to plot the result versus the parameter.
 \end{enumerate}
 \guidefig{step06_step_meas}{Stepped \texttt{.meas} results plotted against the swept parameter}
 
