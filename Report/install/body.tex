@@ -29,7 +29,8 @@ Internet connection & Not required \\
 
 \subsection*{What is in the installation package}
 \begin{itemize}[itemsep=2pt]
-  \item \texttt{LTspice64.msi} -- the installer;
+  \item \texttt{LTspice64.msi} -- the installer for Windows (about 138~MB);
+  \item \texttt{LTspice\_26.pkg} -- the installer for macOS (about 369~MB), see Section~\ref{sec:other};
   \item the folder \texttt{lib} -- a copy of the LTspice component library, used in Section~\ref{sec:lib} to bring the library of the computer up to date without Internet;
 \end{itemize}
 The lab files (\texttt{.asc}) are delivered separately and are not part of this package.
@@ -79,6 +80,10 @@ To bring the libraries up to date without Internet, follow Section~\ref{sec:lib}
 \end{enumerate}
 \installfig{ltspice_version_crop}{Help $\rightarrow$ About LTspice showing version \ltspiceVersion}
 \begin{enumerate}[itemsep=2pt,resume]
+  \item \textbf{Run an example.} Choose \textit{File $\rightarrow$ Open} and open any \texttt{.asc} file from the folder
+        \texttt{\%LOCALAPPDATA\%\textbackslash LTspice\textbackslash examples} (for example from the sub-folder \texttt{Educational}, if present).
+        Click \textit{Run} (the green Play button $\blacktriangleright$ on the toolbar). The installation is successful when the simulation finishes without an error message and the
+        waveform window opens.
   \item \textbf{Close LTspice.} It must be closed before the library is copied in the next section.
 \end{enumerate}
 
@@ -138,6 +143,141 @@ and check that it opens without error and that \textit{Help $\rightarrow$ About 
 \end{itemize}
 
 % =====================================================================
+\section{Computers without Windows (macOS and Linux)}\label{sec:other}
+The package of this guide contains the \textbf{Windows} installer \texttt{LTspice64.msi}. Analog Devices
+publishes LTspice for Windows and macOS only; there is \textbf{no native Linux version}. The table
+summarises the possibilities.
+
+\begin{table}[H]\centering\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\linewidth}{l >{\raggedright\arraybackslash}p{0.27\linewidth} X}
+\toprule
+\textbf{System} & \textbf{How LTspice runs} & \textbf{Main limits} \\ \midrule
+Windows 10/11 (x64) & Native; Sections 1--5. & None. \\
+macOS 14 or later & Native installer \texttt{LTspice\_26.pkg} (about 369~MB), supplied in the package. &
+  The program is larger
+  than the Windows one, and a few schematics behave differently from Windows. \\
+Linux & The Windows \texttt{LTspice64.msi} runs under \textbf{Wine} (version 9 or newer). &
+  Wine itself must be installed first (needs Internet or a local copy of the packages). Less stable than on Windows (slower, small faults). Fonts look
+  rougher; some dialogs may need extra components. \\
+\bottomrule
+\end{tabularx}
+\caption{LTspice on different operating systems}
+\end{table}
+
+\begin{notebox}{Status of this section}
+The Linux steps (Section~\ref{sec:linux}) were tested by the group on Ubuntu with Wine~10.0. The macOS steps
+follow the instructions of Analog Devices and were not tested by the group. The lab files (\texttt{.asc}) are
+the same on all systems.
+\end{notebox}
+
+\subsection{macOS}
+\begin{enumerate}[itemsep=2pt]
+  \item Copy \texttt{LTspice\_26.pkg} (about 369~MB) from the package to the Mac. No download is needed.
+        The Mac must run macOS 14 (Sonoma) or later.
+  \item Open \texttt{LTspice\_26.pkg} and follow the installer.
+  \item Start LTspice and check the version in the LTspice menu (\textit{About LTspice}).
+  \item With Internet, update the library with \textit{Tools $\rightarrow$ Update Components}. Without Internet, the
+        library installed by \texttt{LTspice\_26.pkg} is used as it is.
+\end{enumerate}
+\begin{tipbox}
+Some menus and the toolbar of the macOS version differ from Windows. If a toolbar button is missing, type the
+analysis as a SPICE directive on the schematic (for example \texttt{.tran 1m}), as in the guides of the labs.
+\end{tipbox}
+
+\subsection{Linux with Wine}\label{sec:linux}
+The steps below were carried out by the group on \textbf{Ubuntu} with Wine~10.0 from the Ubuntu
+repositories. Other distributions work in the same way; only the command that installs Wine differs.
+
+\subsubsection*{Step L1: Install Wine and check its version}
+LTspice~24 and later are delivered only as a 64-bit \texttt{.msi}. Wine older than version~9 cannot install
+such a file, so check the version after installing Wine:
+\begin{bash}
+sudo dpkg --add-architecture i386
+sudo apt update
+sudo apt install wine
+wine --version
+\end{bash}
+The last command must print \texttt{wine-9} or higher (in the figure: \texttt{wine-10.0}).
+On Fedora-type systems use \texttt{sudo dnf install wine}. If the version is below~9, install a newer Wine
+from the WineHQ repository for your distribution.
+\installfig{Step1}{Checking the version of Wine on Ubuntu}
+
+\begin{notebox}{Offline computers}
+Wine is not part of the package. On a computer without Internet, install it from a local copy of the
+packages (a USB drive with the \texttt{.deb}/\texttt{.rpm} files and their dependencies, or a local mirror of
+the school) prepared on an online computer of the same distribution.
+\end{notebox}
+
+\subsubsection*{Step L2: Open a terminal in the package folder}
+Copy the package folder to the computer (as in Step~1). In the file manager, open the folder that contains
+\texttt{LTspice64.msi}, right-click an empty area and choose \textit{Open in Terminal}.
+\installfig{Step2}{Opening a terminal in the folder that contains LTspice64.msi}
+
+\subsubsection*{Step L3: Install LTspice}
+In the terminal, run:
+\begin{bash}
+export WINEPREFIX=$HOME/.ltspice
+wine msiexec /i LTspice64.msi
+\end{bash}
+The first line chooses a separate Wine environment (``prefix'') for LTspice, so it stays apart from other
+Windows programs; Wine creates it automatically. The same Setup Wizard as in Steps~2--5 opens. Follow it with
+the default folder. On the last page:
+\begin{itemize}[itemsep=2pt]
+  \item \textbf{with Internet}, click \textit{Update libraries};
+  \item \textbf{without Internet}, choose the option that does not update, and copy the library in Step~L5.
+\end{itemize}
+\installfig{Step3}{Installing LTspice with \texttt{wine msiexec}; last page of the Setup Wizard}
+
+\begin{tipbox}
+Wine prints many lines beginning with \texttt{err:} in the terminal (for example about \texttt{ntlm\_auth} or
+\texttt{richedit}). They are messages of Wine itself and do not stop the installation; they can be ignored.
+\end{tipbox}
+
+\subsubsection*{Step L4: Start LTspice and check the version}
+Start LTspice from the applications menu (the installer creates a shortcut), or with the command:
+\begin{bash}
+export WINEPREFIX=$HOME/.ltspice
+wine "$WINEPREFIX/drive_c/users/$USER/AppData/Local/Programs/ADI/LTspice/LTspice.exe"
+\end{bash}
+Open \textit{Help $\rightarrow$ About LTspice} and check that the version is \ltspiceVersion. Then
+\textbf{close LTspice} before the next step.
+\installfig{Step4}{LTspice \ltspiceVersion\ running on Ubuntu under Wine}
+
+\subsubsection*{Step L5: Copy the updated library}
+Do the same as in Section~\ref{sec:lib}, but with the folder of the Wine environment. The folder that
+Windows calls \texttt{\%LOCALAPPDATA\%\textbackslash LTspice} is, under Wine:
+\begin{bash}
+export WINEPREFIX=$HOME/.ltspice
+DEST="$WINEPREFIX/drive_c/users/$USER/AppData/Local/LTspice"
+ls "$DEST"
+cp -rf lib/. "$DEST/lib/"
+\end{bash}
+\texttt{ls} should list \texttt{examples}, \texttt{lib} and \texttt{reference}. Run the commands in the package
+folder (Step~L2). If \texttt{ls} shows nothing, start LTspice once (Step~L4), close it, and try again.
+
+\subsubsection*{Step L6: Check the installation with an example}
+Start LTspice again, choose \textit{File $\rightarrow$ Open} and open an example circuit from the folder
+\texttt{examples} (in the figure: \texttt{LM741.asc} from \texttt{examples/Educational}). Click \textit{Run}
+(the green Play button $\blacktriangleright$ on the toolbar). The installation is successful when the simulation finishes without an error
+message and the waveform window opens.
+\installfig{Step5}{Example circuit LM741.asc opened in LTspice on Ubuntu}
+
+\subsubsection*{Known limits under Wine}
+\begin{itemize}[itemsep=2pt]
+  \item \textbf{Performance is less stable than on Windows.} Simulations can run slower, and small faults happen
+        more often: windows that do not redraw, a dialog that freezes, or LTspice closing unexpectedly. Save the
+        schematic often; if LTspice stops responding, close it and start it again.
+  \item Fonts are less smooth than on Windows; this is normal.
+  \item Dialogs that are blank or miss text: install the Windows text controls (needs Internet):
+\begin{bash}
+WINEPREFIX=$HOME/.ltspice winetricks gdiplus riched20
+\end{bash}
+  \item Updates of Wine or of the distribution may break a working installation; keep the Wine
+        environment (\texttt{\$HOME/.ltspice}) separate and do not update it during a course.
+  \item For work that must be identical to the Windows lab computers, use a Windows computer.
+\end{itemize}
+
+% =====================================================================
 \section{Troubleshooting}
 \begin{table}[H]\centering\renewcommand{\arraystretch}{1.25}
 \begin{tabularx}{\linewidth}{>{\raggedright\arraybackslash}p{0.34\linewidth} X}
@@ -149,10 +289,12 @@ Error about DLL files during installation & Uninstall old LTspice versions from 
 Parts or examples are missing when LTspice starts & Check that Section~\ref{sec:lib} was done for \emph{this} Windows user. Otherwise close LTspice, start it again; if the problem remains, uninstall and install again. \\
 Windows refuses to copy the \texttt{lib} folder or says a file is in use & Close LTspice completely (also in the system tray) and copy again. \\
 ``Unknown model'' or ``subcircuit not found'' when running a circuit & Do Section~\ref{sec:lib} (copy the whole folder \texttt{lib}), then close and start LTspice again. \\
+Linux: \texttt{msiexec} fails or LTspice does not install & Check \texttt{wine --version}; it must be 9 or newer (Step~L1). \\
+Linux: blank dialogs or missing text & Install \texttt{gdiplus} and \texttt{riched20} with \texttt{winetricks} (see the limits under Wine). \\
 Works for one Windows account but not for another & LTspice settings and libraries may be stored per user: start LTspice once in that account and repeat Steps 6--9. \\
 \bottomrule
 \end{tabularx}
 \caption{Common problems}
 \end{table}
 
-\noindent\textit{This guide covers Windows 10/11 (x64) only.}
+\noindent\textit{Sections 1--5 cover Windows 10/11 (x64); macOS and Linux are covered in Section~\ref{sec:other}.}
