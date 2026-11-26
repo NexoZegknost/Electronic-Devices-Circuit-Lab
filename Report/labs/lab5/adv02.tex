@@ -32,8 +32,8 @@ $E_{\mathrm{off}}$ and the average MOSFET power for $R_G$ = 10, 100 and 1000\,$\
 .step param RG list 10 100 1000
 .ic I(L1)=0.5
 .tran 0 200u 0 2n
-.meas TRAN Eoff INTEG V(d)*Id(M1) FROM 50u TO 52u
-.meas TRAN Eon  INTEG V(d)*Id(M1) FROM 100u TO 102u
+.meas TRAN Eoff INTEG V(d)*Id(M1) FROM 50u TO 53u
+.meas TRAN Eon  INTEG V(d)*Id(M1) FROM 100u TO 103u
 .meas TRAN Pavg AVG   V(d)*Id(M1) FROM 100u TO 200u
 \end{spice}
 \simfig{adv02_sim}{Drain voltage, drain current and instantaneous MOSFET power during turn-off (Advanced Exercise 5.A2)}
