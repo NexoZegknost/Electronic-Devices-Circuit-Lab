@@ -1,12 +1,13 @@
 % Lab 5 -- Exercise 6  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 3.2 (Enhancement-mode MOSFET)  |  Status: Adjust
 % Netlist:
-%   VDS d 0 10 ; VGS g 0 0 ; M1 d g 0 0 EM l=1u w=1u     (symbol nmos4)
+%   V2 n 0 10 ; R2 n d 100 ; V3 g 0 0 ; M1 d g 0 0 EM l=1u w=1u     (symbol nmos4; giá trị như Fig 6.12)
 \exercise{Enhancement-type MOSFET}{Adjust}{Ch.6 3.2 -- Enhancement-mode MOSFET validation}
 \statusreason{The original section is a demonstration with the PSpice part \texttt{MbreakN}. It becomes an exercise in
 which students extract $V_{GS(\mathrm{Th})}$ and $k$ from the transfer curve; the device is defined with an explicit
-level-1 \texttt{.model} so that the result can be compared with theory.}
+level-1 \texttt{.model} so that the result can be compared with theory. The circuit values ($V_2 = 10$\,V, $R_2 = 100\,\Omega$)
+and the sweep range of $V_3$ ($-1$ to $5$\,V) are those of the original.}
 
-\task{An n-channel enhancement-type MOSFET is biased with $V_{DS} = 10$\,V. Sweep $V_{GS}$ from $0$ to $6$\,V and plot
+\task{An n-channel enhancement-type MOSFET is supplied by $V_2 = 10$\,V through $R_2 = 100\,\Omega$. Sweep $V_{GS}$ ($V_3$) from $-1$ to $5$\,V and plot
 $I_D(V_{GS})$. From the curve, determine the threshold voltage $V_{GS(\mathrm{Th})}$ and the constant $k$ of
 $I_D = k\,(V_{GS} - V_{GS(\mathrm{Th})})^2$.}
 
@@ -14,50 +15,52 @@ $I_D = k\,(V_{GS} - V_{GS(\mathrm{Th})})^2$.}
 \circuitfig{ex06}{Circuit of Exercise 5.6: E-MOSFET transfer characteristic}
 \components{
 \begin{itemize}[leftmargin=*,itemsep=1pt]
-  \item $V_{DS} = 10$\,V drain to ground, $V_{GS}$ gate to ground (swept), source and bulk grounded.
+  \item $V_2 = 10$\,V to the drain through $R_2 = 100\,\Omega$, $V_3$ gate to ground (swept), source and bulk grounded.
   \item M1 (symbol \texttt{nmos4}, $L = W = 1\,\mu$m): \texttt{.model EM NMOS(Level=1 Vto=2 Kp=1m Lambda=0)}
 \end{itemize}}
 
 \subsubsection*{Theoretical Calculation}
 \begin{enumerate}[itemsep=2pt]
   \item From the model, write $V_{GS(\mathrm{Th})}$ and $k = \tfrac{K_P}{2}\tfrac{W}{L}$.
-  \item Compute $I_D$ at $V_{GS} = 3$, $4$, $5$ and $6$\,V.
+  \item Compute $I_D$ at $V_{GS} = 3$, $4$ and $5$\,V, and check that the MOSFET stays in saturation.
   \item Explain how $k$ can be obtained from one measured point $(V_{GS}, I_D)$ once $V_{GS(\mathrm{Th})}$ is known.
 \end{enumerate}
 \answerspace{8}
 \begin{solution}
 $V_{GS(\mathrm{Th})} = 2$\,V, $k = 0.5\,\mathrm{mA/V^2}$.
 \begin{center}
-\begin{tabular}{c c c c c}
+\begin{tabular}{c c c c}
 \toprule
-$V_{GS}$ (V) & 3 & 4 & 5 & 6\\ \midrule
-$I_D$ (mA) & 0.5 & 2.0 & 4.5 & 8.0\\
+$V_{GS}$ (V) & 3 & 4 & 5\\ \midrule
+$I_D$ (mA) & 0.5 & 2.0 & 4.5\\
 \bottomrule
 \end{tabular}
 \end{center}
+At $V_{GS} = 5$\,V, $V_{DS} = 10 - 0.1\cdot4.5 = 9.55\,\mathrm{V} > V_{GS}-V_{GS(\mathrm{Th})} = 3$\,V (saturation).
 From a measured point: $k = I_D/(V_{GS}-V_{GS(\mathrm{Th})})^2$, e.g.\ $k = 2\,\mathrm{mA}/(2\,\mathrm{V})^2 = 0.5\,\mathrm{mA/V^2}$.
 \end{solution}
 
 \subsubsection*{Simulation}
 \begin{enumerate}[itemsep=2pt]
   \item Run the DC sweep and plot \texttt{Id(M1)}.
-  \item Read $V_{GS}$ where $I_D$ starts to rise and $I_D$ at $V_{GS} = 4$\,V and $6$\,V with the cursor.
+  \item Read $V_{GS}$ where $I_D$ starts to rise and $I_D$ at $V_{GS} = 4$\,V and $5$\,V with the cursor.
 \end{enumerate}
 \begin{spice}
 .model EM NMOS(Level=1 Vto=2 Kp=1m Lambda=0)
-.dc VGS 0 6 0.01
+.dc V3 -1 5 0.01
 \end{spice}
 \simfig{ex06_sim}{Transfer characteristic $I_D(V_{GS})$ of Exercise 5.6}
 
 \subsubsection*{Theory vs. Simulation}
 \begin{comparison}{Theory vs. simulation, Exercise 5.6}
-\cmprow{$V_{GS(\mathrm{Th})}$}{V}{2.00}{}{}
-\cmprow{$I_D$ at $V_{GS}=4$\,V}{mA}{2.00}{}{}
-\cmprow{$I_D$ at $V_{GS}=6$\,V}{mA}{8.00}{}{}
-\cmprow{$k$}{mA/V$^2$}{0.50}{}{}
+\cmprow{$V_{GS(\mathrm{Th})}$}{V}{2.00}{$\approx 2.0$}{$\approx 0$}
+\cmprow{$I_D$ at $V_{GS}=4$\,V}{mA}{2.00}{$\approx 2.0$}{$\approx 0$}
+\cmprow{$I_D$ at $V_{GS}=5$\,V}{mA}{4.50}{$\approx 4.5$}{$\approx 0$}
+\cmprow{$k$}{mA/V$^2$}{0.50}{$\approx 0.50$}{$\approx 0$}
 \end{comparison}
 \answerspace{3}
 \begin{solution}
 Reading the threshold from the knee of the curve is less precise than computing it from two points; both methods can be
-discussed. \todo{Fill in the simulation column from the LTspice run.}
+discussed. The curve leaves zero at $V_{GS} \approx 2.0$\,V and reaches about 4.5\,mA at 5\,V; these values were read on the
+grid of the plot (precision about $\pm0.05$\,V and $\pm0.1$\,mA), so the agreement is within the reading precision.
 \end{solution}

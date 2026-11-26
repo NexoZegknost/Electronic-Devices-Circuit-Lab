@@ -60,12 +60,14 @@ During each 1\,$\mu$s edge the input crosses this range and a large current flow
 
 \subsubsection*{Theory vs. Simulation}
 \begin{comparison}{Theory vs. simulation, Exercise 5.10}
-\cmprow{$I_M$ ($V_{IN}=-5$\,V)}{mA}{$+247$}{}{}
-\cmprow{$I_M$ ($V_{IN}=+5$\,V)}{mA}{$-247$}{}{}
-\cmprow{$\tau$}{$\mu$s}{99}{}{}
+\cmprow{$I_M$ ($V_{IN}=-5$\,V)}{mA}{$+247$}{$\approx +247$}{$\approx 0$}
+\cmprow{$I_M$ ($V_{IN}=+5$\,V)}{mA}{$-247$}{$\approx -247$}{$\approx 0$}
+\cmprow{$\tau$}{$\mu$s}{99}{$\approx 100$}{$\approx 1$}
 \end{comparison}
 \answerspace{3}
 \begin{solution}
 The steady currents should agree within rounding. The shoot-through peak has no simple hand value; students should
-report it from the plot and explain its origin. \todo{Fill in the simulation column and the shoot-through peak.}
+report it from the plot and explain its origin. The motor current settles at about $\pm247$\,mA with a time constant of about
+0.1\,ms, and $V(\mathrm{out})$ switches between $-5$ and $+5$\,V, as expected.
+\todo{Plot \texttt{Id(M1)} and \texttt{Id(M2)} around $t = 1$\,ms and report the shoot-through peak.}
 \end{solution}

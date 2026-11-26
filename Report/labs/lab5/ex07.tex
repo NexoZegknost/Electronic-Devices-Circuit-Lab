@@ -43,11 +43,12 @@ Since $V_{DS} = V_{GS} > V_{GS}-V_{GS(\mathrm{Th})}$, the device is always in sa
 
 \subsubsection*{Theory vs. Simulation}
 \begin{comparison}{Theory vs. simulation, Exercise 5.7}
-\cmprow{$V_{GSQ}$}{V}{4.00}{}{}
-\cmprow{$V_{DSQ}$}{V}{4.00}{}{}
-\cmprow{$I_{DQ}$}{mA}{2.00}{}{}
+\cmprow{$V_{GSQ}$}{V}{4.00}{4.000}{0.0}
+\cmprow{$V_{DSQ}$}{V}{4.00}{4.000}{0.0}
+\cmprow{$I_{DQ}$}{mA}{2.00}{2.000}{0.0}
 \end{comparison}
 \answerspace{3}
 \begin{solution}
-Agreement is expected within rounding. \todo{Fill in the simulation column from the LTspice run.}
+The simulation gives exactly $V_{GS} = V_{DS} = 4$\,V and $I_D = 2$\,mA. The current in $R_G$ is zero, so $V_G = V_D$
+as assumed by the drain-feedback analysis.
 \end{solution}

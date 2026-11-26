@@ -3,17 +3,18 @@
 %   V2  n 0 10 ; R1 n d 100 ; V3 g 0 0 ; J1 d g 0 JN
 \exercise{JFET Output Characteristics (Nested Sweep)}{Keep}{Ch.6 2.2 -- Nested DC sweep}
 \statusreason{Same circuit and objective as the original nested DC sweep. Only the tool changes: the two-source
-\texttt{.dc} command of LTspice replaces the primary/secondary sweep of PSpice. The model of Exercise 5.1 is reused.}
+\texttt{.dc} command of LTspice replaces the primary/secondary sweep of PSpice, with the same sweep ranges as the
+original ($V_2$: 0--6\,V, step 0.1\,V; $V_3$: 0 to $-3$\,V, step 0.5\,V). The model of Exercise 5.1 is reused.}
 
 \task{Using the circuit of Exercise 5.1, plot the family of output characteristics $I_D(V_{DS})$ for
-$V_{GS} = 0$, $-0.5$, $-1$, $-1.5$ and $-2$\,V. Identify the ohmic region, the saturation region and the
+$V_{GS} = 0$, $-0.5$, $-1$, $-1.5$, $-2$, $-2.5$ and $-3$\,V. Identify the ohmic region, the saturation region and the
 pinch-off boundary, and compare the saturation currents with Shockley's equation.}
 
 \subsubsection*{Circuit}
 \circuitfig{ex02}{Circuit of Exercise 5.2 (same as Exercise 5.1)}
 \components{
 \begin{itemize}[leftmargin=*,itemsep=1pt]
-  \item $V_2$ (drain supply, primary sweep 0--10\,V) in series with $R_1 = 100\,\Omega$; $V_3$ (gate, secondary sweep $-2$--0\,V).
+  \item $V_2$ (drain supply, primary sweep 0--6\,V, step 0.1\,V) in series with $R_1 = 100\,\Omega$; $V_3$ (gate, secondary sweep $-3$--0\,V, step 0.5\,V).
   \item J1 with model \texttt{.model JN NJF(Vto=-2 Beta=1m Lambda=0)}.
 \end{itemize}}
 
@@ -33,6 +34,7 @@ $V_{DS(\mathrm{sat})} = V_{GS}-V_P$ (V) & 2.0 & 1.5 & 1.0 & 0.5 & 0\\
 \bottomrule
 \end{tabular}
 \end{center}
+For $V_{GS} \le -2$\,V (the curves of $-2.5$ and $-3$\,V) the channel is pinched off and $I_D = 0$.
 For $V_{DS} < V_{DS(\mathrm{sat})}$ the device is in the ohmic region; above it the curves are flat because $\lambda = 0$.
 \end{solution}
 
@@ -40,25 +42,29 @@ For $V_{DS} < V_{DS(\mathrm{sat})}$ the device is in the ohmic region; above it 
 \begin{enumerate}[itemsep=2pt]
   \item Replace the sweep of Exercise 5.1 by the nested sweep below: $V_2$ is the inner (primary) sweep, $V_3$ the outer one.
   \item Plot \texttt{Id(J1)}; LTspice draws one curve per value of $V_3$. Because of $R_1$, the drain voltage is
-        $V_{DS} = V_2 - R_1 I_D$, not $V_2$: change the x-axis to \texttt{V(d)} so that the axis shows $V_{DS}$.
-  \item Read $I_D$ at $V_{DS} = 8$\,V on each curve and the knee of the $V_{GS}=0$ curve.
+        $V_{DS} = V_2 - R_1 I_D$, not $V_2$: label the drain wire \texttt{d} (\textit{F4}, \textit{Label Net}) and change the x-axis to \texttt{V(d)}
+        (right-click the x-axis label) so that the axis shows $V_{DS}$.
+  \item Read $I_D$ at $V_{DS} = 5$\,V on each curve and the knee of the $V_{GS}=0$ curve.
 \end{enumerate}
 \begin{spice}
 .model JN NJF(Vto=-2 Beta=1m Lambda=0)
-.dc V2 0 10 0.05 V3 -2 0 0.5
+.dc V2 0 6 0.1 V3 -3 0 0.5
 \end{spice}
 \simfig{ex02_sim}{Output characteristics $I_D(V_{DS})$ of Exercise 5.2}
 
 \subsubsection*{Theory vs. Simulation}
 \begin{comparison}{Theory vs. simulation, Exercise 5.2}
-\cmprow{$I_D$ ($V_{GS}=0$, $V_{DS}=8$\,V)}{mA}{4.00}{}{}
-\cmprow{$I_D$ ($V_{GS}=-0.5$\,V)}{mA}{2.25}{}{}
-\cmprow{$I_D$ ($V_{GS}=-1$\,V)}{mA}{1.00}{}{}
-\cmprow{$I_D$ ($V_{GS}=-1.5$\,V)}{mA}{0.25}{}{}
-\cmprow{$V_{DS(\mathrm{sat})}$ ($V_{GS}=0$)}{V}{2.0}{}{}
+\cmprow{$I_D$ ($V_{GS}=0$, $V_{DS}=5$\,V)}{mA}{4.00}{4.00}{0.0}
+\cmprow{$I_D$ ($V_{GS}=-0.5$\,V)}{mA}{2.25}{2.25}{0.0}
+\cmprow{$I_D$ ($V_{GS}=-1$\,V)}{mA}{1.00}{1.00}{0.0}
+\cmprow{$I_D$ ($V_{GS}=-1.5$\,V)}{mA}{0.25}{0.25}{0.0}
+\cmprow{$V_{DS(\mathrm{sat})}$ ($V_{GS}=0$)}{V}{2.0}{$\approx 2.0$}{$\approx 0$}
 \end{comparison}
 \answerspace{3}
 \begin{solution}
-The saturation currents should match Shockley's equation. The knee is gradual in the simulation, so
-$V_{DS(\mathrm{sat})}$ read with the cursor is approximate. \todo{Fill in the simulation column from the LTspice run.}
+The saturation currents read on the plateaus (4.0, 2.25, 1.0 and 0.25\,mA) match Shockley's equation, and the
+curves for $V_{GS} = -2$, $-2.5$ and $-3$\,V stay at zero, which confirms $V_P = -2$\,V. The knees of the curves lie at
+$V_{DS} \approx 2.0$, 1.5, 1.0 and 0.5\,V, i.e.\ at $V_{GS} - V_P$. The plateaus are flat because $\lambda = 0$. The values were read
+from the grid of the plot, so their precision is about $\pm0.05$\,mA; within this precision the error is zero. The curves end at
+different $V_{DS}$ (5.6--5.9\,V) because of the drop $R_1 I_D$ on the $100\,\Omega$ resistor.
 \end{solution}

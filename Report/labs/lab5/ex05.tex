@@ -1,16 +1,17 @@
 % Lab 5 -- Exercise 5  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 3.1 (Depletion-mode MOSFET)  |  Status: Adjust
 % Netlist phần A (đặc tuyến):
-%   VDS d 0 15 ; VGS g 0 0 ; M1 d g 0 0 DM l=1u w=1u     (symbol nmos4, bulk nối source)
+%   V2 n 0 10 ; R2 n d1 100 ; V3 g1 0 0 ; M1 d1 g1 0 0 DM l=1u w=1u   (symbol nmos4, bulk nối source; giá trị như Fig 6.9)
 % Netlist phần B (tự phân cực):
-%   VDD vdd 0 18 ; RD vdd d 2.2k ; M1 d g s s DM l=1u w=1u ; RS s 0 250 ; RG g 0 1Meg
+%   V4 vdd 0 12 ; R3 vdd d 2k ; M2 d g s s DM l=1u w=1u ; R4 s 0 1k ; R5 g 0 680k   (cùng file Ex05.asc, M2; giá trị như Fig 6.11)
 \exercise{Depletion-type MOSFET}{Adjust}{Ch.6 3.1 -- Depletion-mode MOSFET (verification + self-bias)}
 \statusreason{LTspice has no ready-made depletion-type MOSFET equivalent to the PSpice part \texttt{MbreakND}; the device
 is defined with a level-1 \texttt{.model} with a negative threshold ($V_P = -3$\,V, $I_{DSS} = 9$\,mA).
 The two parts of the original section (characterisation and self-bias) are merged into one exercise because they
-use the same device model.}
+use the same device model. All component values and names are those of the original circuits; the gate sweep is extended
+from $[-5, 0]$\,V to $[-5, +2]$\,V to show the enhancement region.}
 
-\task{(a) Plot the transfer characteristic $I_D(V_{GS})$ of the depletion-type MOSFET for $V_{GS}$ from $-4$\,V to $+2$\,V
-at $V_{DS} = 15$\,V. Read $I_{DSS}$ and $V_P$, and note that the device still conducts for $V_{GS} > 0$.
+\task{(a) Plot the transfer characteristic $I_D(V_{GS})$ of the depletion-type MOSFET for $V_{GS}$ from $-5$\,V to $+2$\,V
+($V_2 = 10$\,V through $R_2 = 100\,\Omega$). Read $I_{DSS}$ and $V_P$, and note that the device still conducts for $V_{GS} > 0$.
 (b) Find the operating point of the self-bias circuit below and verify it with LTspice.}
 
 \subsubsection*{Circuit}
@@ -19,8 +20,8 @@ at $V_{DS} = 15$\,V. Read $I_{DSS}$ and $V_P$, and note that the device still co
 \begin{itemize}[leftmargin=*,itemsep=1pt]
   \item M1: 4-terminal n-channel MOSFET (symbol \texttt{nmos4}), bulk connected to source, $L = W = 1\,\mu$m:\\
         \texttt{.model DM NMOS(Level=1 Vto=-3 Kp=2m Lambda=0)}
-  \item (a) $V_{DS} = 15$\,V drain to ground, $V_{GS}$ gate to ground (swept), source grounded.
-  \item (b) $V_{DD} = 18$\,V, $R_D = 2.2\,\mathrm{k}\Omega$, $R_S = 250\,\Omega$, $R_G = 1\,\mathrm{M}\Omega$.
+  \item (a) $V_2 = 10$\,V to the drain through $R_2 = 100\,\Omega$, $V_3$ gate to ground (swept), source grounded.
+  \item (b) $V_4 = 12$\,V, $R_3 = 2\,\mathrm{k}\Omega$ (drain), $R_4 = 1\,\mathrm{k}\Omega$ (source), $R_5 = 680\,\mathrm{k}\Omega$ (gate to ground).
 \end{itemize}}
 
 \subsubsection*{Theoretical Calculation}
@@ -35,37 +36,42 @@ at $V_{DS} = 15$\,V. Read $I_{DSS}$ and $V_P$, and note that the device still co
 With $W/L = 1$: $I_D = 1\,\mathrm{mA/V^2}\,(V_{GS}+3)^2 = 9\,\mathrm{mA}\,(1+V_{GS}/3)^2$, so $V_P = -3$\,V and $I_{DSS} = 9$\,mA.
 $I_D(-2\,\mathrm{V}) = 1$\,mA, $I_D(-1\,\mathrm{V}) = 4$\,mA, $I_D(+1\,\mathrm{V}) = 16$\,mA (enhancement region).
 
-(b) $V_{GS} = -0.25\,I_D$ ($I_D$ in mA):
+In part (a), at $V_{GS} = +1$\,V the drain voltage is $V_{DS} = 10 - 0.1\cdot16 = 8.4$\,V, still in saturation.
+
+(b) $V_{GS} = -I_D R_4 = -I_D$ ($I_D$ in mA, $R_4 = 1\,\mathrm{k}\Omega$):
 \[
-  I_D = 9\left(1-\frac{I_D}{12}\right)^2 \;\Rightarrow\; I_D^2 - 40I_D + 144 = 0 \;\Rightarrow\; I_D = 4\ \text{or}\ 36\ \mathrm{mA}
+  I_D = 9\left(1-\frac{I_D}{3}\right)^2 \;\Rightarrow\; I_D^2 - 7I_D + 9 = 0 \;\Rightarrow\; I_D = 1.697\ \text{or}\ 5.303\ \mathrm{mA}
 \]
-$I_D = 36$\,mA gives $V_{GS} = -9\,\mathrm{V} < V_P$ (not valid), so $I_{DQ} = 4$\,mA, $V_{GSQ} = -1$\,V,
-$V_D = 18 - 4\cdot2.2 = 9.2$\,V, $V_S = 1$\,V, $V_{DS} = 8.2\,\mathrm{V} > V_{GS}-V_P = 2$\,V (saturation).
+$I_D = 5.303$\,mA gives $V_{GS} = -5.30\,\mathrm{V} < V_P$ (not valid), so $I_{DQ} = 1.70$\,mA, $V_{GSQ} = -1.70$\,V,
+$V_D = 12 - 1.697\cdot2 = 8.61$\,V, $V_S = 1.70$\,V, $V_{DS} = 6.91\,\mathrm{V} > V_{GS}-V_P = 1.30$\,V (saturation).
 \end{solution}
 
 \subsubsection*{Simulation}
 \begin{enumerate}[itemsep=2pt]
-  \item Part (a): run the DC sweep and plot \texttt{Id(M1)}.
-  \item Part (b): build the self-bias circuit in the same file (or a second sheet) and run \texttt{.op}.
+  \item Part (a): run the DC sweep of $V_3$ and plot \texttt{Id(M1)}.
+  \item Part (b): the self-bias circuit is in the same file (MOSFET \texttt{M2}). Replace \texttt{.dc} by \texttt{.op} and read $I_D$ and $V_{DS}$ of \texttt{M2}.
 \end{enumerate}
 \begin{spice}
 .model DM NMOS(Level=1 Vto=-3 Kp=2m Lambda=0)
-.dc VGS -4 2 0.01
-* part (b): replace the line above with
-* .op
+.dc V3 -5 2 0.01
+; part (b): replace the line above with
+; .op
 \end{spice}
 \simfig{ex05_sim}{Transfer characteristic and self-bias operating point of Exercise 5.5}
 
 \subsubsection*{Theory vs. Simulation}
 \begin{comparison}{Theory vs. simulation, Exercise 5.5}
-\cmprow{$I_{DSS}$}{mA}{9.00}{}{}
-\cmprow{$V_P$}{V}{$-3.00$}{}{}
-\cmprow{$I_D$ at $V_{GS}=+1$\,V}{mA}{16.0}{}{}
-\cmprow{$I_{DQ}$ (self-bias)}{mA}{4.00}{}{}
-\cmprow{$V_{DS}$ (self-bias)}{V}{8.20}{}{}
+\cmprow{$I_{DSS}$}{mA}{9.00}{$\approx 9$}{$\approx 0$}
+\cmprow{$V_P$}{V}{$-3.00$}{$\approx -3.0$}{$\approx 0$}
+\cmprow{$I_D$ at $V_{GS}=+1$\,V}{mA}{16.0}{$\approx 16$}{$\approx 0$}
+\cmprow{$I_{DQ}$ (self-bias)}{mA}{1.70}{}{}
+\cmprow{$V_{GSQ}$ (self-bias)}{V}{$-1.70$}{}{}
+\cmprow{$V_{DS}$ (self-bias)}{V}{6.91}{}{}
 \end{comparison}
 \answerspace{3}
 \begin{solution}
 The level-1 model with \texttt{Lambda=0} reproduces the square law exactly; check that $L$ and $W$ are equal on the
-schematic, otherwise $I_D$ is scaled by $W/L$. \todo{Fill in the simulation column from the LTspice run.}
+schematic, otherwise $I_D$ is scaled by $W/L$. In part (a) the curve leaves zero at about $-3$\,V and passes about 9\,mA at
+$V_{GS}=0$ and 16\,mA at $+1$\,V (read on the grid of the plot).
+\todo{Part (b): add the operating point of M2 (\texttt{Id(M2)}, $V_{GS}$, $V_{DS}$) to the figure and fill in the last three rows.}
 \end{solution}

@@ -1,14 +1,15 @@
 % Lab 5 -- Exercise 4  |  Nguyễn Huỳnh Hữu Đức – 2510290  |  Original: Ch.6 2.3.2 (Voltage-divider bias)  |  Status: Keep
 % Netlist:
-%   VDD vdd 0 16
-%   R1  vdd g 3Meg
-%   R2  g 0 1Meg
-%   RD  vdd d 2.2k
+%   VDD vdd 0 12
+%   R1  vdd g 3.3Meg
+%   R2  g 0 2.2Meg
+%   RD  vdd d 1.8k
 %   J1  d g s JN
-%   RS  s 0 2k
+%   RS  s 0 3.3k
 \exercise{JFET Voltage-Divider Bias}{Keep}{Ch.6 2.3.2 -- Voltage-divider configuration}
-\statusreason{Same configuration and objective as the original exercise. Values are chosen so that the operating point
-falls on a simple point of the transfer curve ($V_{GS} = -0.5$\,V) and can be checked by hand.}
+\statusreason{Same configuration, component values ($V_{DD}=12$\,V, $R_1=3.3\,\mathrm{M}\Omega$, $R_2=2.2\,\mathrm{M}\Omega$,
+$R_D=1.8\,\mathrm{k}\Omega$, $R_S=3.3\,\mathrm{k}\Omega$) and objective as the original exercise. Only the JFET is given an explicit
+\texttt{.model} so that the operating point can be found by hand.}
 
 \task{For the voltage-divider bias circuit below, find $V_G$, $I_{DQ}$, $V_{GSQ}$, $V_D$, $V_S$ and $V_{DS}$.
 Verify the operating point with LTspice.}
@@ -17,7 +18,7 @@ Verify the operating point with LTspice.}
 \circuitfig{ex04}{Circuit of Exercise 5.4: JFET voltage-divider bias}
 \components{
 \begin{itemize}[leftmargin=*,itemsep=1pt]
-  \item $V_{DD} = 16$\,V, $R_1 = 3\,\mathrm{M}\Omega$ (top), $R_2 = 1\,\mathrm{M}\Omega$ (bottom), $R_D = 2.2\,\mathrm{k}\Omega$, $R_S = 2\,\mathrm{k}\Omega$.
+  \item $V_{DD} = 12$\,V, $R_1 = 3.3\,\mathrm{M}\Omega$ (top), $R_2 = 2.2\,\mathrm{M}\Omega$ (bottom), $R_D = 1.8\,\mathrm{k}\Omega$, $R_S = 3.3\,\mathrm{k}\Omega$.
   \item J1: \texttt{.model JN NJF(Vto=-2 Beta=1m Lambda=0)}.
 \end{itemize}}
 
@@ -30,15 +31,18 @@ Verify the operating point with LTspice.}
 \answerspace{10}
 \begin{solution}
 \[
-  V_G = V_{DD}\frac{R_2}{R_1+R_2} = 16\cdot\frac{1}{4} = 4\,\mathrm{V},\qquad V_{GS} = 4 - 2I_D \;(I_D\ \text{in mA})
+  V_G = V_{DD}\frac{R_2}{R_1+R_2} = 12\cdot\frac{2.2}{5.5} = 4.8\,\mathrm{V},\qquad V_{GS} = 4.8 - 3.3\,I_D \;(I_D\ \text{in mA})
 \]
 \[
-  I_D = 4\left(1+\frac{4-2I_D}{2}\right)^2 = 4(3-I_D)^2 \;\Rightarrow\; 4I_D^2 - 25I_D + 36 = 0 \;\Rightarrow\; I_D = 2.25\ \text{or}\ 4\ \mathrm{mA}
+  I_D = 4\left(1+\frac{4.8-3.3I_D}{2}\right)^2 = 4(3.4-1.65I_D)^2 \;\Rightarrow\; 10.89I_D^2 - 45.88I_D + 46.24 = 0
+  \;\Rightarrow\; I_D = 1.669\ \text{or}\ 2.544\ \mathrm{mA}
 \]
-$I_D = 4$\,mA gives $V_{GS} = -4\,\mathrm{V} < V_P$ (not valid), so $I_{DQ} = 2.25$\,mA and $V_{GSQ} = -0.5$\,V.
+$I_D = 2.544$\,mA gives $V_{GS} = -3.60\,\mathrm{V} < V_P$ (not valid), so $I_{DQ} = 1.67$\,mA and $V_{GSQ} = -0.71$\,V.
 \[
-  V_S = 4.5\,\mathrm{V},\qquad V_D = 16 - 2.25\cdot 2.2 = 11.05\,\mathrm{V},\qquad V_{DS} = 6.55\,\mathrm{V} > V_{GS}-V_P = 1.5\,\mathrm{V}
+  V_S = 1.669\cdot3.3 = 5.51\,\mathrm{V},\qquad V_D = 12 - 1.669\cdot 1.8 = 9.00\,\mathrm{V},\qquad
+  V_{DS} = 3.49\,\mathrm{V} > V_{GS}-V_P = 1.29\,\mathrm{V}
 \]
+The JFET operates in the saturation region.
 \end{solution}
 
 \subsubsection*{Simulation}
@@ -50,13 +54,16 @@ $I_D = 4$\,mA gives $V_{GS} = -4\,\mathrm{V} < V_P$ (not valid), so $I_{DQ} = 2.
 
 \subsubsection*{Theory vs. Simulation}
 \begin{comparison}{Theory vs. simulation, Exercise 5.4}
-\cmprow{$V_G$}{V}{4.00}{}{}
-\cmprow{$I_{DQ}$}{mA}{2.25}{}{}
-\cmprow{$V_{GSQ}$}{V}{$-0.50$}{}{}
-\cmprow{$V_D$}{V}{11.05}{}{}
-\cmprow{$V_{DS}$}{V}{6.55}{}{}
+\cmprow{$V_G$}{V}{4.80}{4.80001}{0.000}
+\cmprow{$I_{DQ}$}{mA}{1.67}{1.66911}{0.001}
+\cmprow{$V_{GSQ}$}{V}{$-0.71$}{$-0.70806$}{0.001}
+\cmprow{$V_S$}{V}{5.51}{5.50807}{0.001}
+\cmprow{$V_D$}{V}{9.00}{8.99560}{0.000}
+\cmprow{$V_{DS}$}{V}{3.49}{3.48753}{0.000}
 \end{comparison}
 \answerspace{3}
 \begin{solution}
-Agreement is expected within rounding. \todo{Fill in the simulation column from the LTspice run.}
+The simulation agrees with the theory to better than 0.01\,\% (errors computed with the unrounded theoretical values
+$I_D = 1.6691$\,mA, $V_{GS} = -0.7081$\,V). The gate current is only $4.9\times10^{-12}$\,A, so the divider is not loaded
+and $V_G = 4.80$\,V as assumed.
 \end{solution}

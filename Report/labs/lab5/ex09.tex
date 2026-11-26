@@ -66,15 +66,18 @@ Without D1 the current can only charge $C_{DS}$:
 
 \subsubsection*{Theory vs. Simulation}
 \begin{comparison}{Theory vs. simulation, Exercise 5.9 (with D1)}
-\cmprow{$I_{\mathrm{on}}$}{mA}{119}{}{}
-\cmprow{$\tau_{\mathrm{on}}$}{$\mu$s}{99}{}{}
+\cmprow{$I_{\mathrm{on}}$}{mA}{119}{$\approx 119$}{$\approx 0$}
+\cmprow{$\tau_{\mathrm{on}}$}{$\mu$s}{99}{$\approx 100$}{$\approx 1$}
 \cmprow{$\tau_{\mathrm{off}}$}{$\mu$s}{100}{}{}
-\cmprow{$V_{DS(\mathrm{peak})}$ with D1}{V}{12.7}{}{}
+\cmprow{$V_{DS(\mathrm{peak})}$ with D1}{V}{12.7}{$\approx 12.9$}{$\approx 1.6$}
 \cmprow{$V_{DS(\mathrm{peak})}$ without D1, $C_{DS}=1$\,nF}{V}{388}{}{}
 \end{comparison}
 \answerspace{3}
 \begin{solution}
 The decay is not exactly exponential because the diode voltage is not constant, and the peak $V_{DS}$ depends on the
 \texttt{1N4148} model at about 120\,mA. Without D1 the simulated peak is lower than the lossless estimate because
-$R_L$ damps the oscillation. \todo{Fill in the simulation column from the LTspice run.}
+$R_L$ damps the oscillation. With D1 the current rises to about 119\,mA (63\,\% reached after about 0.1\,ms) and the drain is
+clamped at about 12.9\,V. After turn-off the current falls to zero in about 0.3\,ms; it reaches zero in a finite time because the
+diode keeps a voltage of about 0.7\,V across the inductor.
+\todo{Read $\tau_{\mathrm{off}}$ with the cursor (time to fall to 44\,mA after $t=1$\,ms) and add run 2 (without D1, $C_{DS}=1$\,nF).}
 \end{solution}

@@ -62,12 +62,13 @@ $I_D$ (mA) & 4.00 & 2.25 & 1.00 & 0.25 & 0\\
 \subsubsection*{Theory vs. Simulation}
 \begin{comparison}{Theory vs. simulation, Exercise 5.1}
 \cmprow{$I_{DSS}$}{mA}{4.00}{4.0000002}{0.000005}
-\cmprow{$V_P$}{V}{$-2.00$}{}{}
+\cmprow{$V_P$}{V}{$-2.00$}{$\approx -2.0$}{$\approx 0$}
 \cmprow{$I_D$ at $V_{GS}=-1$\,V}{mA}{1.00}{1.0000}{0.00}
-\cmprow{$I_D$ at $V_{GS}=-1.5$\,V}{mA}{0.25}{}{}
+\cmprow{$I_D$ at $V_{GS}=-1.5$\,V}{mA}{0.25}{$\approx 0.25$}{$\approx 0$}
 \end{comparison}
 \answerspace{3}
 \begin{solution}
 With \texttt{Lambda=0} the model follows Shockley's equation exactly, so the deviation should be limited to the cursor
-resolution (step 10\,mV). \todo{Fill in the remaining rows ($V_P$ and $I_D$ at $V_{GS}=-1.5$\,V) from the cursor readings.}
+resolution (step 10\,mV). $V_P$ and $I_D(-1.5\,\mathrm{V})$ were read on the grid of the plot: the curve leaves zero at
+$V_{GS} \approx -2.0$\,V and passes about 0.25\,mA at $-1.5$\,V.
 \end{solution}

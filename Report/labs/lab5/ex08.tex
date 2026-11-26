@@ -54,13 +54,15 @@ practically the same. In the OFF state $V_{GS} = 0$, $I_D = 0$ and $V_{DS} = V_{
 
 \subsubsection*{Theory vs. Simulation}
 \begin{comparison}{Theory vs. simulation, Exercise 5.8}
-\cmprow{$V_{GS}$ (ON)}{V}{4.55}{}{}
-\cmprow{$I_L$ (ON)}{mA}{119}{}{}
+\cmprow{$V_{GS}$ (ON)}{V}{4.55}{$\approx 4.5$}{$\approx 1$}
+\cmprow{$I_L$ (ON)}{mA}{119}{$\approx 119$}{$\approx 0$}
 \cmprow{$V_{DS}$ (ON)}{V}{0.095}{}{}
-\cmprow{$V_{DS}$ (OFF)}{V}{12.0}{}{}
+\cmprow{$V_{DS}$ (OFF)}{V}{12.0}{12.0}{0.0}
 \end{comparison}
 \answerspace{3}
 \begin{solution}
 Agreement is expected; the level-1 model has no gate capacitance by default, so the edges are as fast as the input.
-\todo{Fill in the simulation column from the LTspice run.}
+The ON current (about 119\,mA, just below the 120\,mA grid line) and the OFF voltage of 12\,V agree with the theory;
+$V_{GS}$ is read as 4.5\,V on the grid.
+\todo{$V_{DS}$ (ON) $\approx 0.095$\,V is too small to read on the plot: read it with the cursor and fill in the row.}
 \end{solution}
