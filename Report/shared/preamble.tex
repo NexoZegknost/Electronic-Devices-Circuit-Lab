@@ -142,7 +142,7 @@
 \newcommand{\answerspace}[1]{\ifsolution\else\dotlines{#1}\fi}
 
 % \ans{giá trị}: bản SV in ô trống, bản lời giải in giá trị
-\newcommand{\fillcell}{\fcolorbox{orange!80!black}{yellow!25}{\rule{0pt}{1.1em}\rule{1.3cm}{0pt}}}
+\newcommand{\fillcell}{\rule{0pt}{1.4em}\rule{1.3cm}{0pt}}   % ô trống để sinh viên điền
 \newcommand{\ans}[1]{\ifsolution #1\else\fillcell\fi}
 
 % Môi trường lời giải: chỉ xuất hiện khi \solutiontrue
@@ -172,10 +172,57 @@
 \newtcolorbox{tipbox}{enhanced,breakable,colback=green!4,colframe=green!45!black,fonttitle=\bfseries,
   title=LTspice tip,boxrule=0.6pt,arc=1.5mm,left=8pt,right=8pt,top=4pt,bottom=4pt}
 
-% Khối lệnh SPICE
-\newtcblisting{spice}[1][]{listing only,colback=gray!5,colframe=gray!60!black,boxrule=0.6pt,arc=1mm,
-  title=SPICE directives,fonttitle=\bfseries\small,
-  listing options={basicstyle=\ttfamily\small,columns=fullflexible,keepspaces=true},#1}
+% Khối lệnh SPICE -- thẻ tiêu đề, viền nhấn bên trái, tô màu cú pháp SPICE
+\definecolor{spiceaccent}{HTML}{1F5FAD}
+\definecolor{spicebg}{HTML}{F5F8FC}
+\definecolor{spicedot}{HTML}{0B4F9C}
+\definecolor{spicetype}{HTML}{8E3A9E}
+\definecolor{spicenum}{HTML}{B35C00}
+\definecolor{spicecom}{HTML}{7A8590}
+\lstdefinelanguage{spiceLT}{sensitive=false,alsoletter={.},
+  morekeywords=[1]{.model,.op,.dc,.ac,.tran,.step,.meas,.measure,.param,.ic,.four,.noise,.tf,.include,.inc,.lib,.temp,.options,.save,.end,.subckt,.ends,.func},
+  morekeywords=[2]{NJF,PJF,NMOS,PMOS,NPN,PNP,D,VDMOS,PULSE,SINE,SIN,PWL,AC,DEC,OCT,LIN,PARAM,LIST,FIND,WHEN,AT,MAX,MIN,AVG,RMS,PP,TRIG,TARG,RISE,FALL,CROSS,FROM,TO},
+  morecomment=[l]{;}}
+\newtcblisting{spice}[1][]{enhanced,listing only,breakable,
+  colback=spicebg,colframe=spiceaccent!30,boxrule=0.5pt,arc=1.5mm,
+  borderline west={3.2pt}{0pt}{spiceaccent},
+  title={\raisebox{-0.1ex}{$\blacktriangleright$}\ SPICE directives},
+  fonttitle=\sffamily\bfseries\footnotesize,coltitle=white,
+  attach boxed title to top left={xshift=10pt,yshift=-\tcboxedtitleheight/2},
+  boxed title style={colback=spiceaccent,colframe=spiceaccent,boxrule=0pt,arc=1mm,
+    left=5pt,right=6pt,top=1.5pt,bottom=1.5pt},
+  top=\dimexpr\tcboxedtitleheight/2+5pt\relax,bottom=5pt,left=10pt,right=8pt,
+  before skip=10pt,after skip=8pt,
+  listing options={language=spiceLT,basicstyle=\ttfamily\small\color{black!85},
+    keywordstyle={[1]\color{spicedot}\bfseries},keywordstyle={[2]\color{spicetype}\bfseries},
+    commentstyle=\color{spicecom}\itshape,columns=fullflexible,keepspaces=true,
+    breaklines=true,showstringspaces=false,upquote=true},#1}
+
+% Khung lệnh terminal (bash) -- kiểu cửa sổ Terminal Ubuntu
+\definecolor{termbar}{HTML}{3C3B37}
+\definecolor{termbg}{HTML}{2C001E}
+\definecolor{termfg}{HTML}{F2F2F2}
+\definecolor{termprompt}{HTML}{8AE234}
+\definecolor{termkey}{HTML}{FCE94F}
+\definecolor{termstr}{HTML}{AD7FA8}
+\definecolor{termcom}{HTML}{A8A8A8}
+\newcommand{\termprompt}[1]{\color{termprompt}\bfseries\$}
+\newtcblisting{bash}[1][]{enhanced,listing only,breakable,
+  colback=termbg,colframe=termbar,colbacktitle=termbar,coltitle=white!85!black,
+  boxrule=0.8pt,arc=2.5mm,titlerule=0pt,
+  title={Terminal -- bash},fonttitle=\ttfamily\small,halign title=center,
+  toptitle=2pt,bottomtitle=2pt,left=4pt,right=6pt,top=4pt,bottom=4pt,
+  before skip=6pt,after skip=8pt,
+  overlay unbroken and first={%
+    \foreach \cc/\xx in {red!75!orange/0.38,yellow!85!orange/0.80,green!65!black/1.22}
+      {\fill[\cc] ([xshift=\xx cm]title.west) circle (1.5mm);}},
+  listing options={language=bash,basicstyle=\ttfamily\small\color{termfg},
+    keywordstyle=\color{termkey}\bfseries,commentstyle=\color{termcom}\itshape,
+    stringstyle=\color{termstr},showstringspaces=false,columns=fullflexible,keepspaces=true,
+    breaklines=true,breakatwhitespace=false,
+    morekeywords={sudo,apt,dpkg,wine,winetricks,msiexec,wineboot,export,cp,ls},
+    numbers=left,numberstyle=\termprompt,numbersep=6pt,xleftmargin=14pt,
+    upquote=true},#1}
 
 % Ghi chú TODO cho nhóm (đổi \showtodotrue -> \showtodofalse khi nộp)
 \newif\ifshowtodo \showtodotrue
